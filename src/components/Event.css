@@ -1,0 +1,12 @@
+.wk-event {
+  padding: 20px;
+  border-bottom: 1px solid #444;
+  color: #666;
+}
+
+.wk-event h3 {
+  font-size: 15px;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}

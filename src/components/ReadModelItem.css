@@ -1,0 +1,28 @@
+.wk-read-model-item {
+  display: flex;
+  padding: 12px;
+  border-bottom: 1px solid #444;
+  color: #666;
+}
+
+.wk-read-model-item .wk-field {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 120px;
+  overflow: hidden;
+  padding-left: 16px;
+}
+
+.wk-read-model-item .wk-field .wk-key {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-bottom: 6px;
+}
+
+.wk-read-model-item .wk-field .wk-value {
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

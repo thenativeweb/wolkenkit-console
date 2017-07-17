@@ -1,0 +1,46 @@
+{
+  "name": "wolkenkit-console",
+  "version": "0.0.0",
+  "description": "wolkenkit-console lets you execute domain code from within your browser.",
+  "contributors": [
+    {
+      "name": "Golo Roden",
+      "email": "golo.roden@thenativeweb.io"
+    },
+    {
+      "name": "Matthias Wagler",
+      "email": "matthias.wagler@thenativeweb.io"
+    }
+  ],
+  "bin": {
+    "wolkenkit-console": "bin/wolkenkit-console.js"
+  },
+  "scripts": {
+    "build": "rm -rf ./build && nwb build-react-app",
+    "start": "nwb serve-react-app --port 9000",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "express": "4.15.3"
+  },
+  "devDependencies": {
+    "codemirror": "5.27.4",
+    "mobx": "3.2.1",
+    "mobx-react": "4.2.2",
+    "nwb": "0.18.7",
+    "react": "15.6.1",
+    "react-dom": "15.6.1",
+    "superagent": "3.5.2",
+    "roboter": "0.15.3",
+    "roboter-server": "0.15.3",
+    "wolkenkit-client": "1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thenativeweb/wolkenkit-console.git"
+  },
+  "keywords": [
+    "wolkenkit"
+  ],
+  "license": "AGPL-3.0"
+}

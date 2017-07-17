@@ -1,0 +1,40 @@
+.wk-brand {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.wk-brand-typo {
+  display: none;
+}
+
+.wk-brand-typo span {
+  color: #fff !important;
+}
+
+.wk-logo {
+  width: 64px;
+  height: 64px;
+}
+
+.wk-logo .cloud-nr9 {
+  opacity: 0.9;
+}
+
+.wk-logo .cloud-nr10 {
+  opacity: 0.95;
+  transform: translate3d(0, 0, 0);
+}
+
+.wk-brand-typo {
+  font-size: 14px;
+}
+
+.wk-brand-suffix {
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+}

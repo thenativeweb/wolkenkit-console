@@ -1,0 +1,9 @@
+{
+  "extends": "eslint-config-es/2015/client",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "react/jsx-filename-extension": [ 1, { "extensions": [ ".js", ".jsx" ]}]
+  }
+}

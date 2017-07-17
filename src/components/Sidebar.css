@@ -1,0 +1,7 @@
+.wk-sidebar {
+  width: 96px;
+  background: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
