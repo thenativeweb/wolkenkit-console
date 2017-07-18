@@ -2,7 +2,6 @@ import debugging from '../readModel/debugging';
 import Event from './Event';
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
-import { startObservingEvents, stopObservingEvents } from '../writeModel/backend';
 import './EventConsole.css';
 
 class EventConsole extends Component {
@@ -18,8 +17,6 @@ class EventConsole extends Component {
   }
 
   componentDidMount () {
-    startObservingEvents();
-
     this.mutationObserver = new MutationObserver(() => {
       if (this.container && document.contains(this.container)) {
         this.container.scrollTop = this.container.scrollHeight;
@@ -32,7 +29,6 @@ class EventConsole extends Component {
   }
 
   componentWillUnmount () {
-    stopObservingEvents();
     this.mutationObserver.disconnect();
   }
 
