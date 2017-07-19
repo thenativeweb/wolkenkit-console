@@ -8,7 +8,6 @@ import { observer } from 'mobx-react';
 import program from './readModel/program';
 import React from 'react';
 import ReadModelsConsole from './components/ReadModelsConsole';
-import sandbox from './sandbox';
 import Sidebar from './components/Sidebar';
 import Tabs from './components/Tabs';
 import View from './components/View';
@@ -58,8 +57,8 @@ const App = function () {
           </View>
           <View orientation='vertical' size='flex'>
             <Tabs>
-              <EventConsole title='Events' app={ sandbox.getApp() } />
-              <ReadModelsConsole title='ReadModels' configuration={ application.configuration } app={ sandbox.getApp() } />
+              <EventConsole title='Events' />
+              <ReadModelsConsole title='ReadModels' />
             </Tabs>
           </View>
         </View>

@@ -1,7 +1,7 @@
 import { extendObservable } from 'mobx';
 
 const debugging = extendObservable({}, {
-  selectedReadModel: '',
+  selectedReadModel: 'none',
   selectedReadModelItems: [],
   collectedEvents: []
 });

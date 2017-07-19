@@ -2,7 +2,6 @@ import debugging from '../readModel/debugging';
 import Event from './Event';
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
-import { startObservingEvents, stopObservingEvents } from '../writeModel/backend';
 import './EventConsole.css';
 
 class EventConsole extends Component {
@@ -10,30 +9,27 @@ class EventConsole extends Component {
     super();
 
     this.saveContainerRef = this.saveContainerRef.bind(this);
-
-    this.state = {
-      isConnected: false,
-      events: []
-    };
+    this.handleDOMContentChanged = this.handleDOMContentChanged.bind(this);
   }
 
   componentDidMount () {
-    startObservingEvents();
-
-    this.mutationObserver = new MutationObserver(() => {
-      if (this.container && document.contains(this.container)) {
-        this.container.scrollTop = this.container.scrollHeight;
-      }
-    });
+    this.mutationObserver = new MutationObserver(this.handleDOMContentChanged);
 
     this.mutationObserver.observe(this.container, {
       childList: true
     });
+
+    this.handleDOMContentChanged();
   }
 
   componentWillUnmount () {
-    stopObservingEvents();
     this.mutationObserver.disconnect();
+  }
+
+  handleDOMContentChanged () {
+    if (this.container && document.contains(this.container)) {
+      this.container.scrollTop = this.container.scrollHeight;
+    }
   }
 
   saveContainerRef (ref) {
@@ -41,6 +37,10 @@ class EventConsole extends Component {
   }
 
   render () {
+    if (!debugging.collectedEvents) {
+      return null;
+    }
+
     return (
       <div className='wk-event-console' ref={ this.saveContainerRef }>
         { debugging.collectedEvents.length === 0 ? <div className='wk-hint'>No events have been observed yet. Go ahead and send a command…</div> : '' }
