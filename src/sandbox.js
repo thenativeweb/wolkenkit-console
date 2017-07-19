@@ -1,5 +1,4 @@
 import fakeConsole from './fakeConsole';
-import { startObservingEvents } from './writeModel/backend';
 import wolkenkit from 'wolkenkit-client';
 
 let app;
@@ -10,7 +9,6 @@ const sandbox = {
       app = wolkenkit.connect({ host, port }).
         then(connectedApp => {
           app = connectedApp;
-          startObservingEvents();
 
           resolve();
         }).
