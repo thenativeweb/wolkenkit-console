@@ -9,27 +9,27 @@ class EventConsole extends Component {
     super();
 
     this.saveContainerRef = this.saveContainerRef.bind(this);
-
-    this.state = {
-      isConnected: false,
-      events: []
-    };
+    this.handleDOMContentChanged = this.handleDOMContentChanged.bind(this);
   }
 
   componentDidMount () {
-    this.mutationObserver = new MutationObserver(() => {
-      if (this.container && document.contains(this.container)) {
-        this.container.scrollTop = this.container.scrollHeight;
-      }
-    });
+    this.mutationObserver = new MutationObserver(this.handleDOMContentChanged);
 
     this.mutationObserver.observe(this.container, {
       childList: true
     });
+
+    this.handleDOMContentChanged();
   }
 
   componentWillUnmount () {
     this.mutationObserver.disconnect();
+  }
+
+  handleDOMContentChanged () {
+    if (this.container || document.contains(this.container)) {
+      this.container.scrollTop = this.container.scrollHeight;
+    }
   }
 
   saveContainerRef (ref) {

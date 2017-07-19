@@ -44,8 +44,7 @@ class ErrorConsole extends Component {
     this.handleCloseClicked = this.handleCloseClicked.bind(this);
 
     this.state = {
-      isExpanded: false,
-      errors: []
+      isExpanded: false
     };
   }
 
