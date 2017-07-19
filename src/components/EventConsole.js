@@ -27,7 +27,7 @@ class EventConsole extends Component {
   }
 
   handleDOMContentChanged () {
-    if (this.container || document.contains(this.container)) {
+    if (this.container && document.contains(this.container)) {
       this.container.scrollTop = this.container.scrollHeight;
     }
   }
@@ -37,6 +37,10 @@ class EventConsole extends Component {
   }
 
   render () {
+    if (!debugging.collectedEvents) {
+      return null;
+    }
+
     return (
       <div className='wk-event-console' ref={ this.saveContainerRef }>
         { debugging.collectedEvents.length === 0 ? <div className='wk-hint'>No events have been observed yet. Go ahead and send a command…</div> : '' }

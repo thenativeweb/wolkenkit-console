@@ -19,7 +19,7 @@ class ReadModels extends Component {
 
   componentDidMount () {
     this.mutationObserver = new MutationObserver(() => {
-      if (this.container || document.contains(this.container)) {
+      if (this.container && document.contains(this.container)) {
         this.container.scrollTop = this.container.scrollHeight;
       }
     });
@@ -43,7 +43,7 @@ class ReadModels extends Component {
   }
 
   render () {
-    if (!application.configuration) {
+    if (!application.configuration || !debugging.selectedReadModel) {
       return null;
     }
 
