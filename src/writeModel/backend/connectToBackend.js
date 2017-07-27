@@ -5,7 +5,7 @@ import startObservingEvents from './startObservingEvents';
 import { extendObservable, runInAction } from 'mobx';
 
 const connectToBackend = function () {
-  const { host, port, isConnected } = application;
+  const { host, port, isConnected, authentication } = application;
 
   if (!application.host) {
     throw new Error('Host is missing.');
@@ -26,7 +26,13 @@ const connectToBackend = function () {
     then(loadedConfiguration => {
       configuration = loadedConfiguration;
 
-      return sandbox.connect({ host, port });
+      const options = { host, port };
+
+      if (authentication.identityProviderUrl && authentication.clientId) {
+        options.authentication = authentication;
+      }
+
+      return sandbox.connect(options);
     }).
     then(() => {
       runInAction(() => {

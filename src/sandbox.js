@@ -4,11 +4,23 @@ import wolkenkit from 'wolkenkit-client';
 let app;
 
 const sandbox = {
-  connect ({ host = 'local.wolkenkit.io', port = 3000 }) {
+  connect ({ host = 'local.wolkenkit.io', port = 3000, authentication = undefined }) {
     return new Promise((resolve, reject) => {
-      app = wolkenkit.connect({ host, port }).
+      const options = { host, port };
+
+      if (authentication) {
+        options.authentication = new wolkenkit.authentication.OpenIdConnect(authentication);
+      }
+
+      app = wolkenkit.connect(options).
         then(connectedApp => {
           app = connectedApp;
+
+          if (authentication && !app.auth.isLoggedIn()) {
+            app.auth.login();
+
+            return;
+          }
 
           resolve();
         }).

@@ -11,7 +11,7 @@ import ReadModelsConsole from './components/ReadModelsConsole';
 import Sidebar from './components/Sidebar';
 import Tabs from './components/Tabs';
 import View from './components/View';
-import { changeHost, changePort, connectToBackend } from './writeModel/backend';
+import { changeClientId, changeHost, changeIdentityProviderUrl, changePort, changeScope, changeStrictMode, connectToBackend } from './writeModel/backend';
 import { editCode, executeCode, insertCommand } from './writeModel/programming';
 import './App.css';
 
@@ -28,6 +28,14 @@ const App = function () {
             <input className='TextBox' value={ application.host } onChange={ changeHost } />
             <input className='TextBox TextBox--port' value={ application.port } onChange={ changePort } />
             <Button className='Button' onClick={ connectToBackend }>Connect</Button>
+          </div>
+          <h3>Want to use OpenID Connect?</h3>
+          <span>Simply complete the configuration below.</span>
+          <div className='ControlGroup'>
+            <input className='TextBox' value={ application.authentication.identityProviderUrl } onChange={ changeIdentityProviderUrl } placeholder='Identity Provider URL' />
+            <input className='TextBox' value={ application.authentication.clientId } onChange={ changeClientId } placeholder='Client ID' />
+            <input className='TextBox' value={ application.authentication.scope } onChange={ changeScope } placeholder='Scope' />
+            <label>Strict mode? <input type='checkbox' checked={ application.authentication.strictMode } onChange={ changeStrictMode } /></label>
           </div>
         </View>
       </div>

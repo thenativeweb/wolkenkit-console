@@ -3,6 +3,12 @@ import { extendObservable } from 'mobx';
 const application = extendObservable({}, {
   host: 'local.wolkenkit.io',
   port: 3000,
+  authentication: {
+    identityProviderUrl: '',
+    clientId: '',
+    scope: 'profile',
+    strictMode: true
+  },
   isConnected: false,
   configuration: undefined
 });
