@@ -1,17 +1,20 @@
 import application from './readModel/application';
 import Brand from './components/Brand';
 import Button from './components/Button';
+import ConnectionButton from './components/ConnectionButton';
 import Editor from './components/Editor';
 import ErrorConsole from './components/ErrorConsole';
 import EventConsole from './components/EventConsole';
+import Icon from './components/Icon';
 import { observer } from 'mobx-react';
 import program from './readModel/program';
 import React from 'react';
 import ReadModelsConsole from './components/ReadModelsConsole';
 import Sidebar from './components/Sidebar';
+import Symbols from './components/Symbols';
 import Tabs from './components/Tabs';
 import View from './components/View';
-import { changeClientId, changeHost, changeIdentityProviderUrl, changePort, changeScope, changeStrictMode, connectToBackend } from './writeModel/backend';
+import { changeClientId, changeHost, changeIdentityProviderUrl, changePort, changeScope, changeStrictMode, connectToBackend, disconnectFromBackend } from './writeModel/backend';
 import { editCode, executeCode, insertCommand } from './writeModel/programming';
 import './App.css';
 
@@ -19,8 +22,10 @@ const App = function () {
   if (!application.isConnected) {
     return (
       <div className='wk-app'>
+        <Symbols />
         <Sidebar>
           <Brand suffix='console' />
+          <Sidebar.Item type='centered'><Icon name='new-connection' /></Sidebar.Item>
         </Sidebar>
         <View orientation='vertical' alignItems='center' justifyContent='center'>
           <h2>Connect to a wolkenkit application</h2>
@@ -44,8 +49,12 @@ const App = function () {
 
   return (
     <div className='wk-app'>
+      <Symbols />
       <Sidebar>
         <Brand suffix='console' />
+        <Sidebar.Item>
+          <ConnectionButton onDisconnect={ disconnectFromBackend } />
+        </Sidebar.Item>
       </Sidebar>
       <View id='screen' orientation='vertical'>
         <View orientation='horizontal' size='flex'>

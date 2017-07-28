@@ -3,5 +3,22 @@
   background: #282c34;
   display: flex;
   flex-direction: column;
+}
+
+.wk-sidebar__item {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 24px;
+}
+
+.wk-sidebar__item--centered {
+  display: flex;
+  justify-content: center;
   align-items: center;
+}
+
+.wk-sidebar .wk-icon {
+  fill: #fff;
+  margin-top: 24px;
+  width: 32px;
+  height: 32px;
 }

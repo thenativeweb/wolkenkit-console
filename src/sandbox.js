@@ -30,6 +30,13 @@ const sandbox = {
     });
   },
 
+  disconnect ({ authentication = undefined }) {
+    wolkenkit.reset();
+    if (authentication && authentication.clientId) {
+      window.localStorage.removeItem(`id_token_${authentication.clientId}`);
+    }
+  },
+
   execute (code) {
     if (!app) {
       fakeConsole.error(new Error('Connect to a wolkenkit app first.'));

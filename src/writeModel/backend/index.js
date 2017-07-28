@@ -5,6 +5,7 @@ import changePort from './changePort';
 import changeScope from './changeScope';
 import changeStrictMode from './changeStrictMode';
 import connectToBackend from './connectToBackend';
+import disconnectFromBackend from './disconnectFromBackend';
 import resetReadModel from './resetReadModel';
 import startObservingEvents from './startObservingEvents';
 import startReadingModel from './startReadingModel';
@@ -19,6 +20,7 @@ export {
   changeScope,
   changeStrictMode,
   connectToBackend,
+  disconnectFromBackend,
   resetReadModel,
   startObservingEvents,
   stopObservingEvents,
