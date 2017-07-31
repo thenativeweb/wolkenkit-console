@@ -5,6 +5,7 @@ ADD . /console/
 
 WORKDIR /console
 
-RUN npm install --production --silent
+RUN npm install --production --silent && \
+    npm run build
 
-CMD [ "npm", "start" ]
+CMD [ "node", "bin/wolkenkit-console.js" ]
