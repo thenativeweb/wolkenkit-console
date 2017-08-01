@@ -13,5 +13,9 @@ roboter.
       src: [ 'src/**/*.js', '!node_modules/**/*.js', '!coverage/**/*.js', '!build/**/*.js' ],
       rules: '.eslintrc.json'
     });
+
+    task('universal/shell', {
+      build: 'docker build -t thenativeweb/wolkenkit-console .'
+    });
   }).
   start();
