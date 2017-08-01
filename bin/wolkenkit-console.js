@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, '..', 'static')));
 app.use(express.static(path.join(__dirname, '..', 'build', 'web')));
 
 try {
-  const keysPath = path.join('/', 'keys', 'console.wolkenkit.io');
+  const keysPath = path.join('/', 'keys', 'wildcard.wolkenkit.io');
 
   /* eslint-disable no-sync */
   const privateKey = fs.readFileSync(path.join(keysPath, 'privateKey.pem'), { encoding: 'utf8' });
