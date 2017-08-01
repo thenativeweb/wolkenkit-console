@@ -33,7 +33,7 @@ try {
   /* eslint-enable no-sync */
 
   https.createServer({ key: privateKey, cert: certificate }, app).listen(portHttps, () => {
-    logger.info('Console server started(HTTPS).', { port: portHttps });
+    logger.info('Console server started (HTTPS).', { port: portHttps });
   });
 
   const appRedirect = express();
@@ -52,6 +52,6 @@ try {
   logger.warn('Failed to load SSL keys, falling back to HTTP.');
 
   http.createServer(app).listen(portHttp, () => {
-    logger.info('Console server started(HTTP).', { port: portHttp });
+    logger.info('Console server started (HTTP).', { port: portHttp });
   });
 }

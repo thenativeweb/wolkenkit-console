@@ -31,6 +31,7 @@
     "mobx": "3.2.1",
     "mobx-react": "4.2.2",
     "nwb": "0.18.7",
+    "processenv": "0.1.1",
     "react": "15.6.1",
     "react-dom": "15.6.1",
     "superagent": "3.5.2",

@@ -6,6 +6,7 @@ ADD . /console/
 WORKDIR /console
 
 RUN npm install --production --silent && \
-    npm run build
+    npm run build && \
+    rm -rf /tmp/* /root/.npm /root/.node-gyp
 
-CMD [ "node", "bin/wolkenkit-console.js" ]
+CMD [ "dumb-init", "node", "bin/wolkenkit-console.js" ]
