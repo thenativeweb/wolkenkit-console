@@ -6,52 +6,40 @@
 
 /* eslint-enable strict */
 
-const fs = require('fs'),
-      http = require('http'),
-      https = require('https'),
-      path = require('path');
+const path = require('path');
 
 const express = require('express'),
       flaschenpost = require('flaschenpost'),
+      httpsOrHttp = require('https-or-http'),
       processenv = require('processenv');
 
 const logger = flaschenpost.getLogger();
 
 const app = express(),
+      certificateDirectory = path.join('/', 'keys', 'wildcard.wolkenkit.io'),
       portHttp = processenv('PORT_HTTP') || 8000,
       portHttps = processenv('PORT_HTTPS') || 9000;
 
 app.use(express.static(path.join(__dirname, '..', 'static')));
 app.use(express.static(path.join(__dirname, '..', 'build', 'web')));
 
-try {
-  const keysPath = path.join('/', 'keys', 'wildcard.wolkenkit.io');
+httpsOrHttp({
+  app,
+  certificateDirectory,
+  ports: {
+    http: portHttp,
+    https: portHttps
+  }
+}, (err, servers) => {
+  if (err) {
+    logger.error(err.message, err);
 
-  /* eslint-disable no-sync */
-  const privateKey = fs.readFileSync(path.join(keysPath, 'privateKey.pem'), { encoding: 'utf8' });
-  const certificate = fs.readFileSync(path.join(keysPath, 'certificate.pem'), { encoding: 'utf8' });
-  /* eslint-enable no-sync */
+    return;
+  }
 
-  https.createServer({ key: privateKey, cert: certificate }, app).listen(portHttps, () => {
-    logger.info('Console server started (HTTPS).', { port: portHttps });
-  });
+  logger.info('Console server started.', { protocol: servers.app.protocol, port: servers.app.port });
 
-  const appRedirect = express();
-
-  appRedirect.get(/.*/, (req, res) => {
-    res.writeHead(301, {
-      location: `https://${req.headers.host}${req.url}`
-    });
-    res.end();
-  });
-
-  http.createServer(appRedirect).listen(portHttp, () => {
-    logger.info('Console redirect server started (HTTP).', { port: portHttp });
-  });
-} catch (ex) {
-  logger.warn('Failed to load SSL keys, falling back to HTTP.');
-
-  http.createServer(app).listen(portHttp, () => {
-    logger.info('Console server started (HTTP).', { port: portHttp });
-  });
-}
+  if (servers.redirect) {
+    logger.info('Redirect server started.', { protocol: servers.redirect.protocol, port: servers.redirect.port });
+  }
+});
