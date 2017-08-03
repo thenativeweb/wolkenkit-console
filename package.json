@@ -28,6 +28,7 @@
     "codemirror": "5.27.4",
     "express": "4.15.3",
     "flaschenpost": "0.15.6",
+    "https-or-http": "0.1.0",
     "mobx": "3.2.1",
     "mobx-react": "4.2.2",
     "nwb": "0.18.7",
