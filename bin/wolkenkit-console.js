@@ -8,16 +8,38 @@
 
 const path = require('path');
 
-const express = require('express');
-const app = express();
+const express = require('express'),
+      flaschenpost = require('flaschenpost'),
+      httpsOrHttp = require('https-or-http'),
+      processenv = require('processenv');
 
-const PORT = 9000;
+const logger = flaschenpost.getLogger();
+
+const app = express(),
+      certificateDirectory = path.join('/', 'keys', 'wildcard.wolkenkit.io'),
+      portHttp = processenv('PORT_HTTP') || 8000,
+      portHttps = processenv('PORT_HTTPS') || 9000;
 
 app.use(express.static(path.join(__dirname, '..', 'static')));
 app.use(express.static(path.join(__dirname, '..', 'build', 'web')));
 
-app.listen(PORT, () => {
-  /* eslint-disable no-console */
-  console.log(`\nwolkenkit–console running at http://localhost:${PORT}\n`);
-  /* eslint-enable no-console */
+httpsOrHttp({
+  app,
+  certificateDirectory,
+  ports: {
+    http: portHttp,
+    https: portHttps
+  }
+}, (err, servers) => {
+  if (err) {
+    logger.error(err.message, err);
+
+    return;
+  }
+
+  logger.info('Console server started.', { protocol: servers.app.protocol, port: servers.app.port });
+
+  if (servers.redirect) {
+    logger.info('Redirect server started.', { protocol: servers.redirect.protocol, port: servers.redirect.port });
+  }
 });
