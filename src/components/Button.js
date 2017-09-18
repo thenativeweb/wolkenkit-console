@@ -21,7 +21,7 @@ const Button = function (props) {
   }
 
   return (
-    <button id={ props.id } className={ className } onClick={ props.onClick }>
+    <button id={ props.id } className={ className } disabled={ props.disabled } onClick={ props.onClick }>
       { props.children }
     </button>
   );

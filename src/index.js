@@ -5,9 +5,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import './index.css';
 
-const token = localStorage.getItem(`id_token_${application.authentication.clientId}`);
-
-if (token) {
+if (application.tryToConnect) {
   connectToBackend();
 }
 

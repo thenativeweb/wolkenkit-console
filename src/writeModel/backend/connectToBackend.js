@@ -5,16 +5,13 @@ import startObservingEvents from './startObservingEvents';
 import { extendObservable, runInAction } from 'mobx';
 
 const connectToBackend = function () {
-  const { host, port, isConnected, authentication } = application;
+  const { host, port, authentication } = application;
 
   if (!application.host) {
     throw new Error('Host is missing.');
   }
   if (!application.port) {
     throw new Error('Port is missing.');
-  }
-  if (isConnected) {
-    throw new Error('Already connected to application.');
   }
 
   let configuration;
@@ -36,18 +33,33 @@ const connectToBackend = function () {
     }).
     then(() => {
       runInAction(() => {
-        application.isConnected = true;
         extendObservable(application, {
-          configuration
+          configuration,
+          tryToConnect: true,
+          isBackendReachable: true
         });
+      });
+
+      const app = sandbox.getApp();
+
+      // Commented, because the connected event didn't work reliably. We should
+      // have another look at this in the future.
+      // app.on('connected', () => {
+      //   application.isBackendReachable = true;
+      // });
+
+      app.on('disconnected', () => {
+        application.isBackendReachable = false;
       });
 
       startObservingEvents();
     }).
     catch(() => {
-      /* eslint-disable no-alert */
-      alert('Could not load wolkenkit configuration. Is the backend running?');
-      /* eslint-enable no-alert */
+      runInAction(() => {
+        extendObservable(application, {
+          isBackendReachable: false
+        });
+      });
     });
 };
 

@@ -23,6 +23,10 @@
   border: 1px solid #282c34;
 }
 
+.wk-button:disabled {
+  opacity: 0.5;
+}
+
 .wk-button .wk-button__hint {
   opacity: 0.5;
   font-size: 14px;

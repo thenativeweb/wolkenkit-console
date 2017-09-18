@@ -19,9 +19,20 @@ import { editCode, executeCode, insertCommand } from './writeModel/programming';
 import './App.css';
 
 const App = function () {
-  if (!application.isConnected) {
+  if (!application.tryToConnect) {
     return (
       <div className='wk-app'>
+        {
+          // <MessageBar text='The backend is not reachable, is it running?' type='error' condition={} />
+        }
+        {
+
+          // We explicitly check for false here, as the value null is also allowed
+          // and has a different meaning than false.
+          application.isBackendReachable === false ?
+            <div>!!! Backend is not reachable. !!!</div> :
+            null
+        }
         <Symbols />
         <Sidebar>
           <Brand suffix='console' />
@@ -32,7 +43,7 @@ const App = function () {
           <div className='ControlGroup'>
             <input className='TextBox' value={ application.host } onChange={ changeHost } />
             <input className='TextBox TextBox--port' value={ application.port } onChange={ changePort } />
-            <Button className='Button' onClick={ connectToBackend }>Connect</Button>
+            <Button className='Button' onClick={ connectToBackend } disabled={ !application.host || !application.port }>Connect</Button>
           </div>
           <h3>Want to use OpenID Connect?</h3>
           <span>Simply complete the configuration below.</span>
@@ -49,6 +60,14 @@ const App = function () {
 
   return (
     <div className='wk-app'>
+      {
+
+        // We explicitly check for false here, as the value null is also allowed
+        // and has a different meaning than false.
+        application.isBackendReachable === false ?
+          <div>!!! Backend is not reachable. !!!</div> :
+          null
+      }
       <Symbols />
       <Sidebar>
         <Brand suffix='console' />

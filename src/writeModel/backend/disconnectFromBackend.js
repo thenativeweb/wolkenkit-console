@@ -9,9 +9,10 @@ const disconnectFromBackend = function () {
   sandbox.disconnect(application);
 
   extendObservable(application, {
-    configuration: undefined
+    configuration: undefined,
+    tryToConnect: false,
+    isBackendReachable: null
   });
-  application.isConnected = false;
 };
 
 export default disconnectFromBackend;

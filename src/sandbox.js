@@ -31,10 +31,17 @@ const sandbox = {
   },
 
   disconnect ({ authentication = undefined }) {
-    wolkenkit.reset();
-    if (authentication && authentication.clientId) {
-      window.localStorage.removeItem(`id_token_${authentication.clientId}`);
+    if (app) {
+      if (authentication && authentication.clientId) {
+        app.auth.logout();
+      }
+
+      app.removeEventListener('connected');
+      app.removeEventListener('disconnected');
     }
+
+    // Undocumented sdk function that resets the internal application cache.
+    wolkenkit.reset();
   },
 
   execute (code) {
