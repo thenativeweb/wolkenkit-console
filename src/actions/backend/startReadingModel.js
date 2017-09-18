@@ -1,6 +1,6 @@
-import debugging from '../../readModel/debugging';
-import fakeConsole from '../../fakeConsole';
-import sandbox from '../../sandbox';
+import fakeConsole from '../util/fakeConsole';
+import services from '../../services';
+import state from '../../state';
 import stopReadingModel from './stopReadingModel';
 import { extendObservable, runInAction } from 'mobx';
 
@@ -12,23 +12,27 @@ const startReadingModel = function (modelName) {
   stopReadingModel();
 
   runInAction(() => {
-    debugging.selectedReadModel = modelName;
+    state.debugging.selectedReadModel = modelName;
 
     if (modelName === 'none') {
       return;
     }
 
-    sandbox.getApp().lists[modelName].readAndObserve().
+    services.backend.lists[modelName].readAndObserve().
       started((items, cancel) => {
-        debugging.cancelRead = cancel;
+        state.debugging.cancelRead = cancel;
 
-        extendObservable(debugging, {
-          selectedReadModelItems: items
+        extendObservable(state, {
+          debugging: {
+            selectedReadModelItems: items
+          }
         });
       }).
       updated(items => {
-        extendObservable(debugging, {
-          selectedReadModelItems: items
+        extendObservable(state, {
+          debugging: {
+            selectedReadModelItems: items
+          }
         });
       }).
       failed(fakeConsole.log);

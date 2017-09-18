@@ -1,0 +1,9 @@
+.wk-message-bar {
+  padding: 7px;
+  text-align: center;
+}
+
+.wk-message-bar-error {
+  background-color: #ff0000;
+  color: #ffffff;
+}

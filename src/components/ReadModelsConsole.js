@@ -1,9 +1,8 @@
-import application from '../readModel/application';
-import debugging from '../readModel/debugging';
 import { observer } from 'mobx-react';
 import ReadModelItem from './ReadModelItem';
+import state from '../state';
 import React, { Component } from 'react';
-import { startReadingModel, stopReadingModel } from '../writeModel/backend';
+import { startReadingModel, stopReadingModel } from '../actions/backend';
 import './ReadModelsConsole.css';
 
 class ReadModels extends Component {
@@ -28,8 +27,8 @@ class ReadModels extends Component {
       childList: true
     });
 
-    if (debugging.selectedReadModel !== 'none') {
-      startReadingModel(debugging.selectedReadModel);
+    if (state.debugging.selectedReadModel !== 'none') {
+      startReadingModel(state.debugging.selectedReadModel);
     }
   }
 
@@ -43,7 +42,7 @@ class ReadModels extends Component {
   }
 
   render () {
-    if (!application.configuration || !debugging.selectedReadModel) {
+    if (!state.backend.configuration || !state.debugging.selectedReadModel) {
       return null;
     }
 
@@ -51,10 +50,10 @@ class ReadModels extends Component {
       <div className='wk-read-model-console'>
         <div className='wk-read-model__bar'>
           <div className='wk-dropdown'>
-            <select value={ debugging.selectedReadModel } onChange={ ReadModels.handleModelChanged }>
+            <select value={ state.debugging.selectedReadModel } onChange={ ReadModels.handleModelChanged }>
               <option key={ 'none' } value='none'>Choose model…</option>
               {
-                Object.keys(application.configuration.readModel.lists).map(listName =>
+                Object.keys(state.backend.configuration.readModel.lists).map(listName =>
                   <option key={ listName } value={ listName }>{listName}</option>
                 )
               }
@@ -63,7 +62,7 @@ class ReadModels extends Component {
         </div>
         <div className='wk-read-model__items' ref={ this.saveContainerRef }>
           {
-            debugging.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } />)
+            state.debugging.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } />)
           }
         </div>
       </div>

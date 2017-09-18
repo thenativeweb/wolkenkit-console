@@ -12,6 +12,22 @@ import startReadingModel from './startReadingModel';
 import stopObservingEvents from './stopObservingEvents';
 import stopReadingModel from './stopReadingModel';
 
+export default {
+  changeClientId,
+  changeHost,
+  changeIdentityProviderUrl,
+  changePort,
+  changeScope,
+  changeStrictMode,
+  connectToBackend,
+  disconnectFromBackend,
+  resetReadModel,
+  startObservingEvents,
+  stopObservingEvents,
+  startReadingModel,
+  stopReadingModel
+};
+
 export {
   changeClientId,
   changeHost,

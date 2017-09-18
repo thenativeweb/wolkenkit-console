@@ -1,5 +1,5 @@
 import Button from './Button';
-import fakeConsole from '../fakeConsole';
+import fakeConsole from '../actions/util/fakeConsole';
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 import './ErrorConsole.css';

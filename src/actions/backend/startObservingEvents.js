@@ -1,17 +1,17 @@
-import debugging from '../../readModel/debugging';
-import fakeConsole from '../../fakeConsole';
-import sandbox from '../../sandbox';
+import fakeConsole from '../util/fakeConsole';
+import services from '../../services';
+import state from '../../state';
 import stopObservingEvents from './stopObservingEvents';
 
 const startObservingEvents = function () {
   stopObservingEvents();
 
-  sandbox.getApp().events.observe().
+  services.backend.events.observe().
     started(cancel => {
-      debugging.cancelEvents = cancel;
+      state.debugging.cancelEvents = cancel;
     }).
     received(event => {
-      debugging.collectedEvents.push(event);
+      state.debugging.collectedEvents.push(event);
     }).
     failed(fakeConsole.log);
 };

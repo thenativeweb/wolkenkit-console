@@ -1,11 +1,11 @@
 import App from './App';
-import application from './readModel/application';
-import { connectToBackend } from './writeModel/backend';
+import { connectToBackend } from './actions/backend';
 import React from 'react';
 import { render } from 'react-dom';
+import state from './state';
 import './index.css';
 
-if (application.tryToConnect) {
+if (state.backend.tryToConnect) {
   connectToBackend();
 }
 
