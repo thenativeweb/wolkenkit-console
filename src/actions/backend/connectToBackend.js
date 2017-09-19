@@ -30,7 +30,7 @@ const connectToBackend = function () {
     then(backend => {
       services.backend = backend;
 
-      if (authentication.identityProviderUrl && !backend.auth.isLoggedIn()) {
+      if (authentication.identityProviderUrl && authentication.clientId && !backend.auth.isLoggedIn()) {
         return backend.auth.login();
       }
 
