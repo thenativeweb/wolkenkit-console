@@ -55,7 +55,7 @@ const App = function () {
       <View orientation='vertical'>
         <View size='flex'>
           <MessageBar type='error' isVisble={ state.backend.error }>
-            { state.backend.error } <Button onClick={ backend.handleDisconnectClicked }>Disconnect me</Button> <Button onClick={ backend.handleConnectClicked }>Reconnect me</Button>
+            { state.backend.error } <Button onClick={ backend.handleDisconnectClicked }>Disconnect me</Button> <Button onClick={ backend.handleReconnectClicked }>Reconnect me</Button>
           </MessageBar>
         </View>
 
