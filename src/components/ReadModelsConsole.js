@@ -2,12 +2,12 @@ import { observer } from 'mobx-react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
 import React, { Component } from 'react';
-import { startReadingModel, stopReadingModel } from '../actions/backend';
+import watching from '../actions/watching';
 import './ReadModelsConsole.css';
 
 class ReadModels extends Component {
   static handleModelChanged (event) {
-    startReadingModel(event.target.value);
+    watching.startReadingModel(event.target.value);
   }
 
   constructor () {
@@ -28,12 +28,12 @@ class ReadModels extends Component {
     });
 
     if (state.watching.selectedReadModel !== 'none') {
-      startReadingModel(state.watching.selectedReadModel);
+      watching.startReadingModel(state.watching.selectedReadModel);
     }
   }
 
   componentWillUnmount () {
-    stopReadingModel();
+    watching.stopReadingModel();
     this.mutationObserver.disconnect();
   }
 

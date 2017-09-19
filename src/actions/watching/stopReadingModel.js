@@ -1,9 +1,11 @@
 import { extendObservable } from 'mobx';
+import services from '../../services';
 import state from '../../state';
 
 const stopReadingModel = function () {
-  if (state.watching.cancelRead) {
-    state.watching.cancelRead();
+  if (services.subscriptions.model) {
+    services.subscriptions.model();
+    Reflect.deleteProperty(services.subscriptions, 'model');
   }
 
   extendObservable(state.watching, {

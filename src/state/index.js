@@ -2,44 +2,18 @@ import autoSave from './autoSave';
 import { extendObservable } from 'mobx';
 import load from './load';
 import merge from 'lodash/merge';
-import stripIndent from 'common-tags/lib/stripIndent';
+import { backend, connecting, debugging, programming, watching } from './defaults';
 
 const key = 'wolkenkit-console-state';
 
-const loadedState = load({ key });
-
 const state = extendObservable({}, merge({}, {
-  backend: {
-    host: 'local.wolkenkit.io',
-    port: 3000,
-    tryToConnect: false,
-    isBackendReachable: null,
-    configuration: undefined,
-    authentication: {
-      identityProviderUrl: 'https://grundhoeferj.eu.auth0.com/authorize',
-      clientId: 'Pny9tYykOORUAPC3JcIB8XMAJ_8nsv6c',
-      scope: 'profile',
-      strictMode: false
-    }
-  },
-  programming: {
-    code: stripIndent`
-      /*
-       * Use the 'app' object to access your backend.
-       * For details on how to send commands see…
-       * https://docs.wolkenkit.io/latest/reference/building-a-client/sending-commands/
-       */`
-  },
-  watching: {
-    selectedReadModel: 'none',
-    selectedReadModelItems: [],
-    collectedEvents: []
-  },
-  debugging: {
-    messages: []
-  }
-}, loadedState));
+  backend,
+  connecting,
+  debugging,
+  programming,
+  watching
+}, load({ key })));
 
-autoSave({ state, take: [ 'backend' ], key });
+autoSave({ state, take: [ 'backend', 'connecting' ], key });
 
 export default state;

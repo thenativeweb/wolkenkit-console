@@ -8,7 +8,7 @@ const startObservingEvents = function () {
 
   services.backend.events.observe().
     started(cancel => {
-      state.watching.cancelEvents = cancel;
+      services.subscriptions.events = cancel;
     }).
     received(event => {
       state.watching.collectedEvents.push(event);

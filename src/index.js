@@ -1,12 +1,16 @@
 import App from './App';
-import { connectToBackend } from './actions/backend';
+import backend from './actions/backend';
 import React from 'react';
 import { render } from 'react-dom';
 import state from './state';
 import './index.css';
 
-if (state.backend.tryToConnect) {
-  connectToBackend();
-}
+(async () => {
+  if (state.backend) {
+    const { host, port } = state.backend;
 
-render(<App />, document.querySelector('#app'));
+    await backend.connect({ host, port });
+  }
+
+  render(<App />, document.querySelector('#app'));
+})();

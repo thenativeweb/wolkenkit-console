@@ -9,7 +9,7 @@ class EditorBar extends Component {
     this.handleContextChanged = this.handleContextChanged.bind(this);
     this.handleAggregateChanged = this.handleAggregateChanged.bind(this);
     this.handleCommandChanged = this.handleCommandChanged.bind(this);
-    this.handleBuildCommandClicked = this.handleBuildCommandClicked.bind(this);
+    this.handleInsertCommandClicked = this.handleInsertCommandClicked.bind(this);
 
     this.state = {
       selectedContext: undefined,
@@ -36,11 +36,11 @@ class EditorBar extends Component {
     });
   }
 
-  handleBuildCommandClicked () {
-    const { onCommandCreate } = this.props;
+  handleInsertCommandClicked () {
+    const { onInsertCommandClick } = this.props;
     const { selectedContext, selectedAggregate, selectedCommand } = this.state;
 
-    onCommandCreate({
+    onInsertCommandClick({
       context: selectedContext,
       aggregate: selectedAggregate,
       command: selectedCommand
@@ -55,7 +55,7 @@ class EditorBar extends Component {
     }
 
     return (
-      <Button type='small' onClick={ this.handleBuildCommandClicked }>Insert</Button>
+      <Button type='small' onClick={ this.handleInsertCommandClicked }>Insert</Button>
     );
   }
 

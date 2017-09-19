@@ -113,11 +113,11 @@ class Editor extends Component {
   }
 
   render () {
-    const { configuration, onCommandCreate } = this.props;
+    const { configuration, onInsertCommandClick } = this.props;
 
     return (
       <div className='wk-editor'>
-        <EditorBar onCommandCreate={ onCommandCreate } configuration={ configuration } />
+        <EditorBar onInsertCommandClick={ onInsertCommandClick } configuration={ configuration } />
         <div
           className='wk-editor-container'
           ref={ ref => {

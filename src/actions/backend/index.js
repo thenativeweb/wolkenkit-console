@@ -1,45 +1,21 @@
-import changeClientId from './changeClientId';
-import changeHost from './changeHost';
-import changeIdentityProviderUrl from './changeIdentityProviderUrl';
-import changePort from './changePort';
-import changeScope from './changeScope';
-import changeStrictMode from './changeStrictMode';
-import connectToBackend from './connectToBackend';
-import disconnectFromBackend from './disconnectFromBackend';
-import resetReadModel from './resetReadModel';
-import startObservingEvents from './startObservingEvents';
-import startReadingModel from './startReadingModel';
-import stopObservingEvents from './stopObservingEvents';
-import stopReadingModel from './stopReadingModel';
+import connect from './connect';
+import disconnect from './disconnect';
+import handleConnectClicked from './handleConnectClicked';
+import handleDisconnectClicked from './handleDisconnectClicked';
+import resetState from './resetState';
 
 export default {
-  changeClientId,
-  changeHost,
-  changeIdentityProviderUrl,
-  changePort,
-  changeScope,
-  changeStrictMode,
-  connectToBackend,
-  disconnectFromBackend,
-  resetReadModel,
-  startObservingEvents,
-  stopObservingEvents,
-  startReadingModel,
-  stopReadingModel
+  connect,
+  disconnect,
+  handleConnectClicked,
+  handleDisconnectClicked,
+  resetState
 };
 
 export {
-  changeClientId,
-  changeHost,
-  changeIdentityProviderUrl,
-  changePort,
-  changeScope,
-  changeStrictMode,
-  connectToBackend,
-  disconnectFromBackend,
-  resetReadModel,
-  startObservingEvents,
-  stopObservingEvents,
-  startReadingModel,
-  stopReadingModel
+  connect,
+  disconnect,
+  handleConnectClicked,
+  handleDisconnectClicked,
+  resetState
 };

@@ -1,5 +1,7 @@
+import backend from './actions/backend';
 import Brand from './components/Brand';
 import Button from './components/Button';
+import connecting from './actions/connecting';
 import ConnectionButton from './components/ConnectionButton';
 import Editor from './components/Editor';
 import ErrorConsole from './components/ErrorConsole';
@@ -7,6 +9,7 @@ import EventConsole from './components/EventConsole';
 import Icon from './components/Icon';
 import MessageBar from './components/MessageBar';
 import { observer } from 'mobx-react';
+import programming from './actions/programming';
 import React from 'react';
 import ReadModelsConsole from './components/ReadModelsConsole';
 import Sidebar from './components/Sidebar';
@@ -14,23 +17,16 @@ import state from './state';
 import Symbols from './components/Symbols';
 import Tabs from './components/Tabs';
 import View from './components/View';
-import { changeClientId, changeHost, changeIdentityProviderUrl, changePort, changeScope, changeStrictMode, connectToBackend, disconnectFromBackend } from './actions/backend';
-import { editCode, executeCode, insertCommand } from './actions/programming';
 import './App.css';
 
 const App = function () {
-  if (!state.backend.tryToConnect) {
+  if (!state.backend) {
     return (
       <div className='wk-app'>
         <View orientation='vertical' size='flex'>
           <View size='flex'>
-            {
-
-              // We explicitly check for false here, as the value null is also allowed
-              // and has a different meaning than false.
-            }
-            <MessageBar type='error' isVisble={ state.backend.isBackendReachable === false }>
-              The backend is not reachable, is it running?
+            <MessageBar type='error' isVisble={ state.connecting.error }>
+              { state.connecting.error }
             </MessageBar>
           </View>
 
@@ -43,17 +39,9 @@ const App = function () {
             <View orientation='vertical' alignItems='center' justifyContent='center'>
               <h2>Connect to a wolkenkit application</h2>
               <div className='ControlGroup'>
-                <input className='TextBox' value={ state.backend.host } onChange={ changeHost } />
-                <input className='TextBox TextBox--port' value={ state.backend.port } onChange={ changePort } />
-                <Button className='Button' onClick={ connectToBackend } disabled={ !state.backend.host || !state.backend.port }>Connect</Button>
-              </div>
-              <h3>Want to use OpenID Connect?</h3>
-              <span>Simply complete the configuration below.</span>
-              <div className='ControlGroup'>
-                <input className='TextBox' value={ state.backend.authentication.identityProviderUrl } onChange={ changeIdentityProviderUrl } placeholder='Identity Provider URL' />
-                <input className='TextBox' value={ state.backend.authentication.clientId } onChange={ changeClientId } placeholder='Client ID' />
-                <input className='TextBox' value={ state.backend.authentication.scope } onChange={ changeScope } placeholder='Scope' />
-                <label>Strict mode? <input type='checkbox' checked={ state.backend.authentication.strictMode } onChange={ changeStrictMode } /></label>
+                <input className='TextBox' name='host' value={ state.connecting.host } onChange={ connecting.handleInputChanged } />
+                <input className='TextBox TextBox--port' name='port' value={ state.connecting.port } onChange={ connecting.handleInputChanged } />
+                <Button className='Button' onClick={ backend.handleConnectClicked } disabled={ !state.connecting.host || !state.connecting.port }>Connect</Button>
               </div>
             </View>
           </View>
@@ -66,13 +54,8 @@ const App = function () {
     <div className='wk-app'>
       <View orientation='vertical'>
         <View size='flex'>
-          {
-
-            // We explicitly check for false here, as the value null is also allowed
-            // and has a different meaning than false.
-          }
-          <MessageBar type='error' isVisble={ state.backend.isBackendReachable === false }>
-            The backend is not reachable, is it running? <Button onClick={ disconnectFromBackend }>Disconnect me</Button> <Button onClick={ connectToBackend }>Reconnect me</Button>
+          <MessageBar type='error' isVisble={ state.backend.error }>
+            { state.backend.error } <Button onClick={ backend.handleDisconnectClicked }>Disconnect me</Button> <Button onClick={ backend.handleConnectClicked }>Reconnect me</Button>
           </MessageBar>
         </View>
 
@@ -81,7 +64,7 @@ const App = function () {
           <Sidebar>
             <Brand suffix='console' />
             <Sidebar.Item>
-              <ConnectionButton onDisconnect={ disconnectFromBackend } />
+              <ConnectionButton onDisconnect={ backend.handleDisconnectClicked } />
             </Sidebar.Item>
           </Sidebar>
           <View id='screen' orientation='vertical'>
@@ -91,9 +74,9 @@ const App = function () {
                   <Editor
                     configuration={ state.backend.configuration }
                     value={ state.programming.code }
-                    onCommandCreate={ insertCommand }
-                    onChange={ editCode }
-                    onExecute={ executeCode }
+                    onInsertCommandClick={ programming.handleInsertCommandClicked }
+                    onChange={ programming.handleCodeEdited }
+                    onExecute={ programming.handleExecuteCodeClicked }
                   />
                 </View>
                 <View size='auto'>
