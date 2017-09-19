@@ -8,7 +8,7 @@ const key = 'wolkenkit-console-state';
 
 const loadedState = load({ key });
 
-const state = extendObservable({}, merge({}, loadedState, {
+const state = extendObservable({}, merge({}, {
   backend: {
     host: 'local.wolkenkit.io',
     port: 3000,
@@ -35,7 +35,7 @@ const state = extendObservable({}, merge({}, loadedState, {
     selectedReadModelItems: [],
     collectedEvents: []
   }
-}));
+}, loadedState));
 
 autoSave({ state, take: [ 'backend' ], key });
 
