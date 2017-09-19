@@ -39,9 +39,27 @@ const App = function () {
             <View orientation='vertical' alignItems='center' justifyContent='center'>
               <h2>Connect to a wolkenkit application</h2>
               <div className='ControlGroup'>
-                <input className='TextBox' name='host' value={ state.connecting.host } onChange={ connecting.handleInputChanged } />
-                <input className='TextBox TextBox--port' name='port' value={ state.connecting.port } onChange={ connecting.handleInputChanged } />
-                <Button className='Button' onClick={ backend.handleConnectClicked } disabled={ !state.connecting.host || !state.connecting.port }>Connect</Button>
+                <input className='TextBox' name='host' value={ state.connecting.host } onChange={ connecting.handleInputChanged } placeholder='Host' />
+                <input className='TextBox TextBox--port' name='port' value={ state.connecting.port } onChange={ connecting.handleInputChanged } placeholder='Port' />
+                <Button
+                  className='Button'
+                  onClick={ backend.handleConnectClicked }
+                  disabled={
+                    !state.connecting.host ||
+                    !state.connecting.port ||
+                    (state.connecting.authentication.identityProviderUrl && !state.connecting.authentication.clientId) ||
+                    (!state.connecting.authentication.identityProviderUrl && state.connecting.authentication.clientId)
+                  }
+                >Connect</Button>
+              </div>
+
+              <h3>Want to use OpenID Connect?</h3>
+              <span>Simply complete the configuration below.</span>
+              <div className='ControlGroup'>
+                <input className='TextBox' name='authentication.identityProviderUrl' value={ state.connecting.authentication.identityProviderUrl } onChange={ connecting.handleInputChanged } placeholder='Identity provider URL' />
+                <input className='TextBox' name='authentication.clientId' value={ state.connecting.authentication.clientId } onChange={ connecting.handleInputChanged } placeholder='Client ID' />
+                <input className='TextBox' name='authentication.scope' value={ state.connecting.authentication.scope } onChange={ connecting.handleInputChanged } placeholder='Scope' />
+                <label>Strict mode? <input type='checkbox' name='authentication.strictMode' checked={ state.connecting.authentication.strictMode } onChange={ connecting.handleInputChanged } /></label>
               </div>
             </View>
           </View>

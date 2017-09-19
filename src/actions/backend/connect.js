@@ -11,8 +11,19 @@ const connect = async function (options) {
   if (!options.port) {
     throw new Error('Port is missing.');
   }
+  if (options.authentication) {
+    if (options.authentication.identityProviderUrl && !options.authentication.clientId) {
+      throw new Error('Client ID is missing.');
+    }
+    if (!options.authentication.identityProviderUrl && options.authentication.clientId) {
+      throw new Error('Identity provider URL is missing.');
+    }
+  }
 
   const { host, port } = options;
+
+  const authentication = options.authentication || {};
+  const isAuthenticationEnabled = authentication.identityProviderUrl && authentication.clientId;
 
   let app,
       configuration;
@@ -25,21 +36,19 @@ const connect = async function (options) {
     return;
   }
 
-  // if (authentication.identityProviderUrl && authentication.clientId) {
-  //   options.authentication = new wolkenkit.authentication.OpenIdConnect(authentication);
-  // }
+  let authProvider;
+
+  if (isAuthenticationEnabled) {
+    authProvider = new wolkenkit.authentication.OpenIdConnect(authentication);
+  }
 
   try {
-    app = await wolkenkit.connect(options);
+    app = await wolkenkit.connect({ host, port, authentication: authProvider });
   } catch (ex) {
     state.connecting.error = 'Failed to connect, is the backend running?';
 
     return;
   }
-
-  // if (authentication.identityProviderUrl && authentication.clientId && !backend.auth.isLoggedIn()) {
-  //   return backend.auth.login();
-  // }
 
   runInAction(() => {
     state.backend = {};
@@ -49,9 +58,14 @@ const connect = async function (options) {
       host,
       port,
       configuration,
+      authentication,
       error: undefined
     });
   });
+
+  if (isAuthenticationEnabled && !app.auth.isLoggedIn()) {
+    return app.auth.login();
+  }
 
   // Commented, because the connected event didn't work reliably. We should
   // have another look at this in the future.

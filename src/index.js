@@ -9,7 +9,16 @@ import './index.css';
   if (state.backend) {
     const { host, port } = state.backend;
 
-    await backend.connect({ host, port });
+    await backend.connect({
+      host,
+      port,
+      authentication: {
+        identityProviderUrl: state.backend.authentication.identityProviderUrl,
+        clientId: state.backend.authentication.clientId,
+        scope: state.backend.authentication.scope,
+        strictMode: state.backend.authentication.strictMode
+      }
+    });
   }
 
   render(<App />, document.querySelector('#app'));
