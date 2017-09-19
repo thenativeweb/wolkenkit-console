@@ -14,19 +14,17 @@ const disconnectFromBackend = function () {
       backend.auth.logout();
     }
 
-    backend.removeEventListener('connected');
-    backend.removeEventListener('disconnected');
+    backend.removeAllListeners('connected');
+    backend.removeAllListeners('disconnected');
   }
 
   // Undocumented sdk function that resets the internal application cache.
   wolkenkit.reset();
 
-  extendObservable(state, {
-    backend: {
-      configuration: undefined,
-      tryToConnect: false,
-      isBackendReachable: null
-    }
+  extendObservable(state.backend, {
+    configuration: undefined,
+    tryToConnect: false,
+    isBackendReachable: null
   });
 };
 

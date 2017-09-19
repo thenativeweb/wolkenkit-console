@@ -6,10 +6,8 @@ const stopReadingModel = function () {
     state.debugging.cancelRead();
   }
 
-  extendObservable(state, {
-    debugging: {
-      selectedReadModelItems: []
-    }
+  extendObservable(state.debugging, {
+    selectedReadModelItems: []
   });
 };
 

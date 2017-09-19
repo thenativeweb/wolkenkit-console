@@ -17,9 +17,7 @@ const connectToBackend = function () {
 
   loadConfiguration({ host, port }).
     then(configuration => {
-      extendObservable(state, {
-        backend: { configuration }
-      });
+      extendObservable(state.backend, { configuration });
 
       const options = { host, port };
 
@@ -32,15 +30,13 @@ const connectToBackend = function () {
     then(backend => {
       services.backend = backend;
 
-      if (authentication && !backend.auth.isLoggedIn()) {
+      if (authentication.identityProviderUrl && !backend.auth.isLoggedIn()) {
         return backend.auth.login();
       }
 
-      extendObservable(state, {
-        backend: {
-          tryToConnect: true,
-          isBackendReachable: true
-        }
+      extendObservable(state.backend, {
+        tryToConnect: true,
+        isBackendReachable: true
       });
 
       // Commented, because the connected event didn't work reliably. We should

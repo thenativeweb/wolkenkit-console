@@ -22,17 +22,13 @@ const startReadingModel = function (modelName) {
       started((items, cancel) => {
         state.debugging.cancelRead = cancel;
 
-        extendObservable(state, {
-          debugging: {
-            selectedReadModelItems: items
-          }
+        extendObservable(state.debugging, {
+          selectedReadModelItems: items
         });
       }).
       updated(items => {
-        extendObservable(state, {
-          debugging: {
-            selectedReadModelItems: items
-          }
+        extendObservable(state.debugging, {
+          selectedReadModelItems: items
         });
       }).
       failed(fakeConsole.log);

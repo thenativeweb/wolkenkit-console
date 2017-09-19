@@ -12,6 +12,7 @@ const insertCommand = function (command) {
      * For details on how to send commands see…
      * https://docs.wolkenkit.io/latest/reference/building-a-client/sending-commands/
      */
+
     app.${command.context}.${command.aggregate}().${command.command}().
       failed(console.log);`;
 };

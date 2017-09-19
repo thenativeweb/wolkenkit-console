@@ -6,10 +6,8 @@ const stopObservingEvents = function () {
     state.debugging.cancelEvents();
   }
 
-  extendObservable(state, {
-    debugging: {
-      collectedEvents: []
-    }
+  extendObservable(state.debugging, {
+    collectedEvents: []
   });
 };
 
