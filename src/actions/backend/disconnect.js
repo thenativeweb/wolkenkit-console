@@ -1,3 +1,4 @@
+import connecting from '../connecting';
 import debugging from '../debugging';
 import programming from '../programming';
 import resetState from './resetState';
@@ -25,6 +26,7 @@ const disconnect = function () {
   wolkenkit.reset();
 
   resetState();
+  connecting.resetState();
   debugging.resetState();
   programming.resetState();
   watching.resetState();

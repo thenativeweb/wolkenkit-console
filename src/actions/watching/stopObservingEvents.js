@@ -1,11 +1,10 @@
 import { extendObservable } from 'mobx';
-import services from '../../services';
 import state from '../../state';
 
 const stopObservingEvents = function () {
-  if (services.subscriptions.events) {
-    services.subscriptions.events();
-    Reflect.deleteProperty(services.subscriptions, 'events');
+  if (state.subscriptions.events) {
+    state.subscriptions.events();
+    state.subscriptions.events = undefined;
   }
 
   extendObservable(state.watching, {

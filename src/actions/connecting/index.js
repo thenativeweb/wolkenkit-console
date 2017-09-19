@@ -1,9 +1,12 @@
 import handleInputChanged from './handleInputChanged';
+import resetState from './resetState';
 
 export default {
-  handleInputChanged
+  handleInputChanged,
+  resetState
 };
 
 export {
-  handleInputChanged
+  handleInputChanged,
+  resetState
 };

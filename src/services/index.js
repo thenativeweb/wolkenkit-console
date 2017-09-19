@@ -1,5 +1,3 @@
-const services = {
-  subscriptions: {}
-};
+const services = {};
 
 export default services;

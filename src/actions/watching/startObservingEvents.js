@@ -1,4 +1,5 @@
 import debugging from '../debugging';
+import { extendObservable } from 'mobx';
 import services from '../../services';
 import state from '../../state';
 import stopObservingEvents from './stopObservingEvents';
@@ -8,7 +9,7 @@ const startObservingEvents = function () {
 
   services.backend.events.observe().
     started(cancel => {
-      services.subscriptions.events = cancel;
+      extendObservable(state.subscriptions, { events: cancel });
     }).
     received(event => {
       state.watching.collectedEvents.push(event);

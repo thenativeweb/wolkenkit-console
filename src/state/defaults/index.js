@@ -2,6 +2,7 @@ import backend from './backend';
 import connecting from './connecting';
 import debugging from './debugging';
 import programming from './programming';
+import subscriptions from './subscriptions';
 import watching from './watching';
 
 export {
@@ -9,6 +10,7 @@ export {
   connecting,
   debugging,
   programming,
+  subscriptions,
   watching
 };
 
@@ -17,5 +19,6 @@ export default {
   connecting,
   debugging,
   programming,
+  subscriptions,
   watching
 };

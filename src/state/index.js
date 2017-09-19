@@ -2,7 +2,7 @@ import autoSave from './autoSave';
 import { extendObservable } from 'mobx';
 import load from './load';
 import merge from 'lodash/merge';
-import { backend, connecting, debugging, programming, watching } from './defaults';
+import { backend, connecting, debugging, programming, subscriptions, watching } from './defaults';
 
 const key = 'wolkenkit-console-state';
 
@@ -11,6 +11,7 @@ const state = extendObservable({}, merge({}, {
   connecting,
   debugging,
   programming,
+  subscriptions,
   watching
 }, load({ key })));
 
