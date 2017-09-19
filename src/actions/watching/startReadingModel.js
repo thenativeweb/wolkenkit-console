@@ -20,7 +20,7 @@ const startReadingModel = function (modelName) {
 
     services.backend.lists[modelName].readAndObserve().
       started((items, cancel) => {
-        extendObservable(services.subscriptions, { model: cancel });
+        extendObservable(state.subscriptions, { model: cancel });
         extendObservable(state.watching, { selectedReadModelItems: items });
       }).
       updated(items => {
