@@ -1,8 +1,8 @@
 import executeUnsafeCode from '../util/executeUnsafeCode';
-import services from '../../services';
+import state from '../../state';
 
 const executeCode = function (code) {
-  executeUnsafeCode(code, services.backend);
+  executeUnsafeCode(code, state.backend.app);
 };
 
 export default executeCode;

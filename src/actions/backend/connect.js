@@ -1,5 +1,4 @@
 import loadConfiguration from '../util/loadConfiguration';
-import services from '../../services';
 import state from '../../state';
 import watching from '../watching';
 import wolkenkit from 'wolkenkit-client';
@@ -15,7 +14,7 @@ const connect = async function (options) {
 
   const { host, port } = options;
 
-  let backend,
+  let app,
       configuration;
 
   try {
@@ -31,14 +30,12 @@ const connect = async function (options) {
   // }
 
   try {
-    backend = await wolkenkit.connect(options);
+    app = await wolkenkit.connect(options);
   } catch (ex) {
     state.connecting.error = 'Failed to connect, is the backend running?';
 
     return;
   }
-
-  services.backend = backend;
 
   // if (authentication.identityProviderUrl && authentication.clientId && !backend.auth.isLoggedIn()) {
   //   return backend.auth.login();
@@ -48,6 +45,7 @@ const connect = async function (options) {
     state.backend = {};
 
     extendObservable(state.backend, {
+      app,
       host,
       port,
       configuration,
@@ -61,7 +59,7 @@ const connect = async function (options) {
   //   state.backend.isReachable = true;
   // });
 
-  backend.on('disconnected', () => {
+  app.on('disconnected', () => {
     state.backend.error = 'Lost connection, is the backend running?';
   });
 

@@ -1,13 +1,12 @@
 import debugging from '../debugging';
 import { extendObservable } from 'mobx';
-import services from '../../services';
 import state from '../../state';
 import stopObservingEvents from './stopObservingEvents';
 
 const startObservingEvents = function () {
   stopObservingEvents();
 
-  services.backend.events.observe().
+  state.backend.app.events.observe().
     started(cancel => {
       extendObservable(state.subscriptions, { events: cancel });
     }).

@@ -15,6 +15,11 @@ const state = extendObservable({}, merge({}, {
   watching
 }, load({ key })));
 
-autoSave({ state, take: [ 'backend', 'connecting' ], key });
+autoSave({
+  state,
+  take: [ 'backend', 'connecting' ],
+  skip: [ 'backend.app' ],
+  key
+});
 
-export default state;
+export default state

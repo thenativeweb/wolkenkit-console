@@ -1,5 +1,4 @@
 import debugging from '../debugging';
-import services from '../../services';
 import state from '../../state';
 import stopReadingModel from './stopReadingModel';
 import { extendObservable, runInAction } from 'mobx';
@@ -18,7 +17,7 @@ const startReadingModel = function (modelName) {
       return;
     }
 
-    services.backend.lists[modelName].readAndObserve().
+    state.backend.app.lists[modelName].readAndObserve().
       started((items, cancel) => {
         extendObservable(state.subscriptions, { model: cancel });
         extendObservable(state.watching, { selectedReadModelItems: items });

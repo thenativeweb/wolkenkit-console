@@ -2,7 +2,6 @@ import connecting from '../connecting';
 import debugging from '../debugging';
 import programming from '../programming';
 import resetState from './resetState';
-import services from '../../services';
 import state from '../../state';
 import stopObservingEvents from '../watching/stopObservingEvents';
 import watching from '../watching';
@@ -11,15 +10,15 @@ import wolkenkit from 'wolkenkit-client';
 const disconnect = function () {
   stopObservingEvents();
 
-  const { backend } = services;
+  const app = state.backend.app;
 
-  if (backend) {
+  if (app) {
     if (state.backend.authentication && state.backend.authentication.clientId) {
-      backend.auth.logout();
+      app.auth.logout();
     }
 
-    backend.removeAllListeners('connected');
-    backend.removeAllListeners('disconnected');
+    app.removeAllListeners('connected');
+    app.removeAllListeners('disconnected');
   }
 
   // Undocumented SDK function that resets the internal application cache.
