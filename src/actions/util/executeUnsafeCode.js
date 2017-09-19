@@ -1,8 +1,8 @@
-import fakeConsole from './fakeConsole';
+import debugging from '../debugging';
 
 /* eslint-disable no-unused-vars */
 const executeUnsafeCode = function (code, app) {
-  const console = fakeConsole;
+  const console = debugging;
   /* eslint-enable no-unused-vars */
 
   try {
@@ -10,7 +10,7 @@ const executeUnsafeCode = function (code, app) {
     eval(code);
     /* eslint-enable no-eval */
   } catch (err) {
-    fakeConsole.error(err);
+    debugging.error(err);
   }
 };
 

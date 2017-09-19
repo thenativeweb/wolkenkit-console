@@ -2,11 +2,11 @@ import { extendObservable } from 'mobx';
 import state from '../../state';
 
 const stopObservingEvents = function () {
-  if (state.debugging.cancelEvents) {
-    state.debugging.cancelEvents();
+  if (state.watching.cancelEvents) {
+    state.watching.cancelEvents();
   }
 
-  extendObservable(state.debugging, {
+  extendObservable(state.watching, {
     collectedEvents: []
   });
 };

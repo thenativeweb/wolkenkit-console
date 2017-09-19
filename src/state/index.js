@@ -30,10 +30,13 @@ const state = extendObservable({}, merge({}, {
        * https://docs.wolkenkit.io/latest/reference/building-a-client/sending-commands/
        */`
   },
-  debugging: {
+  watching: {
     selectedReadModel: 'none',
     selectedReadModelItems: [],
     collectedEvents: []
+  },
+  debugging: {
+    messages: []
   }
 }, loadedState));
 

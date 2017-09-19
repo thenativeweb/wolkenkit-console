@@ -27,8 +27,8 @@ class ReadModels extends Component {
       childList: true
     });
 
-    if (state.debugging.selectedReadModel !== 'none') {
-      startReadingModel(state.debugging.selectedReadModel);
+    if (state.watching.selectedReadModel !== 'none') {
+      startReadingModel(state.watching.selectedReadModel);
     }
   }
 
@@ -42,7 +42,7 @@ class ReadModels extends Component {
   }
 
   render () {
-    if (!state.backend.configuration || !state.debugging.selectedReadModel) {
+    if (!state.backend.configuration || !state.watching.selectedReadModel) {
       return null;
     }
 
@@ -50,7 +50,7 @@ class ReadModels extends Component {
       <div className='wk-read-model-console'>
         <div className='wk-read-model__bar'>
           <div className='wk-dropdown'>
-            <select value={ state.debugging.selectedReadModel } onChange={ ReadModels.handleModelChanged }>
+            <select value={ state.watching.selectedReadModel } onChange={ ReadModels.handleModelChanged }>
               <option key={ 'none' } value='none'>Choose model…</option>
               {
                 Object.keys(state.backend.configuration.readModel.lists).map(listName =>
@@ -62,7 +62,7 @@ class ReadModels extends Component {
         </div>
         <div className='wk-read-model__items' ref={ this.saveContainerRef }>
           {
-            state.debugging.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } />)
+            state.watching.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } />)
           }
         </div>
       </div>

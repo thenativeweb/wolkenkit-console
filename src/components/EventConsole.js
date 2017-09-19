@@ -37,16 +37,16 @@ class EventConsole extends Component {
   }
 
   render () {
-    if (!state.debugging.collectedEvents) {
+    if (!state.watching.collectedEvents) {
       return null;
     }
 
     return (
       <div className='wk-event-console' ref={ this.saveContainerRef }>
-        { state.debugging.collectedEvents.length === 0 ? <div className='wk-hint'>No events have been observed yet. Go ahead and send a command…</div> : '' }
+        { state.watching.collectedEvents.length === 0 ? <div className='wk-hint'>No events have been observed yet. Go ahead and send a command…</div> : '' }
 
         {
-          state.debugging.collectedEvents.map(event => <Event key={ event.id } event={ event } />)
+          state.watching.collectedEvents.map(event => <Event key={ event.id } event={ event } />)
         }
       </div>
     );

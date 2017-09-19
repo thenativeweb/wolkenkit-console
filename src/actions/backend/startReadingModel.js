@@ -1,4 +1,4 @@
-import fakeConsole from '../util/fakeConsole';
+import debugging from '../debugging';
 import services from '../../services';
 import state from '../../state';
 import stopReadingModel from './stopReadingModel';
@@ -12,7 +12,7 @@ const startReadingModel = function (modelName) {
   stopReadingModel();
 
   runInAction(() => {
-    state.debugging.selectedReadModel = modelName;
+    state.watching.selectedReadModel = modelName;
 
     if (modelName === 'none') {
       return;
@@ -20,18 +20,18 @@ const startReadingModel = function (modelName) {
 
     services.backend.lists[modelName].readAndObserve().
       started((items, cancel) => {
-        state.debugging.cancelRead = cancel;
+        state.watching.cancelRead = cancel;
 
-        extendObservable(state.debugging, {
+        extendObservable(state.watching, {
           selectedReadModelItems: items
         });
       }).
       updated(items => {
-        extendObservable(state.debugging, {
+        extendObservable(state.watching, {
           selectedReadModelItems: items
         });
       }).
-      failed(fakeConsole.log);
+      failed(debugging.log);
   });
 };
 

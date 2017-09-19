@@ -1,4 +1,4 @@
-import fakeConsole from '../util/fakeConsole';
+import debugging from '../debugging';
 import services from '../../services';
 import state from '../../state';
 import stopObservingEvents from './stopObservingEvents';
@@ -8,12 +8,12 @@ const startObservingEvents = function () {
 
   services.backend.events.observe().
     started(cancel => {
-      state.debugging.cancelEvents = cancel;
+      state.watching.cancelEvents = cancel;
     }).
     received(event => {
-      state.debugging.collectedEvents.push(event);
+      state.watching.collectedEvents.push(event);
     }).
-    failed(fakeConsole.log);
+    failed(debugging.log);
 };
 
 export default startObservingEvents;

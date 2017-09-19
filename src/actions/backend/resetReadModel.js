@@ -1,7 +1,7 @@
 import state from '../../state';
 
 const resetReadModel = function () {
-  state.debugging.selectedReadModel = 'none';
+  state.watching.selectedReadModel = 'none';
 };
 
 export default resetReadModel;

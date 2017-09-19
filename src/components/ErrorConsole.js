@@ -1,6 +1,7 @@
 import Button from './Button';
-import fakeConsole from '../actions/util/fakeConsole';
+import debugging from '../actions/debugging';
 import { observer } from 'mobx-react';
+import state from '../state';
 import React, { Component } from 'react';
 import './ErrorConsole.css';
 
@@ -33,7 +34,7 @@ class ErrorConsole extends Component {
   static handleClearClicked (event) {
     event.preventDefault();
 
-    fakeConsole.clear();
+    debugging.clear();
   }
 
   constructor () {
@@ -65,7 +66,7 @@ class ErrorConsole extends Component {
   }
 
   render () {
-    if (!fakeConsole.messages) {
+    if (!state.debugging.messages) {
       return null;
     }
 
@@ -78,17 +79,17 @@ class ErrorConsole extends Component {
     return (
       <div className={ className }>
         <div className='wk-error-console__header'>
-          <Button type='link' onClick={ this.handleExpandClicked }>Logs and Errors: ({fakeConsole.messages.length})</Button>
+          <Button type='link' onClick={ this.handleExpandClicked }>Logs and Errors: ({state.debugging.messages.length})</Button>
           <Button type='link' onClick={ ErrorConsole.handleClearClicked }>Clear</Button>
           <div className='wk-spacer' />
           { this.state.isExpanded ? <Button type='link' onClick={ this.handleCloseClicked }>Close</Button> : null }
         </div>
         <div className='wk-error-console__messages' ref={ this.saveContainerRef }>
-          { fakeConsole.messages.length === 0 ? <div className='wk-hint'>No errors encountered yet. Well done!</div> : '' }
+          { state.debugging.messages.length === 0 ? <div className='wk-hint'>No errors encountered yet. Well done!</div> : '' }
 
           {
             /* eslint-disable no-extra-parens */
-            fakeConsole.messages.map(ErrorConsole.renderMessage)
+            state.debugging.messages.map(ErrorConsole.renderMessage)
             /* eslint-enable no-extra-parens */
           }
         </div>

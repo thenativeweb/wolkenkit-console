@@ -2,11 +2,11 @@ import { extendObservable } from 'mobx';
 import state from '../../state';
 
 const stopReadingModel = function () {
-  if (state.debugging.cancelRead) {
-    state.debugging.cancelRead();
+  if (state.watching.cancelRead) {
+    state.watching.cancelRead();
   }
 
-  extendObservable(state.debugging, {
+  extendObservable(state.watching, {
     selectedReadModelItems: []
   });
 };
