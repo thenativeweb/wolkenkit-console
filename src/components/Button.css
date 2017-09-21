@@ -1,7 +1,5 @@
 .wk-button {
-  padding: 7px 11px;
-  margin: 16px;
-  margin-left: 0px;
+  padding: 9px 12px;
   background: #29abe2;
   color: #fff;
   border: none;
@@ -33,15 +31,17 @@
   padding-left: 0.75em;
 }
 
-.wk-button--size--flex {
+.wk-button--adjust-flex {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: 100%;
+  width: 100%;
 }
 
-.wk-button--size--auto {
+.wk-button--adjust-auto {
   flex-grow: 0;
   flex-shrink: 0;
+  flex-basis: auto;
 }
 
 .wk-button--type-small {

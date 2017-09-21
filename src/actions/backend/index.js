@@ -1,6 +1,6 @@
 import connect from './connect';
 import disconnect from './disconnect';
-import handleConnectClicked from './handleConnectClicked';
+import handleConnectFormSubmitted from './handleConnectFormSubmitted';
 import handleDisconnectClicked from './handleDisconnectClicked';
 import handleReconnectClicked from './handleReconnectClicked';
 import resetState from './resetState';
@@ -8,7 +8,7 @@ import resetState from './resetState';
 export default {
   connect,
   disconnect,
-  handleConnectClicked,
+  handleConnectFormSubmitted,
   handleDisconnectClicked,
   handleReconnectClicked,
   resetState
@@ -17,7 +17,7 @@ export default {
 export {
   connect,
   disconnect,
-  handleConnectClicked,
+  handleConnectFormSubmitted,
   handleDisconnectClicked,
   handleReconnectClicked,
   resetState

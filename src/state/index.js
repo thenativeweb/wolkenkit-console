@@ -22,4 +22,4 @@ autoSave({
   key
 });
 
-export default state
+export default state;

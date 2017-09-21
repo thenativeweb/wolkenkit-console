@@ -1,11 +1,14 @@
 import backend from './actions/backend';
 import Brand from './components/Brand';
 import Button from './components/Button';
+import CheckBox from './components/CheckBox';
 import connecting from './actions/connecting';
 import ConnectionButton from './components/ConnectionButton';
+import ControlGroup from './components/ControlGroup';
 import Editor from './components/Editor';
 import ErrorConsole from './components/ErrorConsole';
 import EventConsole from './components/EventConsole';
+import Form from './components/Form';
 import Icon from './components/Icon';
 import MessageBar from './components/MessageBar';
 import { observer } from 'mobx-react';
@@ -16,8 +19,17 @@ import Sidebar from './components/Sidebar';
 import state from './state';
 import Symbols from './components/Symbols';
 import Tabs from './components/Tabs';
+import TextBox from './components/TextBox';
 import View from './components/View';
 import './App.css';
+
+const isConnectDisabled = function () {
+  return (
+    !state.connecting.host ||
+    !state.connecting.port ||
+    (state.connecting.useAuthentication && (!state.connecting.authentication.identityProviderUrl || !state.connecting.authentication.clientId))
+  );
+};
 
 const App = function () {
   if (!state.backend) {
@@ -37,30 +49,55 @@ const App = function () {
               <Sidebar.Item type='centered'><Icon name='new-connection' /></Sidebar.Item>
             </Sidebar>
             <View orientation='vertical' alignItems='center' justifyContent='center'>
-              <h2>Connect to a wolkenkit application</h2>
-              <div className='ControlGroup'>
-                <input className='TextBox' name='host' value={ state.connecting.host } onChange={ connecting.handleInputChanged } placeholder='Host' />
-                <input className='TextBox TextBox--port' name='port' value={ state.connecting.port } onChange={ connecting.handleInputChanged } placeholder='Port' />
-                <Button
-                  className='Button'
-                  onClick={ backend.handleConnectClicked }
-                  disabled={
-                    !state.connecting.host ||
-                    !state.connecting.port ||
-                    (state.connecting.authentication.identityProviderUrl && !state.connecting.authentication.clientId) ||
-                    (!state.connecting.authentication.identityProviderUrl && state.connecting.authentication.clientId)
-                  }
-                >Connect</Button>
-              </div>
+              <Form type='centered' onSubmit={ backend.handleConnectFormSubmitted }>
+                <Form.Title>Connect to…</Form.Title>
+                <ControlGroup>
+                  <ControlGroup.Item label='Host' adjust='flex'>
+                    <TextBox name='host' value={ state.connecting.host } onChange={ connecting.handleInputChanged } placeholder='e.g. local.wolkenkit.io' />
+                  </ControlGroup.Item>
 
-              <h3>Want to use OpenID Connect?</h3>
-              <span>Simply complete the configuration below.</span>
-              <div className='ControlGroup'>
-                <input className='TextBox' name='authentication.identityProviderUrl' value={ state.connecting.authentication.identityProviderUrl } onChange={ connecting.handleInputChanged } placeholder='Identity provider URL' />
-                <input className='TextBox' name='authentication.clientId' value={ state.connecting.authentication.clientId } onChange={ connecting.handleInputChanged } placeholder='Client ID' />
-                <input className='TextBox' name='authentication.scope' value={ state.connecting.authentication.scope } onChange={ connecting.handleInputChanged } placeholder='Scope' />
-                <label>Strict mode? <input type='checkbox' name='authentication.strictMode' checked={ state.connecting.authentication.strictMode } onChange={ connecting.handleInputChanged } /></label>
-              </div>
+                  <ControlGroup.Item label='Port' adjust='auto'>
+                    <TextBox name='port' type='port' value={ state.connecting.port } onChange={ connecting.handleInputChanged } placeholder='e.g. 3000' />
+                  </ControlGroup.Item>
+
+                  <ControlGroup.Item adjust='auto'>
+                    <Button
+                      disabled={ isConnectDisabled() }
+                    >Connect</Button>
+                  </ControlGroup.Item>
+                </ControlGroup>
+                <ControlGroup.Divider />
+                <ControlGroup>
+                  <ControlGroup.Item adjust='flex'>
+                    <label htmlFor='use-authentication'>
+                      <CheckBox id='use-authentication' value={ state.connecting.useAuthentication } onChange={ connecting.handleAuthenticationChanged } />
+                      Use authentication
+                    </label>
+                  </ControlGroup.Item>
+                </ControlGroup>
+
+                <ControlGroup isVisible={ state.connecting.useAuthentication }>
+                  <ControlGroup.Item label='Identy Provider Url' adjust='flex'>
+                    <TextBox name='authentication.identityProviderUrl' value={ state.connecting.authentication.identityProviderUrl } onChange={ connecting.handleInputChanged } placeholder='https://<username>.eu.auth0.com/authorize' />
+                  </ControlGroup.Item>
+                </ControlGroup>
+
+                <ControlGroup isVisible={ state.connecting.useAuthentication }>
+                  <ControlGroup.Item label='Client Id' adjust='flex'>
+                    <TextBox name='authentication.clientId' value={ state.connecting.authentication.clientId } onChange={ connecting.handleInputChanged } placeholder='LKhjasdkfj…' />
+                  </ControlGroup.Item>
+                </ControlGroup>
+
+                <ControlGroup isVisible={ state.connecting.useAuthentication }>
+                  <ControlGroup.Item label='Scope' adjust='flex'>
+                    <TextBox name='authentication.scope' value={ state.connecting.authentication.scope } onChange={ connecting.handleInputChanged } placeholder='profile' />
+                  </ControlGroup.Item>
+                </ControlGroup>
+
+                <ControlGroup isVisible={ state.connecting.useAuthentication }>
+                  <label><CheckBox name='authentication.strictMode' checked={ state.connecting.authentication.strictMode } onChange={ connecting.handleInputChanged } />Strict mode?</label>
+                </ControlGroup>
+              </Form>
             </View>
           </View>
         </View>

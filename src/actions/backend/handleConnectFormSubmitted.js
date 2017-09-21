@@ -1,7 +1,9 @@
 import connect from './connect';
 import state from '../../state';
 
-const handleConnectClicked = function () {
+const handleConnectFormSubmitted = function (event) {
+  event.preventDefault();
+
   (async () => {
     await connect({
       host: state.connecting.host,
@@ -16,4 +18,4 @@ const handleConnectClicked = function () {
   })();
 };
 
-export default handleConnectClicked;
+export default handleConnectFormSubmitted;
