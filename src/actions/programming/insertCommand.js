@@ -9,8 +9,15 @@ const insertCommand = function (command) {
   state.programming.code = stripIndent`
     /*
      * Use the 'app' object to access your backend.
-     * For details on how to send commands see…
+     *
+     * Documentation:
      * https://docs.wolkenkit.io/latest/reference/building-a-client/sending-commands/
+     *
+     * Slack:
+     * http://slackin.wolkenkit.io/
+     *
+     * StackOverflow:
+     * https://stackoverflow.com/questions/tagged/wolkenkit
      */
 
     app.${command.context}.${command.aggregate}().${command.command}().
