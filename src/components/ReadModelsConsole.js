@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
-import React, { Component } from 'react';
 import watching from '../actions/watching';
+import React, { Component } from 'react';
 import './ReadModelsConsole.css';
 
 class ReadModels extends Component {
