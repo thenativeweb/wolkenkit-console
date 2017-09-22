@@ -36,12 +36,6 @@ const App = function () {
     return (
       <div className='wk-app'>
         <View orientation='vertical' size='flex'>
-          <View size='flex'>
-            <MessageBar type='error' isVisble={ state.connecting.error }>
-              { state.connecting.error }
-            </MessageBar>
-          </View>
-
           <View orientation='horizontal' size='auto'>
             <Symbols />
             <Sidebar>
@@ -51,6 +45,7 @@ const App = function () {
             <View orientation='vertical' alignItems='center' justifyContent='start'>
               <Form type='centered' onSubmit={ backend.handleConnectFormSubmitted }>
                 <Form.Title>Connect to…</Form.Title>
+                <Form.Error error={ state.connecting.error } />
                 <ControlGroup>
                   <ControlGroup.Item label='Host' adjust='flex'>
                     <TextBox

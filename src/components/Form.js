@@ -1,6 +1,20 @@
 import React from 'react';
 import './Form.css';
 
+const Error = function ({ error }) {
+  if (!error) {
+    return null;
+  }
+
+  const className = `wk-form__error`;
+
+  return (
+    <div className={ className }>
+      { error }
+    </div>
+  );
+};
+
 const Title = function ({ children, className }) {
   let componentClasses = `wk-form__title`;
 
@@ -41,6 +55,7 @@ const Form = function ({ children, className, type, onSubmit }) {
   );
 };
 
+Form.Error = Error;
 Form.Title = Title;
 
 export default Form;

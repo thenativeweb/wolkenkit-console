@@ -30,3 +30,10 @@
   margin-bottom: 24px;
   border: none;
 }
+
+.wk-form .wk-form__error {
+  padding: 12px 18px;
+  margin-bottom: 12px;
+  background: #E7415D;
+  color: #fff;
+}
