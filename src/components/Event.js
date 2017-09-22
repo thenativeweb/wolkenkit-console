@@ -1,17 +1,20 @@
 import { observer } from 'mobx-react';
+import omit from 'lodash/omit';
 import React from 'react';
+import yaml from 'js-yaml';
 import './Event.css';
 
 const Event = function ({ event }) {
-    /* eslint-disable no-extra-parens */
+  const full = [ 'context', 'aggregate.name', 'name', 'type', 'custom', 'metadata.published', 'metadata.position' ];
+  const compact = [ ...full, 'id', 'metadata' ];
+
+  /* eslint-disable no-extra-parens */
+  const eventDetails = yaml.safeDump(omit(event, compact));
+
   return (
     <div className='wk-event'>
-      <h3>{event.context.name}.{event.aggregate.name}.{event.name}</h3> <br />
-      data: {JSON.stringify(event.data)} <br />
-      aggregate.id: {event.aggregate.id} <br />
-      timestamp: { event.metadata.timestamp }<br />
-      revision: { event.metadata.revision }<br />
-      correlationId: { event.metadata.correlationId }
+      <h3>{event.context.name}.{event.aggregate.name}.{event.name}</h3>
+      <div className='wk-event__details' dangerouslySetInnerHTML={{ __html: eventDetails }} />
     </div>
   );
   /* eslint-enable no-extra-parens */

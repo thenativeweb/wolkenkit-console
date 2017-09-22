@@ -2,6 +2,8 @@
   padding: 20px;
   border-bottom: 1px solid #444;
   color: #666;
+  white-space: pre;
+  line-height: 1.2em;
 }
 
 .wk-event h3 {

@@ -1,28 +1,32 @@
 import React from 'react';
 import './Button.css';
 
-const Hint = function (props) {
+const Hint = function ({ children }) {
   return (
     <span className='wk-button__hint'>
-      { props.children }
+      { children }
     </span>
   );
 };
 
-const Button = function (props) {
-  let className = `wk-button ${props.className}`;
+const Button = function ({ adjust = 'auto', children, className, disabled, id, onClick, type }) {
+  let componentClasses = `wk-button`;
 
-  if (props.type) {
-    className += ` wk-button--type-${props.type}`;
+  if (className) {
+    componentClasses += ` ${className}`;
   }
 
-  if (props.size) {
-    className += ` wk-button--size-${props.size}`;
+  if (type) {
+    componentClasses += ` wk-button--type-${type}`;
+  }
+
+  if (adjust) {
+    componentClasses += ` wk-button--adjust-${adjust}`;
   }
 
   return (
-    <button id={ props.id } className={ className } onClick={ props.onClick }>
-      { props.children }
+    <button id={ id } className={ componentClasses } disabled={ disabled } onClick={ onClick }>
+      { children }
     </button>
   );
 };

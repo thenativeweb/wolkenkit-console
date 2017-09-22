@@ -1,14 +1,13 @@
-import application from '../readModel/application';
-import debugging from '../readModel/debugging';
 import { observer } from 'mobx-react';
 import ReadModelItem from './ReadModelItem';
+import state from '../state';
 import React, { Component } from 'react';
-import { startReadingModel, stopReadingModel } from '../writeModel/backend';
+import watching from '../actions/watching';
 import './ReadModelsConsole.css';
 
 class ReadModels extends Component {
   static handleModelChanged (event) {
-    startReadingModel(event.target.value);
+    watching.startReadingModel(event.target.value);
   }
 
   constructor () {
@@ -28,13 +27,13 @@ class ReadModels extends Component {
       childList: true
     });
 
-    if (debugging.selectedReadModel !== 'none') {
-      startReadingModel(debugging.selectedReadModel);
+    if (state.watching.selectedReadModel !== 'none') {
+      watching.startReadingModel(state.watching.selectedReadModel);
     }
   }
 
   componentWillUnmount () {
-    stopReadingModel();
+    watching.stopReadingModel();
     this.mutationObserver.disconnect();
   }
 
@@ -43,7 +42,7 @@ class ReadModels extends Component {
   }
 
   render () {
-    if (!application.configuration || !debugging.selectedReadModel) {
+    if (!state.backend.configuration || !state.watching.selectedReadModel) {
       return null;
     }
 
@@ -51,10 +50,10 @@ class ReadModels extends Component {
       <div className='wk-read-model-console'>
         <div className='wk-read-model__bar'>
           <div className='wk-dropdown'>
-            <select value={ debugging.selectedReadModel } onChange={ ReadModels.handleModelChanged }>
+            <select value={ state.watching.selectedReadModel } onChange={ ReadModels.handleModelChanged }>
               <option key={ 'none' } value='none'>Choose model…</option>
               {
-                Object.keys(application.configuration.readModel.lists).map(listName =>
+                Object.keys(state.backend.configuration.readModel.lists).map(listName =>
                   <option key={ listName } value={ listName }>{listName}</option>
                 )
               }
@@ -63,7 +62,7 @@ class ReadModels extends Component {
         </div>
         <div className='wk-read-model__items' ref={ this.saveContainerRef }>
           {
-            debugging.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } />)
+            state.watching.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } />)
           }
         </div>
       </div>

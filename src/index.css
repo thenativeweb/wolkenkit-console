@@ -10,23 +10,6 @@ html, body, #app {
   box-sizing: border-box;
 }
 
-.ControlGroup {
-  display: flex;
-}
-
-.TextBox {
-  padding: 9px 12px;
-  margin: 16px;
-  margin-left: 0px;
-  font-size: 16px;
-  cursor: pointer;
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-.TextBox--port {
-  width: 4em;
-}
-
 .wk-label {
   margin-bottom: 12px;
 }
