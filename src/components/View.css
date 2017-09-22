@@ -32,8 +32,16 @@
   align-items: center;
 }
 
+.wk-view--align-items-start {
+  align-items: flex-start;
+}
+
 .wk-view--justify-content-center {
   justify-content: center;
+}
+
+.wk-view--justify-content-start {
+  justify-content: flex-start;
 }
 
 .wk-view--size-flex {

@@ -3,15 +3,7 @@
   flex-shrink: 1;
   flex-basis: 100%;
   display: flex;
-  opacity: 1;
-  transition: opacity 300ms;
-  will-change: opacity;
   margin-bottom: 18px;
-}
-
-.wk-control-group--hidden {
-  visibility: hidden;
-  opacity: 0;
 }
 
 .wk-control-group__divider {
@@ -37,10 +29,39 @@
   margin-right: 10px;
 }
 
-.wk-control-group .wk-control-group__item--labeled label {
+.wk-control-group .wk-control-group__item--labeled .wk-control-group__item__label {
   margin-bottom: 6px;
   color: #2f333b;
   font-weight: 400;
+  display: flex;
+}
+
+.wk-control-group .wk-control-group__item--labeled .wk-control-group__item__label label {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.wk-control-group .wk-control-group__item--labeled .wk-control-group__item__label a {
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.75;
+}
+
+.wk-control-group .wk-control-group__item--labeled .wk-control-group__item__label a:hover {
+  opacity: 1;
+}
+
+.wk-control-group .wk-control-group__item--labeled .wk-control-group__item__label a .wk-icon-help {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  width: 16px;
+  height: 16px;
+  fill: #2f333b;
 }
 
 .wk-control-group .wk-control-group__item:last-child {

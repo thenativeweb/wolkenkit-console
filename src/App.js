@@ -48,16 +48,28 @@ const App = function () {
               <Brand suffix='console' />
               <Sidebar.Item type='centered'><Icon name='new-connection' /></Sidebar.Item>
             </Sidebar>
-            <View orientation='vertical' alignItems='center' justifyContent='center'>
+            <View orientation='vertical' alignItems='center' justifyContent='start'>
               <Form type='centered' onSubmit={ backend.handleConnectFormSubmitted }>
                 <Form.Title>Connect to…</Form.Title>
                 <ControlGroup>
                   <ControlGroup.Item label='Host' adjust='flex'>
-                    <TextBox name='host' value={ state.connecting.host } onChange={ connecting.handleInputChanged } placeholder='e.g. local.wolkenkit.io' />
+                    <TextBox
+                      name='host'
+                      autoFocus={ true }
+                      value={ state.connecting.host }
+                      onChange={ connecting.handleInputChanged }
+                      placeholder='local.wolkenkit.io'
+                    />
                   </ControlGroup.Item>
 
                   <ControlGroup.Item label='Port' adjust='auto'>
-                    <TextBox name='port' type='port' value={ state.connecting.port } onChange={ connecting.handleInputChanged } placeholder='e.g. 3000' />
+                    <TextBox
+                      name='port'
+                      type='port'
+                      value={ state.connecting.port }
+                      onChange={ connecting.handleInputChanged }
+                      placeholder='3000'
+                    />
                   </ControlGroup.Item>
 
                   <ControlGroup.Item adjust='auto'>
@@ -68,34 +80,63 @@ const App = function () {
                 </ControlGroup>
                 <ControlGroup.Divider />
                 <ControlGroup>
-                  <ControlGroup.Item adjust='flex'>
-                    <label htmlFor='use-authentication'>
-                      <CheckBox id='use-authentication' value={ state.connecting.useAuthentication } onChange={ connecting.handleAuthenticationChanged } />
-                      Use authentication
-                    </label>
+                  <ControlGroup.Item
+                    type='checkbox'
+                    label='Use authentication'
+                    adjust='flex'
+                    helpLink='https://docs.wolkenkit.io/latest/reference/configuring-an-application/enabling-authentication/'
+                  >
+                    <CheckBox
+                      id='use-authentication'
+                      checked={ state.connecting.useAuthentication }
+                      onChange={ connecting.handleAuthenticationChanged }
+                    />
                   </ControlGroup.Item>
                 </ControlGroup>
 
                 <ControlGroup isVisible={ state.connecting.useAuthentication }>
-                  <ControlGroup.Item label='Identy Provider Url' adjust='flex'>
-                    <TextBox name='authentication.identityProviderUrl' value={ state.connecting.authentication.identityProviderUrl } onChange={ connecting.handleInputChanged } placeholder='https://<username>.eu.auth0.com/authorize' />
+                  <ControlGroup.Item label='Identity provider url' adjust='flex'>
+                    <TextBox
+                      name='authentication.identityProviderUrl'
+                      autoFocus={ true }
+                      value={ state.connecting.authentication.identityProviderUrl }
+                      onChange={ connecting.handleInputChanged }
+                      placeholder='https://your-identity-provider.com/authorize'
+                    />
                   </ControlGroup.Item>
                 </ControlGroup>
 
                 <ControlGroup isVisible={ state.connecting.useAuthentication }>
-                  <ControlGroup.Item label='Client Id' adjust='flex'>
-                    <TextBox name='authentication.clientId' value={ state.connecting.authentication.clientId } onChange={ connecting.handleInputChanged } placeholder='LKhjasdkfj…' />
+                  <ControlGroup.Item label='Client ID' adjust='flex'>
+                    <TextBox
+                      name='authentication.clientId'
+                      value={ state.connecting.authentication.clientId }
+                      onChange={ connecting.handleInputChanged }
+                      placeholder='LKhjasdkfj…'
+                    />
                   </ControlGroup.Item>
                 </ControlGroup>
 
                 <ControlGroup isVisible={ state.connecting.useAuthentication }>
                   <ControlGroup.Item label='Scope' adjust='flex'>
-                    <TextBox name='authentication.scope' value={ state.connecting.authentication.scope } onChange={ connecting.handleInputChanged } placeholder='profile' />
+                    <TextBox
+                      name='authentication.scope'
+                      value={ state.connecting.authentication.scope }
+                      onChange={ connecting.handleInputChanged }
+                      placeholder='profile'
+                    />
                   </ControlGroup.Item>
                 </ControlGroup>
 
                 <ControlGroup isVisible={ state.connecting.useAuthentication }>
-                  <label><CheckBox name='authentication.strictMode' checked={ state.connecting.authentication.strictMode } onChange={ connecting.handleInputChanged } />Strict mode?</label>
+                  <ControlGroup.Item type='checkbox' label='Use strict mode' adjust='flex'>
+                    <CheckBox
+                      id='authentication.strictMode'
+                      name='authentication.strictMode'
+                      checked={ state.connecting.authentication.strictMode }
+                      onChange={ connecting.handleInputChanged }
+                    />
+                  </ControlGroup.Item>
                 </ControlGroup>
               </Form>
             </View>

@@ -1,3 +1,4 @@
+import Icon from './Icon';
 import React from 'react';
 import './ControlGroup.css';
 
@@ -9,7 +10,7 @@ const Divider = function () {
   );
 };
 
-const Item = function ({ className, adjust, children, label, isVisible = true }) {
+const Item = function ({ className, adjust, children, helpLink, label, isVisible = true, type = 'text' }) {
   let componentClasses = `wk-control-group__item`;
 
   if (className) {
@@ -28,12 +29,33 @@ const Item = function ({ className, adjust, children, label, isVisible = true })
     componentClasses += ' wk-control-group__item--labeled';
   }
 
+  if (type === 'checkbox') {
+    componentClasses += ' wk-control-group__item--checkbox';
+
+    const controlId = children || children.props.id ? children.props.id : undefined;
+
+    return (
+      <div
+        className={ componentClasses }
+      >
+        <div className='wk-control-group__item__label'>
+          <div className='wk-control-group__item__control'>{ children }</div>
+          { label ? <label htmlFor={ controlId }>{ label }</label> : null }
+          { helpLink ? <a className='help' title='Get more detailed information…' rel='noopener noreferrer' target='_blank' href={ helpLink }><Icon name='help' /></a> : null }
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={ componentClasses }
     >
-      { label ? <label>{ label }</label> : null }
-      { children }
+      <div className='wk-control-group__item__label'>
+        { label ? <label>{ label }</label> : null }
+        { helpLink ? <a className='help' rel='noopener noreferrer' target='_blank' href={ helpLink }><Icon name='help' /></a> : null }
+      </div>
+      <div className='wk-control-group__item__control'>{ children }</div>
     </div>
   );
 };
@@ -50,7 +72,7 @@ const ControlGroup = function ({ className, children, isVisible = true, type }) 
   }
 
   if (!isVisible) {
-    componentClasses += ' wk-control-group--hidden';
+    return null;
   }
 
   return (

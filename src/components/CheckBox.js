@@ -1,7 +1,7 @@
 import React from 'react';
 import './CheckBox.css';
 
-const CheckBox = function ({ className, id, name, value, onChange, size, type }) {
+const CheckBox = function ({ className, id, name, checked, onChange, size, type }) {
   let componentClasses = `wk-check-box`;
 
   if (className) {
@@ -22,7 +22,7 @@ const CheckBox = function ({ className, id, name, value, onChange, size, type })
       className={ componentClasses }
       name={ name }
       type='checkbox'
-      value={ value }
+      checked={ checked }
       onChange={ onChange }
     />
   );
