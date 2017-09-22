@@ -5,16 +5,21 @@ const handleConnectFormSubmitted = function (event) {
   event.preventDefault();
 
   (async () => {
-    await connect({
+    const options = {
       host: state.connecting.host,
-      port: state.connecting.port,
-      authentication: {
+      port: state.connecting.port
+    };
+
+    if (state.connecting.useAuthentication) {
+      options.authentication = {
         identityProviderUrl: state.connecting.authentication.identityProviderUrl,
         clientId: state.connecting.authentication.clientId,
         scope: state.connecting.authentication.scope,
         strictMode: state.connecting.authentication.strictMode
-      }
-    });
+      };
+    }
+
+    await connect(options);
   })();
 };
 

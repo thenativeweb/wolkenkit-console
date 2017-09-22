@@ -3,13 +3,11 @@ import Brand from './components/Brand';
 import Button from './components/Button';
 import CheckBox from './components/CheckBox';
 import connecting from './actions/connecting';
-import ConnectionButton from './components/ConnectionButton';
 import ControlGroup from './components/ControlGroup';
 import Editor from './components/Editor';
 import ErrorConsole from './components/ErrorConsole';
 import EventConsole from './components/EventConsole';
 import Form from './components/Form';
-import Icon from './components/Icon';
 import Message from './components/Message';
 import Modal from './components/Modal';
 import { observer } from 'mobx-react';
@@ -17,6 +15,7 @@ import programming from './actions/programming';
 import React from 'react';
 import ReadModelsConsole from './components/ReadModelsConsole';
 import Sidebar from './components/Sidebar';
+import SidebarMenu from './components/SidebarMenu';
 import state from './state';
 import Symbols from './components/Symbols';
 import Tabs from './components/Tabs';
@@ -33,7 +32,7 @@ const isConnectDisabled = function () {
 };
 
 const App = function () {
-  if (!state.backend) {
+  if (!state.backend || !state.backend.isConnected) {
     return (
       <div className='wk-app'>
         <View orientation='vertical' size='flex'>
@@ -41,7 +40,6 @@ const App = function () {
             <Symbols />
             <Sidebar>
               <Brand suffix='console' />
-              <Sidebar.Item type='centered'><Icon name='new-connection' /></Sidebar.Item>
             </Sidebar>
             <View orientation='vertical' alignItems='center' justifyContent='start'>
               <Form type='centered' onSubmit={ backend.handleConnectFormSubmitted }>
@@ -163,7 +161,12 @@ const App = function () {
           <Sidebar>
             <Brand suffix='console' />
             <Sidebar.Item>
-              <ConnectionButton onDisconnect={ backend.handleDisconnectClicked } />
+              <SidebarMenu icon='opened-connection'>
+                <SidebarMenu.Item>
+                  {state.backend.user ? `Authenticated as ${state.backend.user.name || state.backend.user.nickname || 'unnamed user'} (${state.backend.user.sub})` : 'Not authenticated (anonymous)'}
+                </SidebarMenu.Item>
+                <SidebarMenu.Item onClick={ backend.handleDisconnectClicked }>Disconnect</SidebarMenu.Item>
+              </SidebarMenu>
             </Sidebar.Item>
           </Sidebar>
           <View id='screen' orientation='vertical'>

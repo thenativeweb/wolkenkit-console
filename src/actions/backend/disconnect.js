@@ -13,7 +13,7 @@ const disconnect = function () {
   const app = state.backend.app;
 
   if (app) {
-    if (state.backend.authentication && state.backend.authentication.clientId) {
+    if (state.connecting.useAuthentication && state.backend.authentication && state.backend.authentication.clientId) {
       app.auth.logout();
     }
 

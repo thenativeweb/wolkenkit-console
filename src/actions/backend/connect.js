@@ -57,15 +57,18 @@ const connect = async function (options) {
       app,
       host,
       port,
+      isConnected: false,
       configuration,
       authentication,
-      error: undefined
+      error: undefined,
+      user: app.auth.getProfile()
     });
   });
 
   if (isAuthenticationEnabled && !app.auth.isLoggedIn()) {
     return app.auth.login();
   }
+  state.backend.isConnected = true;
 
   // Commented, because the connected event didn't work reliably. We should
   // have another look at this in the future.

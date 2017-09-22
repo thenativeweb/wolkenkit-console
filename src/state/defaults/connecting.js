@@ -6,7 +6,7 @@ const connecting = {
     identityProviderUrl: '',
     clientId: '',
     scope: '',
-    strictMode: true
+    strictMode: false
   },
   error: undefined
 };

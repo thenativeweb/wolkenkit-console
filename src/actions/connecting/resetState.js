@@ -4,7 +4,7 @@ import omit from 'lodash/omit';
 import state from '../../state';
 
 const resetState = function () {
-  extendObservable(state.connecting, omit(connecting, [ 'host', 'port', 'authentication' ]));
+  extendObservable(state.connecting, omit(connecting, [ 'host', 'port', 'useAuthentication', 'authentication' ]));
 };
 
 export default resetState;

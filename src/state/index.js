@@ -18,7 +18,7 @@ const state = extendObservable({}, merge({}, {
 autoSave({
   state,
   take: [ 'backend', 'connecting' ],
-  skip: [ 'backend.app' ],
+  skip: [ 'backend.app', 'backend.user' ],
   key
 });
 
