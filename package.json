@@ -25,6 +25,7 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
+    "animejs": "2.1.0",
     "codemirror": "5.27.4",
     "common-tags": "1.4.0",
     "express": "4.15.3",
@@ -36,6 +37,7 @@
     "nwb": "0.18.7",
     "processenv": "0.1.1",
     "react": "15.6.1",
+    "react-addons-transition-group": "15.6.0",
     "react-dom": "15.6.1",
     "superagent": "3.5.2",
     "wolkenkit-client": "1.0.0"

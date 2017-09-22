@@ -1,0 +1,51 @@
+.wk-modal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.wk-modal__backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms;
+  will-change: opacity;
+}
+
+.wk-modal__backdrop--visible {
+  pointer-events: all;
+  opacity: 1;
+}
+
+
+.wk-modal .wk-modal__title {
+  opacity: 0.75;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.wk-modal .wk-modal__title::after {
+  content: '';
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  width: 100%;
+  height: 1px;
+  background: #2f333b;
+  opacity: 0.1;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  border: none;
+}

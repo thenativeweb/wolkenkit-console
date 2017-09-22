@@ -10,7 +10,8 @@ import ErrorConsole from './components/ErrorConsole';
 import EventConsole from './components/EventConsole';
 import Form from './components/Form';
 import Icon from './components/Icon';
-import MessageBar from './components/MessageBar';
+import Message from './components/Message';
+import Modal from './components/Modal';
 import { observer } from 'mobx-react';
 import programming from './actions/programming';
 import React from 'react';
@@ -45,7 +46,7 @@ const App = function () {
             <View orientation='vertical' alignItems='center' justifyContent='start'>
               <Form type='centered' onSubmit={ backend.handleConnectFormSubmitted }>
                 <Form.Title>Connect to…</Form.Title>
-                <Form.Error error={ state.connecting.error } />
+                <Message type='error' message={ state.connecting.error } />
                 <ControlGroup>
                   <ControlGroup.Item label='Host' adjust='flex'>
                     <TextBox
@@ -144,11 +145,18 @@ const App = function () {
   return (
     <div className='wk-app'>
       <View orientation='vertical'>
-        <View size='flex'>
-          <MessageBar type='error' isVisble={ state.backend.error }>
-            { state.backend.error } <Button onClick={ backend.handleDisconnectClicked }>Disconnect me</Button> <Button onClick={ backend.handleReconnectClicked }>Reconnect me</Button>
-          </MessageBar>
-        </View>
+        <Modal isVisible={ state.backend.error }>
+          <Modal.Title>Oops!</Modal.Title>
+          <Modal.Row>
+            <Message type='error' message={ state.backend.error } />
+          </Modal.Row>
+          <Modal.Row>
+            <Button onClick={ backend.handleReconnectClicked } adjust='flex'>Try to reconnect</Button>
+          </Modal.Row>
+          <Modal.Row>
+            <Button onClick={ backend.handleDisconnectClicked } adjust='flex'>Reset connection</Button>
+          </Modal.Row>
+        </Modal>
 
         <View orientation='horizontal' size='auto'>
           <Symbols />
