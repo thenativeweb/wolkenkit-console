@@ -26,3 +26,8 @@
   font-family: 'Ubuntu Mono', monospace !important;
   font-size: 14px;
 }
+
+.cm-s-neo .CodeMirror-cursor {
+  border-left: 1px solid #819090 !important;
+  width: 0 !important;
+}
