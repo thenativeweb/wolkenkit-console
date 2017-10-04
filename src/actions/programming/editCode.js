@@ -1,7 +1,7 @@
 import state from '../../state';
 
 const editCode = function (newCode) {
-  if (newCode === undefined && newCode === null) {
+  if (newCode === undefined || newCode === null) {
     throw new Error('Code is missing.');
   }
 
