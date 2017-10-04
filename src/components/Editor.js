@@ -6,6 +6,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/selection/active-line';
 import './Editor.css';
 import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/addon/hint/show-hint.css';
@@ -71,18 +72,21 @@ class Editor extends Component {
 
     this.editor = new CodeMirror(this.container, {
       autoCloseBrackets: true,
-      value: this.props.value,
-      lineNumbers: true,
-      matchBrackets: true,
-      mode: 'javascript',
-      tabSize: 2,
-      theme: 'neo',
+      autofocus: true,
       extraKeys: {
         'Ctrl-Enter' () {
           onExecute();
         },
         'Ctrl-Space': 'autocomplete'
-      }
+      },
+      lineNumbers: true,
+      matchBrackets: true,
+      mode: 'javascript',
+      showCursorWhenSelecting: true,
+      styleActiveLine: true,
+      tabSize: 2,
+      theme: 'neo',
+      value: this.props.value
     });
 
     this.editor.on('change', this.handleEditorChanged);
