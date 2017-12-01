@@ -13,6 +13,8 @@ const express = require('express'),
       httpsOrHttp = require('https-or-http'),
       processenv = require('processenv');
 
+flaschenpost.initialize({ appRootPath: path.join(__dirname, '..') });
+
 const logger = flaschenpost.getLogger();
 
 const app = express(),
