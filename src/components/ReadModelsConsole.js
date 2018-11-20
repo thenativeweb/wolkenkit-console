@@ -2,10 +2,10 @@ import { observer } from 'mobx-react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
 import watching from '../actions/watching';
-import React, { Component } from 'react';
-import './ReadModelsConsole.css';
+import React from 'react';
+// import './ReadModelsConsole.css';
 
-class ReadModels extends Component {
+class ReadModels extends React.Component {
   static handleModelChanged (event) {
     watching.startReadingModel(event.target.value);
   }

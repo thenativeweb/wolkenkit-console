@@ -1,10 +1,10 @@
 import Event from './Event';
 import { observer } from 'mobx-react';
 import state from '../state';
-import React, { Component } from 'react';
-import './EventConsole.css';
+import React from 'react';
+// import './EventConsole.css';
 
-class EventConsole extends Component {
+class EventConsole extends React.Component {
   constructor () {
     super();
 

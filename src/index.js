@@ -3,7 +3,7 @@ import backend from './actions/backend';
 import React from 'react';
 import { render } from 'react-dom';
 import state from './state';
-import './index.css';
+// import './index.css';
 
 (async () => {
   if (state.backend) {
@@ -16,5 +16,5 @@ import './index.css';
     });
   }
 
-  render(<App />, document.querySelector('#app'));
+  render(<App />, document.querySelector('#root'));
 })();

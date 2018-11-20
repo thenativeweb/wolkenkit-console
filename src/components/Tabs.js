@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
-import './Tabs.css';
+import React from 'react';
+// import './Tabs.css';
 
-class Tabs extends PureComponent {
+class Tabs extends React.PureComponent {
   constructor (props) {
     super(props);
 

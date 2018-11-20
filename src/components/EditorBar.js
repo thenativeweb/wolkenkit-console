@@ -1,8 +1,8 @@
-import Button from './Button';
-import React, { Component } from 'react';
+import { Button } from 'thenativeweb-ux';
+import React from 'react';
 import './EditorBar.css';
 
-class EditorBar extends Component {
+class EditorBar extends React.Component {
   constructor () {
     super();
 

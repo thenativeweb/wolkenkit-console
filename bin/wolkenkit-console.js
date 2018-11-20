@@ -30,7 +30,7 @@ const app = express(),
       port = 3000;
 
 app.use(express.static(path.join(__dirname, '..', 'static')));
-app.use(express.static(path.join(__dirname, '..', 'build', 'web')));
+app.use(express.static(path.join(__dirname, '..', 'build')));
 
 const server = http.createServer(app);
 

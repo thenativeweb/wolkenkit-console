@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import './ReadModelItem.css';
+// import './ReadModelItem.css';
 
 const ReadModelItem = function ({ item }) {
     /* eslint-disable no-extra-parens */

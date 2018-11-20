@@ -3,7 +3,7 @@ import omit from 'lodash/omit';
 import React from 'react';
 import { toJS } from 'mobx';
 import yaml from 'js-yaml';
-import './Event.css';
+// import './Event.css';
 
 const Event = function ({ event }) {
   const full = [ 'context', 'aggregate.name', 'name', 'type', 'custom', 'metadata.published', 'metadata.position' ];
