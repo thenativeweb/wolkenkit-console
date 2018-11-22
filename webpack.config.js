@@ -24,9 +24,9 @@ const getPluginsFor = function (environment) {
       return [
         new webpack.DefinePlugin(getEnvironmentVariables()),
         new CompressionPlugin({
-          asset: '[path].gz[query]',
-          algorithm: 'gzip',
-          test: /\.(js|html)$/
+          test: /\.(js|html)$/,
+          filename: '[path].gz[query]',
+          algorithm: 'gzip'
         }),
         new HtmlWebpackPlugin({
           template: path.join(paths.src, 'template.ejs'),
@@ -50,7 +50,7 @@ const getPluginsFor = function (environment) {
 
 const configuration = {
   mode: nodeEnv || 'development',
-  devtool: 'source-map',
+  devtool: nodeEnv !== 'production' ? 'source-map' : false,
   context: paths.src,
   devServer: {
     contentBase: paths.src,
