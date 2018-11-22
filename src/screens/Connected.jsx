@@ -5,7 +5,7 @@ import EventConsole from '../components/EventConsole';
 import { observer } from 'mobx-react';
 import programming from '../actions/programming';
 import React from 'react';
-import ReadModelsConsole from '../components/ReadModelsConsole';
+import ReadModelConsole from '../components/ReadModelConsole';
 import state from '../state';
 import Tabs from '../components/Tabs';
 import {
@@ -44,7 +44,7 @@ const Connected = function () {
         <View orientation='vertical' adjust='flex'>
           <Tabs>
             <EventConsole title='Events' />
-            <ReadModelsConsole title='ReadModels' />
+            <ReadModelConsole title='ReadModels' />
           </Tabs>
         </View>
       </View>

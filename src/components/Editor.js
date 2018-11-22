@@ -1,5 +1,6 @@
 import { Button } from 'thenativeweb-ux';
 import CodeMirror from 'codemirror';
+import CommandBuilder from './CommandBuilder';
 import EditorBar from './EditorBar';
 import injectSheet from 'react-jss';
 import React from 'react';
@@ -158,18 +159,23 @@ class Editor extends React.Component {
 
     return (
       <div className={ classes.Editor }>
-        <EditorBar onInsertCommandClick={ onInsertCommandClick } configuration={ configuration } />
+        <EditorBar>
+          <CommandBuilder
+            onInsertCommandClick={ onInsertCommandClick }
+            configuration={ configuration }
+          />
+        </EditorBar>
         <div
           className={ classes.EditorContainer }
           ref={ ref => {
             this.container = ref;
           } }
         />
-        <div className='wk-editor-bar wk-editor-bar--bottom'>
-          <Button onClick={ this.props.onExecute }>
+        <EditorBar type='bottom' style={{ alignItems: 'flex-end' }}>
+          <Button size='s' isPrimary={ true } onClick={ this.props.onExecute }>
             Execute <Button.Hint>[Ctrl+Enter]</Button.Hint>
           </Button>
-        </div>
+        </EditorBar>
       </div>
     );
   }

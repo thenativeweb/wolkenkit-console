@@ -25,7 +25,7 @@ const App = function () {
   return (
     <ThemeProvider theme='wolkenkit'>
       <Application>
-        <Modal isVisible={ state.backend.error }>
+        <Modal isVisible={ state.backend.error !== undefined }>
           <Headline>
             Oops!
           </Headline>

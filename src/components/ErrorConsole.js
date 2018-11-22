@@ -103,14 +103,16 @@ class ErrorConsole extends React.Component {
 
     let content;
 
-    if (!(error instanceof Error)) {
-      content = <h3>{error}</h3>;
-    } else {
+    if (error.message && error.name) {
       content = <React.Fragment><h3>Error: {error.message}</h3><p>{error.stack}</p></React.Fragment>;
 
-      if (error.name === 'CommandRejected') {
+      if (error.name === 'CommandRejected' || error.name === 'CommandFailed') {
         content = <h3>Command got rejected: {error.message}</h3>;
       }
+    } else if (typeof error === 'object') {
+      content = <h3>{JSON.stringify(error)}</h3>;
+    } else {
+      content = <h3>{error}</h3>;
     }
 
     return (
