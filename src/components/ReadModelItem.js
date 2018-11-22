@@ -54,8 +54,8 @@ const ReadModelItem = function ({ classes, item }) {
             <div className={ classes.Key }>{ itemKey }</div>
             <div className={ classes.Value } onClick={ handleValueClicked }>{ JSON.stringify(item[itemKey]) }</div>
           </div>
-        )
-      )}
+        ))
+      }
     </div>
   );
   /* eslint-enable no-extra-parens */

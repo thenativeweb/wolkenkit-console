@@ -1,6 +1,7 @@
 import backend from './actions/backend';
 import Connect from './screens/Connect.jsx';
 import Connected from './screens/Connected.jsx';
+import get from 'lodash/get';
 import { observer } from 'mobx-react';
 import React from 'react';
 import state from './state';
@@ -25,12 +26,15 @@ const App = function () {
   return (
     <ThemeProvider theme='wolkenkit'>
       <Application>
-        <Modal isVisible={ state.backend.error !== undefined }>
+        <Application.Services />
+        { renderScreen() }
+
+        <Modal isVisible={ get(state, 'backend.error') !== undefined }>
           <Headline>
             Oops!
           </Headline>
           <Message type='error'>
-            { state.backend.error }
+            { get(state, 'backend.error') }
           </Message>
           <Button
             isPrimary={ true }
@@ -45,9 +49,6 @@ const App = function () {
             Reset connection!
           </Button>
         </Modal>
-
-        <Application.Services />
-        { renderScreen() }
       </Application>
     </ThemeProvider>
   );

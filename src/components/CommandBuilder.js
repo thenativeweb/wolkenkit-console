@@ -116,6 +116,7 @@ const CommandBuilder = function ({ classes, configuration, onInsertCommandClick 
     });
   };
 
+  /* eslint-disable react/jsx-no-bind */
   return (
     <div className={ classes.CommandBuilder }>
       <Text className={ classes.Label }>Build a command</Text>
@@ -148,6 +149,7 @@ const CommandBuilder = function ({ classes, configuration, onInsertCommandClick 
       </div>
     </div>
   );
+  /* eslint-enable react/jsx-no-bind */
 };
 
 export default injectSheet(styles)(CommandBuilder);

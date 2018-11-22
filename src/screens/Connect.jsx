@@ -1,5 +1,6 @@
 import backend from '../actions/backend';
 import connecting from '../actions/connecting';
+import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import React from 'react';
 import state from '../state';
@@ -16,6 +17,21 @@ import {
   View
 } from 'thenativeweb-ux';
 
+const styles = () => ({
+  ConnectionForm: {
+    width: '60vw',
+    'max-width': '460px',
+    'margin-top': '10vh',
+    'margin-bottom': '10vh'
+  },
+
+  Actions: {
+    'border-top': 0,
+    'margin-top': 0,
+    'padding-top': 0
+  }
+});
+
 const isConnectDisabled = function () {
   return (
     !state.connecting.host ||
@@ -24,15 +40,15 @@ const isConnectDisabled = function () {
   );
 };
 
-const Connect = function () {
+const Connect = function ({ classes } = {}) {
   if (!state.backend || !state.backend.isConnected) {
     return (
       <React.Fragment>
         <Sidebar>
           <Sidebar.Brand><Product name='console' /></Sidebar.Brand>
         </Sidebar>
-        <View orientation='vertical' alignItems='center' justifyContent='start' scrollable='auto'>
-          <Form onSubmit={ backend.handleConnectFormSubmitted }>
+        <View orientation='vertical' alignItems='center' scrollable='auto'>
+          <Form className={ classes.ConnectionForm } onSubmit={ backend.handleConnectFormSubmitted }>
             <Headline>Connect to…</Headline>
             {
               state.connecting.error ?
@@ -76,52 +92,58 @@ const Connect = function () {
               </ControlGroup.Item>
             </ControlGroup>
 
-            <ControlGroup isVisible={ state.connecting.useAuthentication }>
-              <ControlGroup.Item label='Identity provider url' adjust='flex'>
-                <TextBox
-                  name='authentication.identityProviderUrl'
-                  autoFocus={ true }
-                  value={ state.connecting.authentication.identityProviderUrl }
-                  onChange={ connecting.handleInputChanged }
-                  placeholder='https://your-identity-provider.com/authorize'
-                />
-              </ControlGroup.Item>
-            </ControlGroup>
+            {
+              state.connecting.useAuthentication ?
+                <React.Fragment>
+                  <ControlGroup>
+                    <ControlGroup.Item label='Identity provider url' adjust='flex'>
+                      <TextBox
+                        name='authentication.identityProviderUrl'
+                        autoFocus={ true }
+                        value={ state.connecting.authentication.identityProviderUrl }
+                        onChange={ connecting.handleInputChanged }
+                        placeholder='https://your-identity-provider.com/authorize'
+                      />
+                    </ControlGroup.Item>
+                  </ControlGroup>
 
-            <ControlGroup isVisible={ state.connecting.useAuthentication }>
-              <ControlGroup.Item label='Client ID' adjust='flex'>
-                <TextBox
-                  name='authentication.clientId'
-                  value={ state.connecting.authentication.clientId }
-                  onChange={ connecting.handleInputChanged }
-                  placeholder='LKhjasdkfj…'
-                />
-              </ControlGroup.Item>
-            </ControlGroup>
+                  <ControlGroup>
+                    <ControlGroup.Item label='Client ID' adjust='flex'>
+                      <TextBox
+                        name='authentication.clientId'
+                        value={ state.connecting.authentication.clientId }
+                        onChange={ connecting.handleInputChanged }
+                        placeholder='LKhjasdkfj…'
+                      />
+                    </ControlGroup.Item>
+                  </ControlGroup>
 
-            <ControlGroup isVisible={ state.connecting.useAuthentication }>
-              <ControlGroup.Item label='Scope' adjust='flex'>
-                <TextBox
-                  name='authentication.scope'
-                  value={ state.connecting.authentication.scope }
-                  onChange={ connecting.handleInputChanged }
-                  placeholder='profile'
-                />
-              </ControlGroup.Item>
-            </ControlGroup>
+                  <ControlGroup>
+                    <ControlGroup.Item label='Scope' adjust='flex'>
+                      <TextBox
+                        name='authentication.scope'
+                        value={ state.connecting.authentication.scope }
+                        onChange={ connecting.handleInputChanged }
+                        placeholder='profile'
+                      />
+                    </ControlGroup.Item>
+                  </ControlGroup>
 
-            <ControlGroup isVisible={ state.connecting.useAuthentication }>
-              <ControlGroup.Item type='checkbox' label='Use strict mode' adjust='flex'>
-                <CheckBox
-                  id='authentication.strictMode'
-                  name='authentication.strictMode'
-                  checked={ state.connecting.authentication.strictMode }
-                  onChange={ connecting.handleInputChanged }
-                />
-              </ControlGroup.Item>
-            </ControlGroup>
+                  <ControlGroup>
+                    <ControlGroup.Item type='checkbox' label='Use strict mode' adjust='flex'>
+                      <CheckBox
+                        id='authentication.strictMode'
+                        name='authentication.strictMode'
+                        checked={ state.connecting.authentication.strictMode }
+                        onChange={ connecting.handleInputChanged }
+                      />
+                    </ControlGroup.Item>
+                  </ControlGroup>
+                </React.Fragment> :
+                null
+            }
 
-            <Form.Actions type='stacked'>
+            <Form.Actions className={ classes.Actions } type='stacked'>
               <Button
                 isPrimary={ true }
                 disabled={ isConnectDisabled() }
@@ -134,4 +156,4 @@ const Connect = function () {
   }
 };
 
-export default observer(Connect);
+export default injectSheet(styles)(observer(Connect));

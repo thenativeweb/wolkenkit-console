@@ -59,30 +59,30 @@ const Tabs = function ({ className, classes, children } = {}) {
     setActiveIndex(newIndex);
   };
 
+  /* eslint-disable react/jsx-no-bind */
   return (
     <div className={ componentClasses }>
       <div className={ classes.Navigation }>
         {
-          children.map((child, index) =>
-            /* eslint-disable no-extra-parens */
-            (
-              <div
-                key={ index }
-                className={ classNames(classes.Tab, { [classes.IsActive]: activeIndex === index }) }
-                data-index={ index }
-                onClick={ handleTabClicked }
-              >
-                { child.props.title }
-              </div>
-            )
-            /* eslint-enable no-extra-parens */
-          )
+          /* eslint-disable no-extra-parens */
+          children.map((child, index) => (
+            <div
+              key={ index }
+              className={ classNames(classes.Tab, { [classes.IsActive]: activeIndex === index }) }
+              data-index={ index }
+              onClick={ handleTabClicked }
+            >
+              { child.props.title }
+            </div>
+          ))
+          /* eslint-enable no-extra-parens */
         }
       </div>
       <div className={ classes.ActiveTabContent }>
         { children[activeIndex] }
       </div>
     </div>
+    /* eslint-enable react/jsx-no-bind */
   );
 };
 
