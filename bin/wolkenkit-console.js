@@ -35,5 +35,5 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
 const server = http.createServer(app);
 
 server.listen(port, () => {
-  logger.info('Console server started.');
+  logger.info('Console server started.', { port });
 });

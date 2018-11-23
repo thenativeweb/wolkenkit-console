@@ -1,8 +1,6 @@
-import superagent from 'superagent';
+import axios from 'axios';
 
-const request = superagent;
-
-const loadConfiguration = function (options) {
+const loadConfiguration = async function (options) {
   if (!options) {
     throw new Error('Options are missing.');
   }
@@ -15,17 +13,9 @@ const loadConfiguration = function (options) {
 
   const { host, port } = options;
 
-  return new Promise((resolve, reject) => {
-    request.
-      get(`https://${host}:${port}/v1/configuration.json`).
-      end((err, res) => {
-        if (err) {
-          return reject(err);
-        }
+  const response = await axios.get(`https://${host}:${port}/v1/configuration.json`);
 
-        resolve(res.body);
-      });
-  });
+  return response.data;
 };
 
 export default loadConfiguration;
