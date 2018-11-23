@@ -1,9 +1,14 @@
+import copy from 'copy-text-to-clipboard';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import omit from 'lodash/omit';
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import stringifyObject from 'stringify-object';
 import { toJS } from 'mobx';
-import yaml from 'js-yaml';
+import { Icon, services, ThemeProvider } from 'thenativeweb-ux';
+
+const copyIconAsHtml = ReactDOMServer.renderToString(<ThemeProvider theme='wolkenkit'><Icon size='s' name='copy' /></ThemeProvider>);
 
 const styles = theme => ({
   Event: {
@@ -22,16 +27,55 @@ const styles = theme => ({
     padding: 0
   },
 
-  Details: {}
+  Details: {},
+
+  Copy: {
+    cursor: 'pointer',
+    position: 'relative',
+
+    '& svg': {
+      position: 'absolute',
+      top: '-0.1em',
+      'padding-left': theme.grid.stepSize,
+      opacity: 0,
+      fill: theme.color.brand.white
+    },
+
+    '&:hover': {
+      color: theme.color.brand.white,
+
+      '& svg': {
+        opacity: 1
+      }
+    }
+  }
 });
 
 const handleValueClicked = function (event) {
-  const text = event.currentTarget.innerText;
+  const target = event.target;
 
-  console.log(event);
-  // services.notifications.show({ type: 'success', text: `Copied ${text} to clipboard!` });
+  if (target.classList.contains('tnw-copy')) {
+    const text = event.target.innerText;
 
-  // copy(JSON.parse(text));
+    copy(JSON.parse(text));
+    services.notifications.show({ type: 'success', text: `Copied ${text} to clipboard!` });
+  }
+};
+
+const formatJson = function (eventData, copyClassName) {
+  const pretty = stringifyObject(eventData, {
+    indent: '  ',
+    singleQuotes: false,
+    transform: (obj, prop, originalResult) => {
+      if (typeof obj[prop] === 'string' || typeof obj[prop] === 'number') {
+        return `<span class="tnw-copy ${copyClassName}">${originalResult}${copyIconAsHtml}</span>`;
+      }
+
+      return originalResult;
+    }
+  });
+
+  return pretty;
 };
 
 const Event = function ({ classes, event }) {
@@ -43,7 +87,7 @@ const Event = function ({ classes, event }) {
   const compact = [ ...full, 'id', 'metadata' ];
 
   /* eslint-disable no-extra-parens */
-  const eventDetails = yaml.safeDump(omit(toJS(event), compact));
+  const eventDetails = formatJson(omit(toJS(event), compact), classes.Copy);
 
   return (
     <div className={ classes.Event }>
