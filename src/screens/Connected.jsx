@@ -19,7 +19,7 @@ const Connected = function () {
     <React.Fragment>
       <Sidebar>
         <Sidebar.Brand><Product name='console' /></Sidebar.Brand>
-        <Sidebar.Item iconName='account'>
+        <Sidebar.Item iconName='active-connection'>
           <Sidebar.Item>
             {state.backend.user ? `Authenticated as ${state.backend.user.name || state.backend.user.nickname || 'unnamed user'} (${state.backend.user.sub})` : 'Not authenticated (anonymous)'}
           </Sidebar.Item>

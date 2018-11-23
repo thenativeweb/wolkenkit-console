@@ -25,6 +25,15 @@ const styles = theme => ({
   Details: {}
 });
 
+const handleValueClicked = function (event) {
+  const text = event.currentTarget.innerText;
+
+  console.log(event);
+  // services.notifications.show({ type: 'success', text: `Copied ${text} to clipboard!` });
+
+  // copy(JSON.parse(text));
+};
+
 const Event = function ({ classes, event }) {
   if (!event) {
     return null;
@@ -39,7 +48,11 @@ const Event = function ({ classes, event }) {
   return (
     <div className={ classes.Event }>
       <h3 className={ classes.Title }>{event.context.name}.{event.aggregate.name}.{event.name}</h3>
-      <div className={ classes.Details } dangerouslySetInnerHTML={{ __html: eventDetails }} />
+      <div
+        className={ classes.Details }
+        onClick={ handleValueClicked }
+        dangerouslySetInnerHTML={{ __html: eventDetails }}
+      />
     </div>
   );
   /* eslint-enable no-extra-parens */

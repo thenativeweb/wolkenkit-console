@@ -5,6 +5,7 @@ import get from 'lodash/get';
 import { observer } from 'mobx-react';
 import React from 'react';
 import state from './state';
+import Symbols from './components/Symbols';
 import {
   Application,
   Button,
@@ -27,6 +28,9 @@ const App = function () {
     <ThemeProvider theme='wolkenkit'>
       <Application>
         <Application.Services />
+
+        <Symbols />
+
         { renderScreen() }
 
         <Modal isVisible={ get(state, 'backend.error') !== undefined }>
