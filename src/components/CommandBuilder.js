@@ -21,6 +21,10 @@ const styles = theme => ({
     display: 'flex',
     'align-items': 'center',
     'flex-wrap': 'wrap'
+  },
+
+  Control: {
+    'margin-bottom': theme.grid.stepSize
   }
 });
 
@@ -32,7 +36,7 @@ const CommandChooser = function ({ commands, selectedCommand, onChange }) {
   return (
     <Dropdown
       size='s'
-      style={{ flexGrow: 1 }}
+      style={{ flexGrow: 1, marginBottom: 5 }}
       options={ commands.map(command => ({ label: command, value: command })) }
       value={ selectedCommand }
       onChange={ onChange }
@@ -48,7 +52,7 @@ const AggregateChooser = function ({ aggregates, selectedAggregate, onChange }) 
   return (
     <Dropdown
       size='s'
-      style={{ flexGrow: 1 }}
+      style={{ flexGrow: 1, marginBottom: 5 }}
       options={ aggregates.map(aggregate => ({ label: aggregate, value: aggregate })) }
       value={ selectedAggregate }
       onChange={ onChange }
@@ -123,7 +127,7 @@ const CommandBuilder = function ({ classes, configuration, onInsertCommandClick 
       <div className={ classes.Controls }>
         <Dropdown
           size='s'
-          style={{ flexGrow: 1 }}
+          style={{ flexGrow: 1, marginBottom: 5 }}
           options={ contexts.map(context => ({ label: context, value: context })) }
           value={ selectedContext }
           onChange={ handleContextChange }
@@ -140,6 +144,7 @@ const CommandBuilder = function ({ classes, configuration, onInsertCommandClick 
         />
         <Button
           size='s'
+          style={{ flexGrow: 1, marginBottom: 5 }}
           isPrimary={ true }
           className={ classes.FlexControl }
           onClick={ handleInsertClicked }
