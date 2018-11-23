@@ -82,7 +82,7 @@ class Connect extends React.Component {
                   <TextBox
                     name='port'
                     type='port'
-                    value={ state.connecting.port }
+                    value={ String(state.connecting.port) }
                     onChange={ connecting.handleInputChanged }
                     placeholder='3000'
                   />
