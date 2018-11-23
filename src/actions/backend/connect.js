@@ -31,6 +31,7 @@ const connect = async function (options) {
   try {
     configuration = await loadConfiguration({ host, port });
   } catch (ex) {
+    state.connecting.shouldAutoConnect = false;
     state.connecting.error = 'Failed to connect, is the backend running?';
 
     return;
@@ -45,6 +46,7 @@ const connect = async function (options) {
   try {
     app = await wolkenkit.connect({ host, port, authentication: authProvider });
   } catch (ex) {
+    state.connecting.shouldAutoConnect = false;
     state.connecting.error = 'Failed to connect, is the backend running?';
 
     return;

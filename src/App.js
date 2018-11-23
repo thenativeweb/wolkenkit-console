@@ -15,6 +15,8 @@ import {
 } from 'thenativeweb-ux';
 
 const renderScreen = function () {
+  console.log('renderScreen');
+
   if (!state.backend || !state.backend.isConnected) {
     return <Connect />;
   }
