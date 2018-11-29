@@ -1,36 +1,73 @@
-import Button from './Button';
+import classNames from 'classnames';
 import debugging from '../actions/debugging';
+import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
+import React from 'react';
 import state from '../state';
-import React, { Component } from 'react';
-import './ErrorConsole.css';
+import { Button, View } from 'thenativeweb-ux';
 
-class ErrorConsole extends Component {
-  static renderMessage (error, index) {
-    if (error instanceof Error) {
-      if (error.name === 'CommandRejected') {
-        return (
-          <div key={ index } className='wk-message'>
-            <h3>Command got rejected: {error.message}</h3>
-          </div>
-        );
-      }
+const styles = theme => ({
+  ErrorConsole: {
+    overflow: 'hidden',
+    display: 'flex',
+    'flex-direction': 'column',
+    'border-top': '1px solid #eee',
+    height: 48,
+    transition: 'height 200ms ease-in-out',
+    'will-change': 'height'
+  },
 
-      return (
-        <div key={ index } className='wk-message'>
-          <h3>Error: {error.message}</h3>
-          <p>{error.stack}</p>
-        </div>
-      );
+  IsExpanded: {
+    height: '300px'
+  },
+
+  Link: {
+    background: 'transparent',
+    color: theme.color.brand.highlight,
+    border: 0,
+
+    '&:active, &:focus': {
+      background: 'transparent',
+      color: theme.color.brand.highlight
     }
+  },
 
-    return (
-      <div key={ index } className='wk-message'>
-        <h3>{error}</h3>
-      </div>
-    );
+  Header: {
+    height: 48,
+    display: 'flex',
+    'flex-direction': 'row',
+    'align-items': 'center',
+    padding: [ theme.grid.stepSize * 2, theme.grid.stepSize ],
+    'border-bottom': '1px solid #eee'
+  },
+
+  HeaderSpacer: {
+    'flex-grow': 1
+  },
+
+  Messages: {
+    'font-family': theme.font.family.code,
+    overflow: 'auto',
+    'flex-grow': 1
+  },
+
+  Message: {
+    'font-size': theme.font.size.small,
+    padding: [ theme.grid.stepSize, theme.grid.stepSize * 2 ],
+    'border-bottom': '1px solid #eee',
+
+    '& h3': {
+      'font-size': theme.font.size.small
+    }
+  },
+
+  Hint: {
+    'font-size': theme.font.size.small,
+    padding: theme.grid.stepSize * 2
   }
+});
 
+class ErrorConsole extends React.Component {
   static handleClearClicked (event) {
     event.preventDefault();
 
@@ -40,7 +77,7 @@ class ErrorConsole extends Component {
   constructor () {
     super();
 
-    this.saveContainerRef = this.saveContainerRef.bind(this);
+    this.renderMessage = this.renderMessage.bind(this);
     this.handleExpandClicked = this.handleExpandClicked.bind(this);
     this.handleCloseClicked = this.handleCloseClicked.bind(this);
 
@@ -61,35 +98,58 @@ class ErrorConsole extends Component {
     });
   }
 
-  saveContainerRef (ref) {
-    this.container = ref;
+  renderMessage (error, index) {
+    const { classes } = this.props;
+
+    let content;
+
+    if (error.message && error.name) {
+      content = <React.Fragment><h3>Error: {error.message}</h3><p>{error.stack}</p></React.Fragment>;
+
+      if (error.name === 'CommandRejected' || error.name === 'CommandFailed') {
+        content = <h3>Command got rejected: {error.message}</h3>;
+      }
+    } else if (typeof error === 'object') {
+      content = <h3>{JSON.stringify(error)}</h3>;
+    } else {
+      content = <h3>{error}</h3>;
+    }
+
+    return (
+      <div key={ index } className={ classes.Message }>
+        { content }
+      </div>
+    );
   }
 
   render () {
+    const { classes } = this.props;
+    const { isExpanded } = this.state;
+
     if (!state.debugging.messages) {
       return null;
     }
 
-    let className = 'wk-error-console';
-
-    if (this.state.isExpanded) {
-      className += ' wk-error-console--expanded';
-    }
+    const componentClasses = classNames(classes.ErrorConsole, {
+      [classes.IsExpanded]: isExpanded
+    });
 
     return (
-      <div className={ className }>
-        <div className='wk-error-console__header'>
-          <Button type='link' onClick={ this.handleExpandClicked }>Logs and Errors: ({state.debugging.messages.length})</Button>
-          <Button type='link' onClick={ ErrorConsole.handleClearClicked }>Clear</Button>
-          <div className='wk-spacer' />
-          { this.state.isExpanded ? <Button type='link' onClick={ this.handleCloseClicked }>Close</Button> : null }
-        </div>
-        <div className='wk-error-console__messages' ref={ this.saveContainerRef }>
-          { state.debugging.messages.length === 0 ? <div className='wk-hint'>No errors encountered yet. Well done!</div> : '' }
+      <div className={ componentClasses }>
+        <View orientation='horizontal' adjust='auto' className={ classes.Header }>
+
+          <Button className={ classes.Link } onClick={ this.handleExpandClicked }>Logs and Errors: ({state.debugging.messages.length})</Button>
+
+          <Button className={ classes.Link } onClick={ ErrorConsole.handleClearClicked }>Clear</Button>
+          <div className={ classes.HeaderSpacer } />
+          { this.state.isExpanded ? <Button className={ classes.Link } onClick={ this.handleCloseClicked }>Close</Button> : null }
+        </View>
+        <div className={ classes.Messages }>
+          { state.debugging.messages.length === 0 ? <div className={ classes.Hint }>No errors encountered yet. Well done!</div> : '' }
 
           {
             /* eslint-disable no-extra-parens */
-            state.debugging.messages.map(ErrorConsole.renderMessage)
+            state.debugging.messages.map(this.renderMessage)
             /* eslint-enable no-extra-parens */
           }
         </div>
@@ -98,4 +158,4 @@ class ErrorConsole extends Component {
   }
 }
 
-export default observer(ErrorConsole);
+export default injectSheet(styles)(observer(ErrorConsole));

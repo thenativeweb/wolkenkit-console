@@ -1,7 +1,7 @@
 import debugging from '../debugging';
 import state from '../../state';
 import stopReadingModel from './stopReadingModel';
-import { extendObservable, runInAction } from 'mobx';
+import { runInAction, set } from 'mobx';
 
 const startReadingModel = function (modelName) {
   if (!modelName) {
@@ -19,11 +19,11 @@ const startReadingModel = function (modelName) {
 
     state.backend.app.lists[modelName].readAndObserve().
       started((items, cancel) => {
-        extendObservable(state.subscriptions, { model: cancel });
-        extendObservable(state.watching, { selectedReadModelItems: items });
+        set(state.subscriptions, { model: cancel });
+        set(state.watching, { selectedReadModelItems: items });
       }).
       updated(items => {
-        extendObservable(state.watching, { selectedReadModelItems: items });
+        set(state.watching, { selectedReadModelItems: items });
       }).
       failed(debugging.log);
   });

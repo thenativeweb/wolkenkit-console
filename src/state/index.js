@@ -1,12 +1,12 @@
 import autoSave from './autoSave';
-import { extendObservable } from 'mobx';
 import load from './load';
 import merge from 'lodash/merge';
+import { observable } from 'mobx';
 import { backend, connecting, debugging, programming, subscriptions, watching } from './defaults';
 
 const key = 'wolkenkit-console-state';
 
-const state = extendObservable({}, merge({}, {
+const state = observable.object(merge({}, {
   backend,
   connecting,
   debugging,
@@ -18,7 +18,7 @@ const state = extendObservable({}, merge({}, {
 autoSave({
   state,
   take: [ 'backend', 'connecting' ],
-  skip: [ 'backend.app', 'backend.user' ],
+  skip: [ 'backend.app', 'backend.isConnected', 'backend.user', 'connecting.error' ],
   key
 });
 

@@ -1,18 +1,56 @@
-import Button from './Button';
+import { Button } from 'thenativeweb-ux';
 import CodeMirror from 'codemirror';
+import CommandBuilder from './CommandBuilder';
 import EditorBar from './EditorBar';
-import React, { Component } from 'react';
+import injectSheet from 'react-jss';
+import React from 'react';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/selection/active-line';
-import './Editor.css';
+
 import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/addon/hint/show-hint.css';
 import '../../node_modules/codemirror/theme/neo.css';
 
-class Editor extends Component {
+const styles = theme => ({
+  Editor: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    'flex-direction': 'column',
+    overflow: 'hidden'
+  },
+
+  EditorContainer: {
+    display: 'flex',
+    'flex-grow': 1,
+    'flex-shrink': 1,
+    position: 'relative',
+    overflow: 'hidden',
+
+    '& .CodeMirror': {
+      height: '100%',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width: '100%',
+      'font-family': theme.font.family.code,
+      'font-size': theme.font.size.small
+    },
+
+    '& .CodeMirror .CodeMirror-cursor ': {
+      'border-left': '1px solid #819090 !important',
+      width: '0 !important'
+    }
+  }
+});
+
+class Editor extends React.Component {
   constructor () {
     super();
 
@@ -117,25 +155,30 @@ class Editor extends Component {
   }
 
   render () {
-    const { configuration, onInsertCommandClick } = this.props;
+    const { classes, configuration, onInsertCommandClick } = this.props;
 
     return (
-      <div className='wk-editor'>
-        <EditorBar onInsertCommandClick={ onInsertCommandClick } configuration={ configuration } />
+      <div className={ classes.Editor }>
+        <EditorBar>
+          <CommandBuilder
+            onInsertCommandClick={ onInsertCommandClick }
+            configuration={ configuration }
+          />
+        </EditorBar>
         <div
-          className='wk-editor-container'
+          className={ classes.EditorContainer }
           ref={ ref => {
             this.container = ref;
           } }
         />
-        <div className='wk-editor-bar wk-editor-bar--bottom'>
-          <Button onClick={ this.props.onExecute }>
+        <EditorBar type='bottom' style={{ alignItems: 'flex-end' }}>
+          <Button size='s' isPrimary={ true } onClick={ this.props.onExecute }>
             Execute <Button.Hint>[Ctrl+Enter]</Button.Hint>
           </Button>
-        </div>
+        </EditorBar>
       </div>
     );
   }
 }
 
-export default Editor;
+export default injectSheet(styles)(Editor);

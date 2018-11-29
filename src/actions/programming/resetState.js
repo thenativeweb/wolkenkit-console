@@ -1,9 +1,9 @@
-import { extendObservable } from 'mobx';
 import { programming } from '../../state/defaults';
+import { set } from 'mobx';
 import state from '../../state';
 
 const resetState = function () {
-  extendObservable(state.programming, programming);
+  set(state.programming, programming);
 };
 
 export default resetState;

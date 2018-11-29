@@ -12,7 +12,7 @@ const autoSave = function (options) {
     const stateToPersist = omit(pick(stateAsObject, take), skip);
 
     if (!isFirstRun) {
-      window.localStorage.setItem(key, JSON.stringify(stateToPersist));
+      window.sessionStorage.setItem(key, JSON.stringify(stateToPersist));
     }
     isFirstRun = false;
   });

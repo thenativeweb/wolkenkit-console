@@ -1,7 +1,7 @@
 const load = function (options) {
   const { key } = options;
 
-  let state = window.localStorage.getItem(key) || undefined;
+  let state = window.sessionStorage.getItem(key) || undefined;
 
   try {
     state = JSON.parse(state);

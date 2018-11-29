@@ -1,49 +1,57 @@
 import Event from './Event';
+import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
+import React from 'react';
 import state from '../state';
-import React, { Component } from 'react';
-import './EventConsole.css';
 
-class EventConsole extends Component {
-  constructor () {
-    super();
+const styles = theme => ({
+  EventConsole: {
+    height: '100%',
+    width: '100%',
+    overflow: 'auto',
+    background: theme.color.brand.dark,
+    'font-family': theme.font.family.code,
+    'font-size': theme.font.size.small,
+    color: theme.color.brand.light
+  },
 
-    this.saveContainerRef = this.saveContainerRef.bind(this);
-    this.handleDOMContentChanged = this.handleDOMContentChanged.bind(this);
+  Hint: {
+    opacity: 0.5,
+    padding: theme.grid.stepSize * 2
+  }
+});
+
+class EventConsole extends React.Component {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      prevEventCount: undefined
+    };
+
+    this.scrollContainerRef = React.createRef();
   }
 
-  componentDidMount () {
-    this.mutationObserver = new MutationObserver(this.handleDOMContentChanged);
+  componentDidUpdate () {
+    if (this.state.prevEventCount !== state.watching.collectedEvents.length) {
+      const domElement = this.scrollContainerRef.current;
 
-    this.mutationObserver.observe(this.container, {
-      childList: true
-    });
+      if (domElement) {
+        domElement.scrollTop = domElement.scrollHeight;
+      }
 
-    this.handleDOMContentChanged();
-  }
-
-  componentWillUnmount () {
-    this.mutationObserver.disconnect();
-  }
-
-  handleDOMContentChanged () {
-    if (this.container && document.contains(this.container)) {
-      this.container.scrollTop = this.container.scrollHeight;
+      this.setState({
+        prevEventCount: state.watching.collectedEvents.length
+      });
     }
-  }
-
-  saveContainerRef (ref) {
-    this.container = ref;
   }
 
   render () {
-    if (!state.watching.collectedEvents) {
-      return null;
-    }
+    const { classes } = this.props;
 
     return (
-      <div className='wk-event-console' ref={ this.saveContainerRef }>
-        { state.watching.collectedEvents.length === 0 ? <div className='wk-hint'>No events have been observed yet. Go ahead and send a command…</div> : '' }
+      <div className={ classes.EventConsole } ref={ this.scrollContainerRef }>
+        { state.watching.collectedEvents.length === 0 ? <div className={ classes.Hint }>No events have been observed yet. Go ahead and send a command…</div> : '' }
 
         {
           state.watching.collectedEvents.map(event => <Event key={ event.id } event={ event } />)
@@ -53,4 +61,4 @@ class EventConsole extends Component {
   }
 }
 
-export default observer(EventConsole);
+export default injectSheet(styles)(observer(EventConsole));

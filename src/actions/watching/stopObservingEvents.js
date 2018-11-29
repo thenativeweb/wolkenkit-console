@@ -1,4 +1,4 @@
-import { extendObservable } from 'mobx';
+import { set } from 'mobx';
 import state from '../../state';
 
 const stopObservingEvents = function () {
@@ -7,7 +7,7 @@ const stopObservingEvents = function () {
     state.subscriptions.events = undefined;
   }
 
-  extendObservable(state.watching, {
+  set(state.watching, {
     collectedEvents: []
   });
 };

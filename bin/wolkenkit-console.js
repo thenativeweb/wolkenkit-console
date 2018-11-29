@@ -19,7 +19,8 @@ if (process.platform === 'win32' && __dirname.includes('\\nvm\\')) {
   /* eslint-enable no-process-env */
 }
 
-const express = require('express'),
+const compression = require('compression'),
+      express = require('express'),
       flaschenpost = require('flaschenpost');
 
 flaschenpost.initialize({ appRootPath: path.join(__dirname, '..') });
@@ -27,13 +28,14 @@ flaschenpost.initialize({ appRootPath: path.join(__dirname, '..') });
 const logger = flaschenpost.getLogger();
 
 const app = express(),
-      port = 3000;
+      port = 4000;
 
+app.use(compression());
 app.use(express.static(path.join(__dirname, '..', 'static')));
-app.use(express.static(path.join(__dirname, '..', 'build', 'web')));
+app.use(express.static(path.join(__dirname, '..', 'build')));
 
 const server = http.createServer(app);
 
 server.listen(port, () => {
-  logger.info('Console server started.');
+  logger.info('Console server started.', { port });
 });

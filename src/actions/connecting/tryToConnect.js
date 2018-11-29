@@ -1,8 +1,8 @@
-import connect from './connect';
+import backend from '../backend';
 import state from '../../state';
 
-const handleConnectFormSubmitted = function (event) {
-  event.preventDefault();
+const tryToConnect = function () {
+  state.connecting.shouldAutoConnect = true;
 
   (async () => {
     const options = {
@@ -19,8 +19,8 @@ const handleConnectFormSubmitted = function (event) {
       };
     }
 
-    await connect(options);
+    await backend.connect(options);
   })();
 };
 
-export default handleConnectFormSubmitted;
+export default tryToConnect;

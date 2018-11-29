@@ -1,4 +1,4 @@
-import { extendObservable } from 'mobx';
+import { set } from 'mobx';
 import state from '../../state';
 
 const stopReadingModel = function () {
@@ -7,7 +7,7 @@ const stopReadingModel = function () {
     state.subscriptions.model = undefined;
   }
 
-  extendObservable(state.watching, {
+  set(state.watching, {
     selectedReadModelItems: []
   });
 };
