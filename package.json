@@ -56,7 +56,7 @@
     "wolkenkit-client": "2.0.0"
   },
   "devDependencies": {
-    "roboter": "3.0.1"
+    "roboter": "3.0.3"
   },
   "repository": {
     "type": "git",
