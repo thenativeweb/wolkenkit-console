@@ -47,6 +47,7 @@
     "processenv": "1.1.0",
     "react": "16.7.0-alpha.2",
     "react-dom": "16.7.0-alpha.2",
+    "roboter": "3.0.3",
     "stringify-object": "3.3.0",
     "style-loader": "0.23.1",
     "thenativeweb-ux": "0.9.0",
@@ -55,9 +56,7 @@
     "webpack-dev-server": "3.1.10",
     "wolkenkit-client": "2.0.0"
   },
-  "devDependencies": {
-    "roboter": "3.0.3"
-  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git://github.com/thenativeweb/wolkenkit-console.git"
