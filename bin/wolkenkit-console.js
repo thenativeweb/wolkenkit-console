@@ -9,6 +9,8 @@
 const http = require('http'),
       path = require('path');
 
+const processenv = require('processenv');
+
 // On Windows, nvm has the strange behavior to store applications inside of a
 // node_modules directory. Hence finding the application's root path fails,
 // which is tried in flaschenpost. To fix this, we manually set the root path
@@ -28,7 +30,7 @@ flaschenpost.initialize({ appRootPath: path.join(__dirname, '..') });
 const logger = flaschenpost.getLogger();
 
 const app = express(),
-      port = 4000;
+      port = processenv('PORT', 4000);
 
 app.use(compression());
 app.use(express.static(path.join(__dirname, '..', 'static')));
