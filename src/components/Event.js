@@ -38,7 +38,11 @@ const styles = theme => ({
       top: '-0.1em',
       'padding-left': theme.grid.stepSize,
       opacity: 0,
-      fill: theme.color.brand.white
+      fill: theme.color.brand.white,
+
+      '& *': {
+        'pointer-events': 'none'
+      }
     },
 
     '&:hover': {
@@ -52,13 +56,17 @@ const styles = theme => ({
 });
 
 const handleValueClicked = function (event) {
-  const target = event.target;
+  let target = event.target.classList.contains('tnw-copy') ? event.target : null;
 
-  if (target.classList.contains('tnw-copy')) {
-    const text = event.target.innerText;
+  if (!target) {
+    target = event.target.parentElement.classList.contains('tnw-copy') ? event.target.parentElement : null;
+  }
+
+  if (target) {
+    const text = target.innerText;
 
     copy(JSON.parse(text));
-    services.notifications.show({ type: 'success', text: `Copied ${text} to clipboard!` });
+    services.notifications.show({ type: 'success', text: `Copied to clipboard!` });
   }
 };
 

@@ -66,7 +66,7 @@ const styles = theme => ({
 const handleValueClicked = function (event) {
   const text = event.currentTarget.innerText;
 
-  services.notifications.show({ type: 'success', text: `Copied ${text} to clipboard!` });
+  services.notifications.show({ type: 'success', text: `Copied to clipboard!` });
 
   copy(JSON.parse(text));
 };
