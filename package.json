@@ -1,6 +1,6 @@
 {
   "name": "wolkenkit-console",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "wolkenkit-console lets you execute domain code from within your browser.",
   "contributors": [
     {
