@@ -1,10 +1,11 @@
-import { Dropdown } from 'thenativeweb-ux';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
+import PrettyJson from './PrettyJson';
 import React from 'react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
 import watching from '../actions/watching';
+import { Dropdown, Modal, View } from 'thenativeweb-ux';
 
 const styles = theme => ({
   ReadModelConsole: {
@@ -44,6 +45,11 @@ class ReadModelConsole extends React.Component {
     super();
 
     this.saveContainerRef = this.saveContainerRef.bind(this);
+    this.handleJsonClick = this.handleJsonClick.bind(this);
+
+    this.state = {
+      json: undefined
+    };
   }
 
   componentDidMount () {
@@ -71,12 +77,19 @@ class ReadModelConsole extends React.Component {
     this.container = ref;
   }
 
+  handleJsonClick (value) {
+    this.setState({
+      json: value
+    });
+  }
+
   render () {
     if (!state.backend.configuration || !state.watching.selectedReadModel) {
       return null;
     }
 
     const { classes } = this.props;
+    const { json } = this.state;
 
     return (
       <div className={ classes.ReadModelConsole }>
@@ -90,9 +103,14 @@ class ReadModelConsole extends React.Component {
         </div>
         <div className={ classes.Items } ref={ this.saveContainerRef }>
           {
-            state.watching.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } />)
+            state.watching.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } onJsonClick={ this.handleJsonClick } />)
           }
         </div>
+        <Modal isVisible={ json !== undefined } onCancel={ () => this.setState({ json: undefined }) }>
+          <View scrollable={ 'auto' }>
+            <PrettyJson value={ json } />
+          </View>
+        </Modal>
       </div>
     );
   }
