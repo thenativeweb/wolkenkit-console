@@ -5,7 +5,7 @@ import React from 'react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
 import watching from '../actions/watching';
-import { Button, Dropdown, Headline, Modal, View } from 'thenativeweb-ux';
+import { Dropdown, Modal } from 'thenativeweb-ux';
 
 const styles = theme => ({
   ReadModelConsole: {
@@ -111,16 +111,7 @@ class ReadModelConsole extends React.Component {
           }
         </div>
         <Modal className={ classes.JsonViewer } isVisible={ json !== undefined } onCancel={ () => this.setState({ json: undefined }) }>
-          <Headline style={{ justifyContent: 'flex-end', display: 'flex', flexShrink: 0 }}>
-            <Button
-              isSubtle={ true }
-              icon='close'
-              onClick={ () => this.setState({ json: undefined }) }
-            />
-          </Headline>
-          <View scrollable={ 'auto' }>
-            <PrettyJson value={ json } />
-          </View>
+          <PrettyJson value={ json } />
         </Modal>
       </div>
     );

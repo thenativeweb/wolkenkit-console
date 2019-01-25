@@ -51,7 +51,10 @@ const handleCopyClicked = function (event) {
 };
 
 const ReadModelItemValue = function ({ classes, value, onJsonClick }) {
-  /* eslint-disable no-extra-parens */
+  if (value === null) {
+    return 'null';
+  }
+
   const valueType = typeof value;
 
   switch (valueType) {
@@ -92,7 +95,6 @@ const ReadModelItemValue = function ({ classes, value, onJsonClick }) {
         </div>
       );
   }
-  /* eslint-enable no-extra-parens */
 };
 
 export default injectSheet(styles)(observer(ReadModelItemValue));

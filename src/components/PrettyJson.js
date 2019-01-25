@@ -1,11 +1,10 @@
 import copy from 'copy-text-to-clipboard';
 import injectSheet from 'react-jss';
 import JsonFormatterWorker from 'worker-loader!./JsonFormatterWorker.js';
-import LoadingIndicator from './LoadingIndicator';
 import { observer } from 'mobx-react';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { Icon, services, ThemeProvider } from 'thenativeweb-ux';
+import { BusyIndicator, Icon, services, ThemeProvider } from 'thenativeweb-ux';
 
 const copyIconAsHtml = ReactDOMServer.renderToString(<ThemeProvider theme='wolkenkit'><Icon size='s' name='copy' /></ThemeProvider>);
 
@@ -93,7 +92,7 @@ class PrettyJson extends React.Component {
     const { json } = this.state;
 
     if (!json) {
-      return <LoadingIndicator />;
+      return <BusyIndicator />;
     }
 
     return (
