@@ -26,7 +26,7 @@ const Connected = function () {
           <Sidebar.Item onClick={ backend.handleDisconnectClicked }>Disconnect</Sidebar.Item>
         </Sidebar.Item>
       </Sidebar>
-      <View orientation='horizontal' adjust='flex'>
+      <View orientation='horizontal' adjust='flex' style={{ overflow: 'hidden' }}>
         <View orientation='vertical' adjust='flex'>
           <View adjust='flex'>
             <Editor
@@ -41,7 +41,7 @@ const Connected = function () {
             <ErrorConsole />
           </View>
         </View>
-        <View orientation='vertical' adjust='flex'>
+        <View orientation='vertical' adjust='flex' style={{ overflow: 'hidden' }}>
           <Tabs>
             <EventConsole title='Events' />
             <ReadModelConsole title='ReadModels' />

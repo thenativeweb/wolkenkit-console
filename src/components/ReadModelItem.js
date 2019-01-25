@@ -1,13 +1,13 @@
-import copy from 'copy-text-to-clipboard';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Icon, services } from 'thenativeweb-ux';
+import ReadModelItemValue from './ReadModelItemValue';
 
 const styles = theme => ({
   ReadModelItem: {
     display: 'flex',
-    padding: theme.grid.stepSize,
+    flexDirection: 'row',
+    padding: theme.grid.stepSize * 1.5,
     'border-bottom': '1px solid #444',
     color: '#666'
   },
@@ -15,7 +15,7 @@ const styles = theme => ({
   Field: {
     'flex-grow': 1,
     'flex-shrink': 1,
-    'flex-basis': '120px',
+    flexBasis: '120px',
     overflow: 'hidden',
     'padding-left': theme.grid.stepSize * 1.5
   },
@@ -63,15 +63,7 @@ const styles = theme => ({
   }
 });
 
-const handleValueClicked = function (event) {
-  const text = event.currentTarget.innerText;
-
-  services.notifications.show({ type: 'success', text: `Copied to clipboard!` });
-
-  copy(JSON.parse(text));
-};
-
-const ReadModelItem = function ({ classes, item }) {
+const ReadModelItem = function ({ classes, item, onJsonClick }) {
   /* eslint-disable no-extra-parens */
   return (
     <div className={ classes.ReadModelItem }>
@@ -80,21 +72,10 @@ const ReadModelItem = function ({ classes, item }) {
         map(itemKey => (
           <div className={ classes.Field } key={ itemKey }>
             <div className={ classes.Key }>{ itemKey }</div>
-            <div
-              className={ classes.ValueContainer }
-              onClick={ handleValueClicked }
-              title='Copy to clipboard'
-              aria-label='Copy to clipboard'
-            >
-              <div className={ classes.Value }>
-                { JSON.stringify(item[itemKey]) }
-              </div>
-              <Icon
-                size='s'
-                name='copy'
-                className={ classes.CopyIcon }
-              />
-            </div>
+            <ReadModelItemValue
+              value={ item[itemKey] }
+              onJsonClick={ onJsonClick }
+            />
           </div>
         ))
       }

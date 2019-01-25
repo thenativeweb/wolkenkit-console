@@ -12,7 +12,8 @@ import {
   Headline,
   Message,
   Modal,
-  ThemeProvider
+  ThemeProvider,
+  View
 } from 'thenativeweb-ux';
 
 const renderScreen = function () {
@@ -33,25 +34,27 @@ const App = function () {
 
         { renderScreen() }
 
-        <Modal isVisible={ get(state, 'backend.error') !== undefined }>
+        <Modal showHeader={ false } isVisible={ get(state, 'backend.error') !== undefined }>
           <Headline>
             Oops!
           </Headline>
           <Message type='error'>
             { get(state, 'backend.error') }
           </Message>
-          <Button
-            isPrimary={ true }
-            onClick={ backend.handleReconnectClicked }
-          >
-            Reconnect me!
-          </Button>
-          <Button
-            isPrimary={ true }
-            onClick={ backend.handleDisconnectClicked }
-          >
-            Reset connection!
-          </Button>
+          <View orientation='vertical'>
+            <Button
+              isPrimary={ true }
+              onClick={ backend.handleReconnectClicked }
+            >
+              Reconnect me!
+            </Button>
+            <Button
+              isPrimary={ true }
+              onClick={ backend.handleDisconnectClicked }
+            >
+              Reset connection!
+            </Button>
+          </View>
         </Modal>
       </Application>
     </ThemeProvider>
