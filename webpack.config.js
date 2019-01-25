@@ -40,7 +40,6 @@ const getPluginsFor = function (environment) {
     default:
       return [
         new webpack.DefinePlugin(getEnvironmentVariables()),
-        new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
           template: path.join(paths.src, 'template.ejs')
         })

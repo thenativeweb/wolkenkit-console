@@ -37,7 +37,8 @@ const styles = theme => ({
     'flex-shrink': 0,
     'flex-basis': 'auto',
     fill: theme.color.brand.white,
-    opacity: 0
+    opacity: 0,
+    marginTop: '-0.1em'
   }
 });
 

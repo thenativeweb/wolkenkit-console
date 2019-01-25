@@ -1,12 +1,15 @@
 import copy from 'copy-text-to-clipboard';
 import injectSheet from 'react-jss';
+import JsonFormatterWorker from 'worker-loader!./JsonFormatterWorker.js';
+import LoadingIndicator from './LoadingIndicator';
 import { observer } from 'mobx-react';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import stringifyObject from 'stringify-object';
 import { Icon, services, ThemeProvider } from 'thenativeweb-ux';
 
 const copyIconAsHtml = ReactDOMServer.renderToString(<ThemeProvider theme='wolkenkit'><Icon size='s' name='copy' /></ThemeProvider>);
+
+const jsonFormatterWorker = new JsonFormatterWorker();
 
 const styles = theme => ({
   PrettyJson: {
@@ -56,38 +59,51 @@ const handleValueClicked = function (event) {
   }
 };
 
-const formatJson = function (eventData, copyClassName) {
-  const pretty = stringifyObject(eventData, {
-    indent: '  ',
-    singleQuotes: false,
-    transform: (obj, prop, originalResult) => {
-      if (typeof obj[prop] === 'string' || typeof obj[prop] === 'number') {
-        return `<span class="tnw-copy ${copyClassName}">${originalResult}${copyIconAsHtml}</span>`;
-      }
+class PrettyJson extends React.Component {
+  constructor (props) {
+    super(props);
 
-      return originalResult;
-    }
-  });
+    this.handleWorkerMessage = this.handleWorkerMessage.bind(this);
 
-  return pretty;
-};
-
-const PrettyJson = function ({ classes, value }) {
-  if (!value) {
-    return null;
+    this.state = {
+      json: undefined
+    };
   }
 
-  /* eslint-disable no-extra-parens */
-  const jsonDetails = formatJson(value, classes.Copy);
+  componentDidMount () {
+    const { value, classes } = this.props;
 
-  return (
-    <div
-      className={ classes.PrettyJson }
-      onClick={ handleValueClicked }
-      dangerouslySetInnerHTML={{ __html: jsonDetails }}
-    />
-  );
-  /* eslint-enable no-extra-parens */
-};
+    jsonFormatterWorker.postMessage({ value: JSON.stringify(value), copyClassName: classes.Copy, copyIconAsHtml });
+
+    jsonFormatterWorker.addEventListener('message', this.handleWorkerMessage);
+  }
+
+  componentWillUnmount () {
+    jsonFormatterWorker.removeEventListener('message', this.handleWorkerMessage);
+  }
+
+  handleWorkerMessage (event) {
+    this.setState({
+      json: event.data
+    });
+  }
+
+  render () {
+    const { classes } = this.props;
+    const { json } = this.state;
+
+    if (!json) {
+      return <LoadingIndicator />;
+    }
+
+    return (
+      <div
+        className={ classes.PrettyJson }
+        onClick={ handleValueClicked }
+        dangerouslySetInnerHTML={{ __html: json }}
+      />
+    );
+  }
+}
 
 export default injectSheet(styles)(observer(PrettyJson));
