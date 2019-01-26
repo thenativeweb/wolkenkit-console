@@ -16,7 +16,8 @@ const styles = theme => ({
     'border-bottom': '1px solid #444',
     color: '#666',
     'white-space': 'pre',
-    'line-height': 1.2
+    'line-height': 1.2,
+    boxSizing: 'border-box'
   },
 
   Title: {
@@ -86,7 +87,7 @@ const formatJson = function (eventData, copyClassName) {
   return pretty;
 };
 
-const Event = function ({ classes, event }) {
+const Event = function ({ classes, event, style }) {
   if (!event) {
     return null;
   }
@@ -98,7 +99,7 @@ const Event = function ({ classes, event }) {
   const eventDetails = formatJson(omit(toJS(event), compact), classes.Copy);
 
   return (
-    <div className={ classes.Event }>
+    <div className={ classes.Event } style={ style }>
       <h3 className={ classes.Title }>{event.context.name}.{event.aggregate.name}.{event.name}</h3>
       <div
         className={ classes.Details }

@@ -43,7 +43,7 @@ const Connected = function () {
         </View>
         <View orientation='vertical' adjust='flex' style={{ overflow: 'hidden' }}>
           <Tabs>
-            <EventConsole title='Events' />
+            <EventConsole title={ `Events (${state.watching.collectedEvents.length})` } />
             <ReadModelConsole title='ReadModels' />
           </Tabs>
         </View>

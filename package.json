@@ -47,6 +47,7 @@
     "processenv": "1.1.0",
     "react": "16.8.0-alpha.1",
     "react-dom": "16.8.0-alpha.1",
+    "react-virtualized": "9.21.0",
     "roboter": "3.0.4",
     "stringify-object": "3.3.0",
     "style-loader": "0.23.1",

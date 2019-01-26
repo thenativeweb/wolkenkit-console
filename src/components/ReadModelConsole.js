@@ -4,7 +4,9 @@ import PrettyJson from './PrettyJson';
 import React from 'react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
+import { toJS } from 'mobx';
 import watching from '../actions/watching';
+import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 import { Dropdown, Modal } from 'thenativeweb-ux';
 
 const styles = theme => ({
@@ -50,6 +52,12 @@ class ReadModelConsole extends React.Component {
 
     this.saveContainerRef = this.saveContainerRef.bind(this);
     this.handleJsonClick = this.handleJsonClick.bind(this);
+    this.rowRenderer = this.rowRenderer.bind(this);
+
+    this.cellMeasureCache = new CellMeasurerCache({
+      fixedWidth: true,
+      minHeight: 50
+    });
 
     this.state = {
       json: undefined
@@ -87,6 +95,29 @@ class ReadModelConsole extends React.Component {
     });
   }
 
+  rowRenderer ({ index, parent, style }) {
+    const item = state.watching.selectedReadModelItems[index];
+
+    return (
+      <CellMeasurer
+        cache={ this.cellMeasureCache }
+        columnIndex={ 0 }
+        key={ item.id }
+        rowIndex={ index }
+        parent={ parent }
+      >
+        {() => (
+          <ReadModelItem
+            key={ item.id }
+            item={ item }
+            onJsonClick={ this.handleJsonClick }
+            style={ style }
+          />
+        )}
+      </CellMeasurer>
+    );
+  }
+
   render () {
     if (!state.backend.configuration || !state.watching.selectedReadModel) {
       return null;
@@ -94,6 +125,10 @@ class ReadModelConsole extends React.Component {
 
     const { classes } = this.props;
     const { json } = this.state;
+
+    // This use of mobx is needed in order to trigger the observer
+    // https://github.com/mobxjs/mobx-react/issues/484
+    const items = toJS(state.watching.selectedReadModelItems);
 
     return (
       <div className={ classes.ReadModelConsole }>
@@ -106,9 +141,17 @@ class ReadModelConsole extends React.Component {
           />
         </div>
         <div className={ classes.Items } ref={ this.saveContainerRef }>
-          {
-            state.watching.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } onJsonClick={ this.handleJsonClick } />)
-          }
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                width={ width }
+                height={ height }
+                rowCount={ items.length }
+                rowHeight={ this.cellMeasureCache.rowHeight }
+                rowRenderer={ this.rowRenderer }
+              />
+            )}
+          </AutoSizer>
         </div>
         <Modal className={ classes.JsonViewer } isVisible={ json !== undefined } onCancel={ () => this.setState({ json: undefined }) }>
           <PrettyJson value={ json } />

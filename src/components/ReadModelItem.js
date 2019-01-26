@@ -9,7 +9,8 @@ const styles = theme => ({
     flexDirection: 'row',
     padding: theme.grid.stepSize * 1.5,
     'border-bottom': '1px solid #444',
-    color: '#666'
+    color: '#666',
+    boxSizing: 'border-box'
   },
 
   Field: {
@@ -63,10 +64,10 @@ const styles = theme => ({
   }
 });
 
-const ReadModelItem = function ({ classes, item, onJsonClick }) {
+const ReadModelItem = function ({ classes, item, onJsonClick, style }) {
   /* eslint-disable no-extra-parens */
   return (
-    <div className={ classes.ReadModelItem }>
+    <div className={ classes.ReadModelItem } style={ style }>
       { Object.keys(item).
         filter(key => key !== 'isAuthorized').
         map(itemKey => (
