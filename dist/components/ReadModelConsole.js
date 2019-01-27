@@ -4,13 +4,14 @@ import _getPrototypeOf from "@babel/runtime/helpers/getPrototypeOf";
 import _createClass from "@babel/runtime/helpers/createClass";
 import _inherits from "@babel/runtime/helpers/inherits";
 import _assertThisInitialized from "@babel/runtime/helpers/assertThisInitialized";
-import { Dropdown } from 'thenativeweb-ux';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
+import PrettyJson from './PrettyJson';
 import React from 'react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
 import watching from '../actions/watching';
+import { Dropdown, Modal } from 'thenativeweb-ux';
 
 var styles = function styles(theme) {
   return {
@@ -37,6 +38,9 @@ var styles = function styles(theme) {
       'font-family': theme.font.family.code,
       'font-size': theme.font.size.small,
       color: '#eee'
+    },
+    JsonViewer: {
+      minWidth: '45vw'
     }
   };
 };
@@ -60,6 +64,10 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ReadModelConsole).call(this));
     _this.saveContainerRef = _this.saveContainerRef.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleJsonClick = _this.handleJsonClick.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.state = {
+      json: undefined
+    };
     return _this;
   }
 
@@ -91,13 +99,23 @@ function (_React$Component) {
       this.container = ref;
     }
   }, {
+    key: "handleJsonClick",
+    value: function handleJsonClick(value) {
+      this.setState({
+        json: value
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       if (!state.backend.configuration || !state.watching.selectedReadModel) {
         return null;
       }
 
       var classes = this.props.classes;
+      var json = this.state.json;
       return React.createElement("div", {
         className: classes.ReadModelConsole
       }, React.createElement("div", {
@@ -118,8 +136,19 @@ function (_React$Component) {
       }, state.watching.selectedReadModelItems.map(function (item) {
         return React.createElement(ReadModelItem, {
           key: item.id,
-          item: item
+          item: item,
+          onJsonClick: _this3.handleJsonClick
         });
+      })), React.createElement(Modal, {
+        className: classes.JsonViewer,
+        isVisible: json !== undefined,
+        onCancel: function onCancel() {
+          return _this3.setState({
+            json: undefined
+          });
+        }
+      }, React.createElement(PrettyJson, {
+        value: json
       })));
     }
   }]);

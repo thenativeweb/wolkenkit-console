@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import state from './state';
 import Symbols from './components/Symbols';
-import { Application, Button, Headline, Message, Modal, ThemeProvider } from 'thenativeweb-ux';
+import { Application, Button, Headline, Message, Modal, ThemeProvider, View } from 'thenativeweb-ux';
 
 var renderScreen = function renderScreen() {
   if (!state.backend || !state.backend.isConnected) {
@@ -20,16 +20,19 @@ var App = function App() {
   return React.createElement(ThemeProvider, {
     theme: "wolkenkit"
   }, React.createElement(Application, null, React.createElement(Application.Services, null), React.createElement(Symbols, null), renderScreen(), React.createElement(Modal, {
+    showHeader: false,
     isVisible: get(state, 'backend.error') !== undefined
   }, React.createElement(Headline, null, "Oops!"), React.createElement(Message, {
     type: "error"
-  }, get(state, 'backend.error')), React.createElement(Button, {
+  }, get(state, 'backend.error')), React.createElement(View, {
+    orientation: "vertical"
+  }, React.createElement(Button, {
     isPrimary: true,
     onClick: backend.handleReconnectClicked
   }, "Reconnect me!"), React.createElement(Button, {
     isPrimary: true,
     onClick: backend.handleDisconnectClicked
-  }, "Reset connection!"))));
+  }, "Reset connection!")))));
 };
 
 export default observer(App);

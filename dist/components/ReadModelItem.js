@@ -1,21 +1,21 @@
-import copy from 'copy-text-to-clipboard';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Icon, services } from 'thenativeweb-ux';
+import ReadModelItemValue from './ReadModelItemValue';
 
 var styles = function styles(theme) {
   return {
     ReadModelItem: {
       display: 'flex',
-      padding: theme.grid.stepSize,
+      flexDirection: 'row',
+      padding: theme.grid.stepSize * 1.5,
       'border-bottom': '1px solid #444',
       color: '#666'
     },
     Field: {
       'flex-grow': 1,
       'flex-shrink': 1,
-      'flex-basis': '120px',
+      flexBasis: '120px',
       overflow: 'hidden',
       'padding-left': theme.grid.stepSize * 1.5
     },
@@ -58,18 +58,10 @@ var styles = function styles(theme) {
   };
 };
 
-var handleValueClicked = function handleValueClicked(event) {
-  var text = event.currentTarget.innerText;
-  services.notifications.show({
-    type: 'success',
-    text: "Copied to clipboard!"
-  });
-  copy(JSON.parse(text));
-};
-
 var ReadModelItem = function ReadModelItem(_ref) {
   var classes = _ref.classes,
-      item = _ref.item;
+      item = _ref.item,
+      onJsonClick = _ref.onJsonClick;
 
   /* eslint-disable no-extra-parens */
   return React.createElement("div", {
@@ -82,18 +74,10 @@ var ReadModelItem = function ReadModelItem(_ref) {
       key: itemKey
     }, React.createElement("div", {
       className: classes.Key
-    }, itemKey), React.createElement("div", {
-      className: classes.ValueContainer,
-      onClick: handleValueClicked,
-      title: "Copy to clipboard",
-      "aria-label": "Copy to clipboard"
-    }, React.createElement("div", {
-      className: classes.Value
-    }, JSON.stringify(item[itemKey])), React.createElement(Icon, {
-      size: "s",
-      name: "copy",
-      className: classes.CopyIcon
-    })));
+    }, itemKey), React.createElement(ReadModelItemValue, {
+      value: item[itemKey],
+      onJsonClick: onJsonClick
+    }));
   }));
   /* eslint-enable no-extra-parens */
 };
