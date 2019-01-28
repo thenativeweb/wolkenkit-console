@@ -19,7 +19,10 @@ var Connected = function Connected() {
     onClick: backend.handleDisconnectClicked
   }, "Disconnect"))), React.createElement(View, {
     orientation: "horizontal",
-    adjust: "flex"
+    adjust: "flex",
+    style: {
+      overflow: 'hidden'
+    }
   }, React.createElement(View, {
     orientation: "vertical",
     adjust: "flex"
@@ -35,7 +38,10 @@ var Connected = function Connected() {
     adjust: "auto"
   }, React.createElement(ErrorConsole, null))), React.createElement(View, {
     orientation: "vertical",
-    adjust: "flex"
+    adjust: "flex",
+    style: {
+      overflow: 'hidden'
+    }
   }, React.createElement(Tabs, null, React.createElement(EventConsole, {
     title: "Events"
   }), React.createElement(ReadModelConsole, {
