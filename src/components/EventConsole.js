@@ -1,10 +1,12 @@
 import Event from './Event';
 import injectSheet from 'react-jss';
+import { Modal } from 'thenativeweb-ux';
 import { observer } from 'mobx-react';
+import PrettyJson from './PrettyJson';
 import React from 'react';
 import state from '../state';
 import { toJS } from 'mobx';
-import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
+import { AutoSizer, List } from 'react-virtualized';
 
 const styles = theme => ({
   EventConsole: {
@@ -20,6 +22,10 @@ const styles = theme => ({
   Hint: {
     opacity: 0.5,
     padding: theme.grid.stepSize * 2
+  },
+
+  JsonViewer: {
+    minWidth: '30vw'
   }
 });
 
@@ -27,26 +33,17 @@ class EventConsole extends React.Component {
   constructor (props) {
     super(props);
 
-    this.cellMeasureCache = new CellMeasurerCache({
-      fixedWidth: true,
-      minHeight: 50
-    });
-
-    this.rowRenderer = this.rowRenderer.bind(this);
-
     this.scrollContainerRef = React.createRef();
     this.listRef = React.createRef();
 
-    this.state = {
-      prevEventCount: undefined,
-      scrollToIndex: undefined
-    };
-  }
+    this.handleEventExpand = this.handleEventExpand.bind(this);
+    this.rowRenderer = this.rowRenderer.bind(this);
 
-  componentDidMount () {
-    this.setState({
+    this.state = {
+      selectedEvent: undefined,
+      prevEventCount: undefined,
       scrollToIndex: state.watching.collectedEvents.length - 1
-    });
+    };
   }
 
   componentDidUpdate () {
@@ -65,24 +62,28 @@ class EventConsole extends React.Component {
     }
   }
 
-  rowRenderer ({ index, style, parent }) {
+  handleEventExpand (selectedEvent) {
+    this.setState({
+      selectedEvent
+    });
+  }
+
+  rowRenderer ({ index, style }) {
     const event = state.watching.collectedEvents[index];
 
     return (
-      <CellMeasurer
-        cache={ this.cellMeasureCache }
-        columnIndex={ 0 }
+      <Event
         key={ event.id }
-        rowIndex={ index }
-        parent={ parent }
-      >
-        <Event key={ event.id } event={ event } style={ style } />
-      </CellMeasurer>
+        event={ event }
+        style={ style }
+        onExpand={ this.handleEventExpand }
+      />
     );
   }
 
   render () {
     const { classes, scrollToIndex } = this.props;
+    const { selectedEvent } = this.state;
 
     // This use of mobx is needed in order to trigger the observer
     // https://github.com/mobxjs/mobx-react/issues/484
@@ -99,12 +100,21 @@ class EventConsole extends React.Component {
               width={ width }
               height={ height }
               rowCount={ items.length }
-              rowHeight={ this.cellMeasureCache.rowHeight }
+              rowHeight={ 200 }
               rowRenderer={ this.rowRenderer }
               scrollToIndex={ scrollToIndex }
             />
           )}
         </AutoSizer>
+
+        <Modal
+          className={ classes.JsonViewer }
+          isVisible={ selectedEvent !== undefined }
+          onCancel={ () => this.setState({ selectedEvent: undefined }) }
+          attach='right'
+        >
+          <PrettyJson value={ selectedEvent } />
+        </Modal>
       </div>
     );
   }

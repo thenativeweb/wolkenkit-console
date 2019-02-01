@@ -19,7 +19,7 @@ const styles = theme => ({
   }
 });
 
-const EditorBar = function ({ children, classes, className, style, type }) {
+const EditorBar = React.memo(({ children, classes, className, style, type }) => {
   const componentClasses = classNames(classes.EditorBar, {
     [classes.TypeBottom]: type === 'bottom'
   }, className);
@@ -29,6 +29,6 @@ const EditorBar = function ({ children, classes, className, style, type }) {
       { children }
     </div>
   );
-};
+});
 
 export default injectSheet(styles)(EditorBar);

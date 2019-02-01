@@ -6,7 +6,7 @@ import ReadModelItem from './ReadModelItem';
 import state from '../state';
 import { toJS } from 'mobx';
 import watching from '../actions/watching';
-import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
+import { AutoSizer, List } from 'react-virtualized';
 import { Dropdown, Modal } from 'thenativeweb-ux';
 
 const styles = theme => ({
@@ -38,7 +38,7 @@ const styles = theme => ({
   },
 
   JsonViewer: {
-    minWidth: '45vw'
+    minWidth: '30vw'
   }
 });
 
@@ -53,11 +53,6 @@ class ReadModelConsole extends React.Component {
     this.saveContainerRef = this.saveContainerRef.bind(this);
     this.handleJsonClick = this.handleJsonClick.bind(this);
     this.rowRenderer = this.rowRenderer.bind(this);
-
-    this.cellMeasureCache = new CellMeasurerCache({
-      fixedWidth: true,
-      minHeight: 50
-    });
 
     this.state = {
       json: undefined
@@ -95,26 +90,16 @@ class ReadModelConsole extends React.Component {
     });
   }
 
-  rowRenderer ({ index, parent, style }) {
+  rowRenderer ({ index, style }) {
     const item = state.watching.selectedReadModelItems[index];
 
     return (
-      <CellMeasurer
-        cache={ this.cellMeasureCache }
-        columnIndex={ 0 }
+      <ReadModelItem
         key={ item.id }
-        rowIndex={ index }
-        parent={ parent }
-      >
-        {() => (
-          <ReadModelItem
-            key={ item.id }
-            item={ item }
-            onJsonClick={ this.handleJsonClick }
-            style={ style }
-          />
-        )}
-      </CellMeasurer>
+        item={ item }
+        onJsonClick={ this.handleJsonClick }
+        style={ style }
+      />
     );
   }
 
@@ -147,13 +132,18 @@ class ReadModelConsole extends React.Component {
                 width={ width }
                 height={ height }
                 rowCount={ items.length }
-                rowHeight={ this.cellMeasureCache.rowHeight }
+                rowHeight={ 68 }
                 rowRenderer={ this.rowRenderer }
               />
             )}
           </AutoSizer>
         </div>
-        <Modal className={ classes.JsonViewer } isVisible={ json !== undefined } onCancel={ () => this.setState({ json: undefined }) }>
+        <Modal
+          className={ classes.JsonViewer }
+          isVisible={ json !== undefined }
+          onCancel={ () => this.setState({ json: undefined }) }
+          attach='right'
+        >
           <PrettyJson value={ json } />
         </Modal>
       </div>
