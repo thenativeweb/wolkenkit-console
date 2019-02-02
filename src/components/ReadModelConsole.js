@@ -50,39 +50,43 @@ class ReadModelConsole extends React.Component {
   constructor () {
     super();
 
-    this.saveContainerRef = this.saveContainerRef.bind(this);
     this.handleJsonClick = this.handleJsonClick.bind(this);
     this.rowRenderer = this.rowRenderer.bind(this);
 
     this.state = {
-      json: undefined
+      json: undefined,
+      prevItemCount: undefined,
+      scrollToIndex: 0
     };
   }
 
+  /* eslint-disable class-methods-use-this */
   componentDidMount () {
-    this.mutationObserver = new MutationObserver(() => {
-      if (this.container && document.contains(this.container)) {
-        this.container.scrollTop = this.container.scrollHeight;
-      }
-    });
-
-    this.mutationObserver.observe(this.container, {
-      childList: true
-    });
-
     const listNames = Object.keys(state.backend.configuration.readModel.lists);
 
-    watching.startReadingModel(listNames[0]);
+    if (listNames[0]) {
+      watching.startReadingModel(listNames[0]);
+    }
+  }
+  /* eslint-enable class-methods-use-this */
+
+  componentDidUpdate () {
+    const { prevItemCount } = this.state;
+    const newItemCount = state.watching.selectedReadModelItems.length;
+
+    if (prevItemCount !== newItemCount) {
+      this.setState({
+        prevItemCount: newItemCount,
+        scrollToIndex: newItemCount - 1
+      });
+    }
   }
 
+  /* eslint-disable class-methods-use-this */
   componentWillUnmount () {
     watching.stopReadingModel();
-    this.mutationObserver.disconnect();
   }
-
-  saveContainerRef (ref) {
-    this.container = ref;
-  }
+  /* eslint-enable class-methods-use-this */
 
   handleJsonClick (value) {
     this.setState({
@@ -109,7 +113,7 @@ class ReadModelConsole extends React.Component {
     }
 
     const { classes } = this.props;
-    const { json } = this.state;
+    const { json, scrollToIndex } = this.state;
 
     // This use of mobx is needed in order to trigger the observer
     // https://github.com/mobxjs/mobx-react/issues/484
@@ -125,7 +129,7 @@ class ReadModelConsole extends React.Component {
             onChange={ ReadModelConsole.handleModelChanged }
           />
         </div>
-        <div className={ classes.Items } ref={ this.saveContainerRef }>
+        <div className={ classes.Items }>
           <AutoSizer>
             {({ height, width }) => (
               <List
@@ -134,6 +138,7 @@ class ReadModelConsole extends React.Component {
                 rowCount={ items.length }
                 rowHeight={ 68 }
                 rowRenderer={ this.rowRenderer }
+                scrollToIndex={ scrollToIndex }
               />
             )}
           </AutoSizer>

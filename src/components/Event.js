@@ -18,9 +18,15 @@ const styles = theme => ({
     'border-bottom': `1px solid ${theme.color.brand.midGrey}`,
     color: '#666',
     'white-space': 'pre',
-    'line-height': 1.2,
+    'line-height': 1.1,
     boxSizing: 'border-box',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    transition: 'background 200ms ease-in-out',
+    willChange: 'background',
+
+    '&:hover': {
+      background: 'rgba(0, 0, 0, 0.1)'
+    }
   },
 
   IsActive: {

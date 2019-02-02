@@ -1,3 +1,4 @@
+import { Icon } from 'thenativeweb-ux';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -10,7 +11,16 @@ const styles = theme => ({
     padding: theme.grid.stepSize * 1.5,
     'border-bottom': '1px solid #444',
     color: '#666',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    transition: 'background 200ms ease-in-out',
+    willChange: 'background',
+
+    '&:hover': {
+      background: 'rgba(0, 0, 0, 0.1)',
+      '& $ExpandIcon': {
+        opacity: 1
+      }
+    }
   },
 
   Field: {
@@ -61,6 +71,18 @@ const styles = theme => ({
     'flex-basis': 'auto',
     fill: theme.color.brand.white,
     opacity: 0
+  },
+
+  Expand: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    paddingLeft: theme.grid.stepSize * 1.5,
+    paddingBottom: 3,
+    cursor: 'pointer'
+  },
+
+  ExpandIcon: {
+    extend: 'CopyIcon'
   }
 });
 
@@ -80,6 +102,16 @@ const ReadModelItem = function ({ classes, item, onJsonClick, style }) {
           </div>
         ))
       }
+      <div
+        className={ classes.Expand }
+        onClick={ () => onJsonClick(item) }
+      >
+        <Icon
+          size='s'
+          name='expand-in-modal'
+          className={ classes.ExpandIcon }
+        />
+      </div>
     </div>
   );
   /* eslint-enable no-extra-parens */

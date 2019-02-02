@@ -33,9 +33,6 @@ class EventConsole extends React.Component {
   constructor (props) {
     super(props);
 
-    this.scrollContainerRef = React.createRef();
-    this.listRef = React.createRef();
-
     this.handleEventExpand = this.handleEventExpand.bind(this);
     this.rowRenderer = this.rowRenderer.bind(this);
 
@@ -54,10 +51,6 @@ class EventConsole extends React.Component {
       this.setState({
         prevEventCount: newEventCount,
         scrollToIndex: newEventCount - 1
-      }, () => {
-        if (this.listRef.current) {
-          this.listRef.current.scrollToRow(newEventCount - 1);
-        }
       });
     }
   }
@@ -82,21 +75,20 @@ class EventConsole extends React.Component {
   }
 
   render () {
-    const { classes, scrollToIndex } = this.props;
-    const { selectedEvent } = this.state;
+    const { classes } = this.props;
+    const { selectedEvent, scrollToIndex } = this.state;
 
     // This use of mobx is needed in order to trigger the observer
     // https://github.com/mobxjs/mobx-react/issues/484
     const items = toJS(state.watching.collectedEvents);
 
     return (
-      <div className={ classes.EventConsole } ref={ this.scrollContainerRef }>
+      <div className={ classes.EventConsole }>
         { state.watching.collectedEvents.length === 0 ? <div className={ classes.Hint }>No events have been observed yet. Go ahead and send a command…</div> : '' }
 
         <AutoSizer>
           {({ height, width }) => (
             <List
-              ref={ this.listRef }
               width={ width }
               height={ height }
               rowCount={ items.length }
@@ -108,6 +100,7 @@ class EventConsole extends React.Component {
         </AutoSizer>
 
         <Modal
+          header='Event Details'
           className={ classes.JsonViewer }
           isVisible={ selectedEvent !== undefined }
           onCancel={ () => this.setState({ selectedEvent: undefined }) }
