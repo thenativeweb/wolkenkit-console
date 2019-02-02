@@ -86,35 +86,31 @@ const styles = theme => ({
   }
 });
 
-const ReadModelItem = function ({ classes, item, onJsonClick, style }) {
-  /* eslint-disable no-extra-parens */
-  return (
-    <div className={ classes.ReadModelItem } style={ style }>
-      { Object.keys(item).
-        filter(key => key !== 'isAuthorized').
-        map(itemKey => (
-          <div className={ classes.Field } key={ itemKey }>
-            <div className={ classes.Key }>{ itemKey }</div>
-            <ReadModelItemValue
-              value={ item[itemKey] }
-              onJsonClick={ onJsonClick }
-            />
-          </div>
-        ))
-      }
-      <div
-        className={ classes.Expand }
-        onClick={ () => onJsonClick(item) }
-      >
-        <Icon
-          size='s'
-          name='expand-in-modal'
-          className={ classes.ExpandIcon }
-        />
-      </div>
+const ReadModelItem = ({ classes, item, onJsonClick, style }) => (
+  <div className={ classes.ReadModelItem } style={ style }>
+    { Object.keys(item).
+      filter(key => key !== 'isAuthorized').
+      map(itemKey => (
+        <div className={ classes.Field } key={ itemKey }>
+          <div className={ classes.Key }>{ itemKey }</div>
+          <ReadModelItemValue
+            value={ item[itemKey] }
+            onJsonClick={ onJsonClick }
+          />
+        </div>
+      ))
+    }
+    <div
+      className={ classes.Expand }
+      onClick={ () => onJsonClick(item) }
+    >
+      <Icon
+        size='s'
+        name='expand-in-modal'
+        className={ classes.ExpandIcon }
+      />
     </div>
-  );
-  /* eslint-enable no-extra-parens */
-};
+  </div>
+);
 
 export default injectSheet(styles)(observer(ReadModelItem));

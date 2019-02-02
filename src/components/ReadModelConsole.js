@@ -1,13 +1,12 @@
 import injectSheet from 'react-jss';
-import { observer } from 'mobx-react';
 import PrettyJson from './PrettyJson';
 import React from 'react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
-import { toJS } from 'mobx';
 import watching from '../actions/watching';
 import { AutoSizer, List } from 'react-virtualized';
 import { Dropdown, Modal } from 'thenativeweb-ux';
+import { observer, Observer } from 'mobx-react';
 
 const styles = theme => ({
   ReadModelConsole: {
@@ -51,7 +50,7 @@ class ReadModelConsole extends React.Component {
     super();
 
     this.handleJsonClick = this.handleJsonClick.bind(this);
-    this.rowRenderer = this.rowRenderer.bind(this);
+    this.renderItems = this.renderItems.bind(this);
 
     this.state = {
       json: undefined,
@@ -94,7 +93,7 @@ class ReadModelConsole extends React.Component {
     });
   }
 
-  rowRenderer ({ index, style }) {
+  renderItems ({ index, style }) {
     const item = state.watching.selectedReadModelItems[index];
 
     return (
@@ -117,7 +116,6 @@ class ReadModelConsole extends React.Component {
 
     // This use of mobx is needed in order to trigger the observer
     // https://github.com/mobxjs/mobx-react/issues/484
-    const items = toJS(state.watching.selectedReadModelItems);
 
     return (
       <div className={ classes.ReadModelConsole }>
@@ -132,14 +130,18 @@ class ReadModelConsole extends React.Component {
         <div className={ classes.Items }>
           <AutoSizer>
             {({ height, width }) => (
-              <List
-                width={ width }
-                height={ height }
-                rowCount={ items.length }
-                rowHeight={ 68 }
-                rowRenderer={ this.rowRenderer }
-                scrollToIndex={ scrollToIndex }
-              />
+              <Observer>
+                { () => (
+                  <List
+                    width={ width }
+                    height={ height }
+                    rowCount={ state.watching.selectedReadModelItems.length }
+                    rowHeight={ 68 }
+                    rowRenderer={ ({ index, key, style }) => this.renderItems({ index, key, style }) }
+                    scrollToIndex={ scrollToIndex }
+                  />
+                )}
+              </Observer>
             )}
           </AutoSizer>
         </div>
