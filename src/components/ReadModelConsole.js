@@ -1,10 +1,11 @@
+import AutoSizer from 'react-virtualized-auto-sizer';
 import injectSheet from 'react-jss';
+import { FixedSizeList as List } from 'react-window';
 import PrettyJson from './PrettyJson';
 import React from 'react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
 import watching from '../actions/watching';
-import { AutoSizer, List } from 'react-virtualized';
 import { Dropdown, Modal } from 'thenativeweb-ux';
 import { observer, Observer } from 'mobx-react';
 
@@ -50,12 +51,9 @@ class ReadModelConsole extends React.Component {
     super();
 
     this.handleJsonClick = this.handleJsonClick.bind(this);
-    this.renderItems = this.renderItems.bind(this);
 
     this.state = {
-      json: undefined,
-      prevItemCount: undefined,
-      scrollToIndex: 0
+      json: undefined
     };
   }
 
@@ -69,18 +67,6 @@ class ReadModelConsole extends React.Component {
   }
   /* eslint-enable class-methods-use-this */
 
-  componentDidUpdate () {
-    const { prevItemCount } = this.state;
-    const newItemCount = state.watching.selectedReadModelItems.length;
-
-    if (prevItemCount !== newItemCount) {
-      this.setState({
-        prevItemCount: newItemCount,
-        scrollToIndex: newItemCount - 1
-      });
-    }
-  }
-
   /* eslint-disable class-methods-use-this */
   componentWillUnmount () {
     watching.stopReadingModel();
@@ -93,28 +79,15 @@ class ReadModelConsole extends React.Component {
     });
   }
 
-  renderItems ({ index, style }) {
-    const item = state.watching.selectedReadModelItems[index];
-
-    return (
-      <ReadModelItem
-        key={ item.id }
-        item={ item }
-        onJsonClick={ this.handleJsonClick }
-        style={ style }
-      />
-    );
-  }
-
   render () {
     if (!state.backend.configuration || !state.watching.selectedReadModel) {
       return null;
     }
 
     const { classes } = this.props;
-    const { json, scrollToIndex } = this.state;
+    const { json } = this.state;
 
-    // This use of mobx is needed in order to trigger the observer
+    // This use of mobx Observer here is needed in order to trigger updates on items
     // https://github.com/mobxjs/mobx-react/issues/484
 
     return (
@@ -135,11 +108,24 @@ class ReadModelConsole extends React.Component {
                   <List
                     width={ width }
                     height={ height }
-                    rowCount={ state.watching.selectedReadModelItems.length }
-                    rowHeight={ 68 }
-                    rowRenderer={ ({ index, key, style }) => this.renderItems({ index, key, style }) }
-                    scrollToIndex={ scrollToIndex }
-                  />
+                    itemCount={ state.watching.selectedReadModelItems.length }
+                    itemSize={ 68 }
+                    itemData={ state.watching.selectedReadModelItems }
+                    itemKey={ (index, data) => data[index].id }
+                  >
+                    { ({ index, style }) => {
+                      const item = state.watching.selectedReadModelItems[index];
+
+                      return (
+                        <ReadModelItem
+                          key={ item.id }
+                          item={ item }
+                          onJsonClick={ this.handleJsonClick }
+                          style={ style }
+                        />
+                      );
+                    } }
+                  </List>
                 )}
               </Observer>
             )}

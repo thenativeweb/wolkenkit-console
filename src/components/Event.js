@@ -91,7 +91,14 @@ const styles = theme => ({
     flexGrow: 1,
     flexBasis: '50%',
     position: 'relative',
-    paddingLeft: theme.grid.stepSize
+    paddingLeft: theme.grid.stepSize,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+
+    '& > div': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }
   },
 
   DetailsDataLabel: {
