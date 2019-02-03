@@ -1,4 +1,5 @@
 import copy from 'copy-text-to-clipboard';
+import formatJson from './formatJson';
 import injectSheet from 'react-jss';
 import JsonFormatterWorker from 'worker-loader!./JsonFormatterWorker.js';
 import { observer } from 'mobx-react';
@@ -62,23 +63,30 @@ class PrettyJson extends React.Component {
   constructor (props) {
     super(props);
 
-    this.handleWorkerMessage = this.handleWorkerMessage.bind(this);
+    if (props.useWorker === true) {
+      this.handleWorkerMessage = this.handleWorkerMessage.bind(this);
 
-    this.state = {
-      json: undefined
-    };
+      this.state = {
+        json: undefined
+      };
+    }
   }
 
   componentDidMount () {
-    const { value, classes } = this.props;
+    const { value, classes, useWorker } = this.props;
 
-    jsonFormatterWorker.postMessage({ value: JSON.stringify(value), copyClassName: classes.Copy, copyIconAsHtml });
-
-    jsonFormatterWorker.addEventListener('message', this.handleWorkerMessage);
+    if (useWorker) {
+      jsonFormatterWorker.postMessage({ value: JSON.stringify(value), copyClassName: classes.Copy, copyIconAsHtml });
+      jsonFormatterWorker.addEventListener('message', this.handleWorkerMessage);
+    }
   }
 
   componentWillUnmount () {
-    jsonFormatterWorker.removeEventListener('message', this.handleWorkerMessage);
+    const { useWorker } = this.props;
+
+    if (useWorker) {
+      jsonFormatterWorker.removeEventListener('message', this.handleWorkerMessage);
+    }
   }
 
   handleWorkerMessage (event) {
@@ -88,18 +96,26 @@ class PrettyJson extends React.Component {
   }
 
   render () {
-    const { classes } = this.props;
-    const { json } = this.state;
+    const { classes, useWorker, value } = this.props;
 
-    if (!json) {
-      return <BusyIndicator />;
+    let formattedJson;
+
+    if (useWorker) {
+      const { json } = this.state;
+
+      if (!json) {
+        return <BusyIndicator />;
+      }
+      formattedJson = json;
+    } else {
+      formattedJson = formatJson(value, classes.Copy, copyIconAsHtml);
     }
 
     return (
       <div
         className={ classes.PrettyJson }
         onClick={ handleValueClicked }
-        dangerouslySetInnerHTML={{ __html: json }}
+        dangerouslySetInnerHTML={{ __html: formattedJson }}
       />
     );
   }

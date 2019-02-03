@@ -4,33 +4,25 @@ import format from 'date-fns/format';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import omit from 'lodash/omit';
+import PrettyJson from './PrettyJson';
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import stringifyObject from 'stringify-object';
-import { Icon, services, ThemeProvider } from 'thenativeweb-ux';
-
-const copyIconAsHtml = ReactDOMServer.renderToString(<ThemeProvider theme='wolkenkit'><Icon size='s' name='copy' /></ThemeProvider>);
+import { Icon, services } from 'thenativeweb-ux';
 
 const styles = theme => ({
   Event: {
+    width: '100%',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    'border-bottom': `1px solid ${theme.color.brand.midGrey}`,
     color: '#666',
     'white-space': 'pre',
-    'line-height': 1.1,
-    boxSizing: 'border-box',
-    overflow: 'hidden',
-    transition: 'background 200ms ease-in-out',
-    willChange: 'background',
-
-    '&:hover': {
-      background: 'rgba(0, 0, 0, 0.1)'
-    }
+    'line-height': 1.1
   },
 
   IsActive: {
-    backend: theme.color.brand.highlight
+    '& $Header': {
+      color: theme.color.brand.highlight
+    }
   },
 
   Header: {
@@ -154,22 +146,6 @@ const handleValueClicked = function (event) {
   }
 };
 
-const formatJson = function (eventData, copyClassName) {
-  const pretty = stringifyObject(eventData, {
-    indent: '  ',
-    singleQuotes: false,
-    transform: (obj, prop, originalResult) => {
-      if (typeof obj[prop] === 'string' || typeof obj[prop] === 'number') {
-        return `<span class="tnw-copy ${copyClassName}">${originalResult}${copyIconAsHtml}</span>`;
-      }
-
-      return originalResult;
-    }
-  });
-
-  return pretty;
-};
-
 const Event = React.memo(({ classes, event, isActive, style, onExpand }) => {
   if (!event) {
     return null;
@@ -187,9 +163,6 @@ const Event = React.memo(({ classes, event, isActive, style, onExpand }) => {
     'metadata',
     'data'
   ]);
-
-  const detailsGenericHtml = formatJson(simplifiedEvent, classes.Copy);
-  const dataHtml = formatJson(event.data, classes.Copy);
 
   const componentClasses = classNames(classes.Event, {
     [classes.IsActive]: isActive
@@ -212,16 +185,18 @@ const Event = React.memo(({ classes, event, isActive, style, onExpand }) => {
         <div
           className={ classes.DetailsGeneric }
           onClick={ handleValueClicked }
-          dangerouslySetInnerHTML={{ __html: detailsGenericHtml }}
-        />
+        >
+          <PrettyJson value={ simplifiedEvent } />
+        </div>
         <div
           className={ classes.DetailsData }
         >
           <label className={ classes.DetailsDataLabel }>data</label>
           <div
             onClick={ handleValueClicked }
-            dangerouslySetInnerHTML={{ __html: dataHtml }}
-          />
+          >
+            <PrettyJson value={ event.data } />
+          </div>
         </div>
       </div>
     </div>

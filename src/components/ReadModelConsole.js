@@ -137,7 +137,7 @@ class ReadModelConsole extends React.Component {
           onCancel={ () => this.setState({ json: undefined }) }
           attach='right'
         >
-          <PrettyJson value={ json } />
+          <PrettyJson value={ json } useWorker={ true } />
         </Modal>
       </div>
     );

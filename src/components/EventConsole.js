@@ -2,6 +2,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import Event from './Event';
 import injectSheet from 'react-jss';
 import { FixedSizeList as List } from 'react-window';
+import ListItem from './ListItem';
 import { Modal } from 'thenativeweb-ux';
 import { observer } from 'mobx-react';
 import PrettyJson from './PrettyJson';
@@ -34,26 +35,27 @@ class EventConsole extends React.Component {
     super(props);
 
     this.handleEventExpand = this.handleEventExpand.bind(this);
-    this.listRef = React.createRef();
+
+    this.setListRef = element => {
+      this.listRef = element;
+
+      this.updateScrollPosition();
+    };
 
     this.state = {
       selectedEvent: undefined,
-      prevEventCount: undefined,
+      previousEventCount: undefined,
       scrollToIndex: state.watching.collectedEvents.length - 1
     };
   }
 
-  componentDidMount () {
-    this.updateScrollPosition();
-  }
-
   componentDidUpdate () {
-    const { prevEventCount } = this.state;
+    const { previousEventCount } = this.state;
     const newEventCount = state.watching.collectedEvents.length;
 
-    if (prevEventCount !== newEventCount) {
+    if (previousEventCount !== newEventCount) {
       this.setState({
-        prevEventCount: newEventCount,
+        previousEventCount: newEventCount,
         scrollToIndex: newEventCount - 1
       }, () => {
         this.updateScrollPosition();
@@ -62,8 +64,8 @@ class EventConsole extends React.Component {
   }
 
   updateScrollPosition () {
-    if (this.listRef.current) {
-      this.listRef.current.scrollToItem(this.state.scrollToIndex);
+    if (this.listRef) {
+      this.listRef.scrollToItem(this.state.scrollToIndex);
     }
   }
 
@@ -75,7 +77,7 @@ class EventConsole extends React.Component {
 
   render () {
     const { classes } = this.props;
-    const { selectedEvent } = this.state;
+    const { selectedEvent = {}} = this.state;
 
     return (
       <div className={ classes.EventConsole }>
@@ -84,7 +86,7 @@ class EventConsole extends React.Component {
         <AutoSizer>
           {({ height, width }) => (
             <List
-              ref={ this.listRef }
+              ref={ this.setListRef }
               width={ width }
               height={ height }
               itemCount={ state.watching.collectedEvents.length }
@@ -96,12 +98,13 @@ class EventConsole extends React.Component {
                 const event = state.watching.collectedEvents[index];
 
                 return (
-                  <Event
-                    key={ event.id }
-                    event={ event }
-                    style={ style }
-                    onExpand={ this.handleEventExpand }
-                  />
+                  <ListItem key={ event.id } style={ style }>
+                    <Event
+                      event={ event }
+                      isActive={ event.id === selectedEvent.id }
+                      onExpand={ this.handleEventExpand }
+                    />
+                  </ListItem>
                 );
               } }
             </List>
@@ -111,11 +114,11 @@ class EventConsole extends React.Component {
         <Modal
           header='Event Details'
           className={ classes.JsonViewer }
-          isVisible={ selectedEvent !== undefined }
+          isVisible={ selectedEvent.id !== undefined }
           onCancel={ () => this.setState({ selectedEvent: undefined }) }
           attach='right'
         >
-          <PrettyJson value={ selectedEvent } />
+          <PrettyJson value={ selectedEvent } useWorker={ true } />
         </Modal>
       </div>
     );
