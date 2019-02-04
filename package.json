@@ -48,6 +48,7 @@
     "processenv": "1.1.0",
     "react": "16.8.0-alpha.1",
     "react-dom": "16.8.0-alpha.1",
+    "react-json-tree": "0.11.2",
     "react-virtualized-auto-sizer": "1.0.2",
     "react-window": "1.5.1",
     "roboter": "4.0.0",
