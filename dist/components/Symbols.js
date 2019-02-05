@@ -1,6 +1,5 @@
 import React from 'react';
-
-var Symbols = function Symbols() {
+var Symbols = React.memo(function () {
   return React.createElement("svg", {
     style: {
       display: 'none'
@@ -31,6 +30,5 @@ var Symbols = function Symbols() {
   }, React.createElement("path", {
     d: "M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"
   })));
-};
-
+});
 export default Symbols;

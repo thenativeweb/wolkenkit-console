@@ -5,6 +5,7 @@ import _getPrototypeOf from "@babel/runtime/helpers/getPrototypeOf";
 import _inherits from "@babel/runtime/helpers/inherits";
 import _assertThisInitialized from "@babel/runtime/helpers/assertThisInitialized";
 import copy from 'copy-text-to-clipboard';
+import formatJson from './formatJson';
 import injectSheet from 'react-jss';
 import JsonFormatterWorker from 'worker-loader!./JsonFormatterWorker.js';
 import { observer } from 'mobx-react';
@@ -77,10 +78,14 @@ function (_React$Component) {
     _classCallCheck(this, PrettyJson);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PrettyJson).call(this, props));
-    _this.handleWorkerMessage = _this.handleWorkerMessage.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.state = {
-      json: undefined
-    };
+
+    if (props.useWorker === true) {
+      _this.handleWorkerMessage = _this.handleWorkerMessage.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+      _this.state = {
+        json: undefined
+      };
+    }
+
     return _this;
   }
 
@@ -89,18 +94,26 @@ function (_React$Component) {
     value: function componentDidMount() {
       var _this$props = this.props,
           value = _this$props.value,
-          classes = _this$props.classes;
-      jsonFormatterWorker.postMessage({
-        value: JSON.stringify(value),
-        copyClassName: classes.Copy,
-        copyIconAsHtml: copyIconAsHtml
-      });
-      jsonFormatterWorker.addEventListener('message', this.handleWorkerMessage);
+          classes = _this$props.classes,
+          useWorker = _this$props.useWorker;
+
+      if (useWorker) {
+        jsonFormatterWorker.postMessage({
+          value: JSON.stringify(value),
+          copyClassName: classes.Copy,
+          copyIconAsHtml: copyIconAsHtml
+        });
+        jsonFormatterWorker.addEventListener('message', this.handleWorkerMessage);
+      }
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      jsonFormatterWorker.removeEventListener('message', this.handleWorkerMessage);
+      var useWorker = this.props.useWorker;
+
+      if (useWorker) {
+        jsonFormatterWorker.removeEventListener('message', this.handleWorkerMessage);
+      }
     }
   }, {
     key: "handleWorkerMessage",
@@ -112,18 +125,29 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var classes = this.props.classes;
-      var json = this.state.json;
+      var _this$props2 = this.props,
+          classes = _this$props2.classes,
+          useWorker = _this$props2.useWorker,
+          value = _this$props2.value;
+      var formattedJson;
 
-      if (!json) {
-        return React.createElement(BusyIndicator, null);
+      if (useWorker) {
+        var json = this.state.json;
+
+        if (!json) {
+          return React.createElement(BusyIndicator, null);
+        }
+
+        formattedJson = json;
+      } else {
+        formattedJson = formatJson(value, classes.Copy, copyIconAsHtml);
       }
 
       return React.createElement("div", {
         className: classes.PrettyJson,
         onClick: handleValueClicked,
         dangerouslySetInnerHTML: {
-          __html: json
+          __html: formattedJson
         }
       });
     }

@@ -21,7 +21,7 @@ var styles = function styles(theme) {
   };
 };
 
-var EditorBar = function EditorBar(_ref) {
+var EditorBar = React.memo(function (_ref) {
   var children = _ref.children,
       classes = _ref.classes,
       className = _ref.className,
@@ -32,6 +32,5 @@ var EditorBar = function EditorBar(_ref) {
     className: componentClasses,
     style: style
   }, children);
-};
-
+});
 export default injectSheet(styles)(EditorBar);

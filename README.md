@@ -18,9 +18,9 @@ To run wolkenkit-console use the following command:
 $ wolkenkit-console
 ```
 
-This runs the application on port `9000`, so after that you can point your browser to [http://localhost:9000](http://localhost:9000).
+This runs the application on port `9000`, so after that you can point your browser to <http://localhost:9000>.
 
-*Please note that wolkenkit-console is meant for prototyping and testing domains, hence it does not (yet) work with applications that require authentication.*
+_Please note that wolkenkit-console is meant for prototyping and testing domains, hence it does not (yet) work with applications that require authentication._
 
 ## License
 

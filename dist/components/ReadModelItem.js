@@ -1,3 +1,4 @@
+import { Icon } from 'thenativeweb-ux';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -10,7 +11,16 @@ var styles = function styles(theme) {
       flexDirection: 'row',
       padding: theme.grid.stepSize * 1.5,
       'border-bottom': '1px solid #444',
-      color: '#666'
+      color: '#666',
+      boxSizing: 'border-box',
+      transition: 'background 200ms ease-in-out',
+      willChange: 'background',
+      '&:hover': {
+        background: 'rgba(0, 0, 0, 0.1)',
+        '& $ExpandIcon': {
+          opacity: 1
+        }
+      }
     },
     Field: {
       'flex-grow': 1,
@@ -54,6 +64,16 @@ var styles = function styles(theme) {
       'flex-basis': 'auto',
       fill: theme.color.brand.white,
       opacity: 0
+    },
+    Expand: {
+      display: 'flex',
+      alignItems: 'flex-end',
+      paddingLeft: theme.grid.stepSize * 1.5,
+      paddingBottom: 3,
+      cursor: 'pointer'
+    },
+    ExpandIcon: {
+      extend: 'CopyIcon'
     }
   };
 };
@@ -61,11 +81,11 @@ var styles = function styles(theme) {
 var ReadModelItem = function ReadModelItem(_ref) {
   var classes = _ref.classes,
       item = _ref.item,
-      onJsonClick = _ref.onJsonClick;
-
-  /* eslint-disable no-extra-parens */
+      onJsonClick = _ref.onJsonClick,
+      style = _ref.style;
   return React.createElement("div", {
-    className: classes.ReadModelItem
+    className: classes.ReadModelItem,
+    style: style
   }, Object.keys(item).filter(function (key) {
     return key !== 'isAuthorized';
   }).map(function (itemKey) {
@@ -78,8 +98,16 @@ var ReadModelItem = function ReadModelItem(_ref) {
       value: item[itemKey],
       onJsonClick: onJsonClick
     }));
-  }));
-  /* eslint-enable no-extra-parens */
+  }), React.createElement("div", {
+    className: classes.Expand,
+    onClick: function onClick() {
+      return onJsonClick(item);
+    }
+  }, React.createElement(Icon, {
+    size: "s",
+    name: "expand-in-modal",
+    className: classes.ExpandIcon
+  })));
 };
 
 export default injectSheet(styles)(observer(ReadModelItem));

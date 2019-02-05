@@ -43,7 +43,7 @@ var Connected = function Connected() {
       overflow: 'hidden'
     }
   }, React.createElement(Tabs, null, React.createElement(EventConsole, {
-    title: "Events"
+    title: "Events (".concat(state.watching.collectedEvents.length, ")")
   }), React.createElement(ReadModelConsole, {
     title: "ReadModels"
   })))));

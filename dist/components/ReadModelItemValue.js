@@ -50,7 +50,7 @@ var handleCopyClicked = function handleCopyClicked(event) {
   copy(JSON.parse(text));
 };
 
-var ReadModelItemValue = function ReadModelItemValue(_ref) {
+var ReadModelItemValue = React.memo(function (_ref) {
   var classes = _ref.classes,
       value = _ref.value,
       onJsonClick = _ref.onJsonClick;
@@ -92,6 +92,5 @@ var ReadModelItemValue = function ReadModelItemValue(_ref) {
         className: classes.CopyIcon
       }));
   }
-};
-
+});
 export default injectSheet(styles)(observer(ReadModelItemValue));

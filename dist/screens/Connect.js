@@ -78,9 +78,11 @@ function (_React$Component) {
         }, _callee, this);
       }));
 
-      return function componentDidMount() {
+      function componentDidMount() {
         return _componentDidMount.apply(this, arguments);
-      };
+      }
+
+      return componentDidMount;
     }()
     /* eslint-enable class-methods-use-this */
 
