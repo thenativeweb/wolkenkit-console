@@ -50,7 +50,7 @@ const handleCopyClicked = function (event) {
   copy(JSON.parse(text));
 };
 
-const ReadModelItemValue = function ({ classes, value, onJsonClick }) {
+const ReadModelItemValue = React.memo(({ classes, value, onJsonClick }) => {
   if (value === null) {
     return 'null';
   }
@@ -95,6 +95,6 @@ const ReadModelItemValue = function ({ classes, value, onJsonClick }) {
         </div>
       );
   }
-};
+});
 
 export default injectSheet(styles)(observer(ReadModelItemValue));

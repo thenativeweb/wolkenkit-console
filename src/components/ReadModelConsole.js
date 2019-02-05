@@ -1,11 +1,13 @@
+import AutoSizer from 'react-virtualized-auto-sizer';
 import injectSheet from 'react-jss';
-import { observer } from 'mobx-react';
+import { FixedSizeList as List } from 'react-window';
 import PrettyJson from './PrettyJson';
 import React from 'react';
 import ReadModelItem from './ReadModelItem';
 import state from '../state';
 import watching from '../actions/watching';
 import { Dropdown, Modal } from 'thenativeweb-ux';
+import { observer, Observer } from 'mobx-react';
 
 const styles = theme => ({
   ReadModelConsole: {
@@ -36,7 +38,7 @@ const styles = theme => ({
   },
 
   JsonViewer: {
-    minWidth: '45vw'
+    minWidth: '30vw'
   }
 });
 
@@ -48,7 +50,6 @@ class ReadModelConsole extends React.Component {
   constructor () {
     super();
 
-    this.saveContainerRef = this.saveContainerRef.bind(this);
     this.handleJsonClick = this.handleJsonClick.bind(this);
 
     this.state = {
@@ -56,30 +57,21 @@ class ReadModelConsole extends React.Component {
     };
   }
 
+  /* eslint-disable class-methods-use-this */
   componentDidMount () {
-    this.mutationObserver = new MutationObserver(() => {
-      if (this.container && document.contains(this.container)) {
-        this.container.scrollTop = this.container.scrollHeight;
-      }
-    });
-
-    this.mutationObserver.observe(this.container, {
-      childList: true
-    });
-
     const listNames = Object.keys(state.backend.configuration.readModel.lists);
 
-    watching.startReadingModel(listNames[0]);
+    if (listNames[0]) {
+      watching.startReadingModel(listNames[0]);
+    }
   }
+  /* eslint-enable class-methods-use-this */
 
+  /* eslint-disable class-methods-use-this */
   componentWillUnmount () {
     watching.stopReadingModel();
-    this.mutationObserver.disconnect();
   }
-
-  saveContainerRef (ref) {
-    this.container = ref;
-  }
+  /* eslint-enable class-methods-use-this */
 
   handleJsonClick (value) {
     this.setState({
@@ -95,6 +87,9 @@ class ReadModelConsole extends React.Component {
     const { classes } = this.props;
     const { json } = this.state;
 
+    // This use of mobx Observer here is needed in order to trigger updates on items
+    // https://github.com/mobxjs/mobx-react/issues/484
+
     return (
       <div className={ classes.ReadModelConsole }>
         <div className={ classes.Bar }>
@@ -105,13 +100,44 @@ class ReadModelConsole extends React.Component {
             onChange={ ReadModelConsole.handleModelChanged }
           />
         </div>
-        <div className={ classes.Items } ref={ this.saveContainerRef }>
-          {
-            state.watching.selectedReadModelItems.map(item => <ReadModelItem key={ item.id } item={ item } onJsonClick={ this.handleJsonClick } />)
-          }
+        <div className={ classes.Items }>
+          <AutoSizer>
+            {({ height, width }) => (
+              <Observer>
+                { () => (
+                  <List
+                    width={ width }
+                    height={ height }
+                    itemCount={ state.watching.selectedReadModelItems.length }
+                    itemSize={ 68 }
+                    itemData={ state.watching.selectedReadModelItems }
+                    itemKey={ (index, data) => data[index].id }
+                  >
+                    { ({ index, style }) => {
+                      const item = state.watching.selectedReadModelItems[index];
+
+                      return (
+                        <ReadModelItem
+                          key={ item.id }
+                          item={ item }
+                          onJsonClick={ this.handleJsonClick }
+                          style={ style }
+                        />
+                      );
+                    } }
+                  </List>
+                )}
+              </Observer>
+            )}
+          </AutoSizer>
         </div>
-        <Modal className={ classes.JsonViewer } isVisible={ json !== undefined } onCancel={ () => this.setState({ json: undefined }) }>
-          <PrettyJson value={ json } />
+        <Modal
+          className={ classes.JsonViewer }
+          isVisible={ json !== undefined }
+          onCancel={ () => this.setState({ json: undefined }) }
+          attach='right'
+        >
+          <PrettyJson value={ json } useWorker={ true } />
         </Modal>
       </div>
     );
