@@ -55,6 +55,7 @@ class Editor extends React.Component {
     super();
 
     this.handleEditorChanged = this.handleEditorChanged.bind(this);
+    this.handleInsertCommandClick = this.handleInsertCommandClick.bind(this);
   }
 
   componentDidMount () {
@@ -154,14 +155,47 @@ class Editor extends React.Component {
     }
   }
 
+  async handleInsertCommandClick (command) {
+    const { editor } = this;
+    const doc = editor.getDoc();
+
+    const aggregateId = '';
+    let cursorPosition = editor.getCursor();
+
+    const commandCall = `${command.command}({})`;
+
+    // In the future we could use the clipboard to fetch a previously copied aggregate id.
+    // try {
+    //   const clipboard = await navigator.clipboard.readText();
+    //
+    //   if (uuid.is(clipboard)) {
+    //     aggregateId = `'${clipboard}'`;
+    //   }
+    // } catch (ex) {
+    //   // Left blank intenionally
+    // }
+
+    const commandExecutionCode = `app.${command.context}.${command.aggregate}(${aggregateId}).${commandCall}.failed(console.log);\n`,
+          indexOfCommandCall = commandExecutionCode.indexOf(commandCall);
+
+    if (cursorPosition.line === 0 && cursorPosition.ch === 0) {
+      cursorPosition = new CodeMirror.Pos(doc.lastLine());
+    }
+
+    doc.replaceRange(commandExecutionCode, cursorPosition);
+    doc.setCursor(new CodeMirror.Pos(cursorPosition.line, indexOfCommandCall + commandCall.length - 2));
+
+    editor.focus();
+  }
+
   render () {
-    const { classes, configuration, onInsertCommandClick } = this.props;
+    const { classes, configuration } = this.props;
 
     return (
       <div className={ classes.Editor }>
         <EditorBar>
           <CommandBuilder
-            onInsertCommandClick={ onInsertCommandClick }
+            onInsertCommandClick={ this.handleInsertCommandClick }
             configuration={ configuration }
           />
         </EditorBar>
