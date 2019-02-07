@@ -6,6 +6,7 @@ import JSONTree from './JSONTree';
 import { observer } from 'mobx-react';
 import pick from 'lodash/pick';
 import React from 'react';
+import { toJS } from 'mobx';
 
 const styles = theme => ({
   Event: {
@@ -18,7 +19,7 @@ const styles = theme => ({
     'line-height': 1.1,
 
     '&:hover $DetailsData': {
-      overflow: 'auto'
+      overflowY: 'auto'
     }
   },
 
@@ -90,12 +91,7 @@ const styles = theme => ({
     position: 'relative',
     paddingLeft: theme.grid.stepSize,
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
-
-    '& > div': {
-      overflow: 'hidden',
-      textOverflow: 'ellipsis'
-    }
+    textOverflow: 'ellipsis'
   },
 
   Copy: {
@@ -124,17 +120,19 @@ const styles = theme => ({
   }
 });
 
-const Event = React.memo(({ classes, event, isActive, style, onExpand }) => {
+const Event = React.memo(({ classes, event, isActive, onExpand }) => {
   if (!event) {
     return null;
   }
+
+  const eventAsJSON = toJS(event);
 
   const componentClasses = classNames(classes.Event, {
     [classes.IsActive]: isActive
   });
 
   return (
-    <div className={ componentClasses } style={ style }>
+    <div className={ componentClasses }>
       <div className={ classes.Header } onClick={ () => onExpand(event) }>
         <h3 className={ classes.Title }>
           {event.context.name}.{event.aggregate.name}.{event.name}
@@ -144,10 +142,10 @@ const Event = React.memo(({ classes, event, isActive, style, onExpand }) => {
       </div>
       <div className={ classes.Details }>
         <div className={ classes.DetailsGeneric }>
-          <JSONTree value={ pick(event, [ 'aggregate.id', 'user', 'metadata.revision' ]) } />
+          <JSONTree value={ pick(eventAsJSON, [ 'aggregate.id', 'user', 'metadata.revision' ]) } />
         </div>
         <div className={ classes.DetailsData }>
-          <JSONTree value={ pick(event, [ 'data' ]) } />
+          <JSONTree value={ pick(eventAsJSON, [ 'data' ]) } />
         </div>
       </div>
     </div>

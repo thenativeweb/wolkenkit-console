@@ -23,7 +23,9 @@ const theme = {
   base00: 'transparent',
   base01: '#383830',
   base02: '#49483e',
-  base03: '#666',
+
+  // ITEM_STRING_EXPANDED_COLOR
+  base03: '#66666677',
   base04: '#666',
   base05: '#f8f8f2',
   base06: '#f5f4f1',
@@ -31,6 +33,9 @@ const theme = {
   base08: '#666',
   base09: '#666',
   base0A: '#666',
+
+  // STRING_COLOR
+  // DATE_COLOR
   base0B: '#666',
   base0C: '#666',
   base0D: '#666',
@@ -98,12 +103,28 @@ const Tree = React.memo(({ classes, value }) => (
           lineHeight: '1.1em'
         }
       }),
+      arrowContainer: ({ style }) => ({
+        style: {
+          ...style,
+          width: 6,
+          height: 14
+        }
+      }),
       arrowSign: {
         color: 'transparent'
       }
     }}
-    valueRenderer={ raw => <CopyPasteValue value={ raw } /> }
-    getItemString={ (type, data, itemType) => itemType }
+    valueRenderer={ raw => <CopyPasteValue value={ raw } stringify={ false } /> }
+    getItemString={ (type, data, itemType, itemString) => {
+      switch (type) {
+        case 'Array':
+          return `[…] (${data.length})`;
+        case 'Object':
+          return `{…} (${Reflect.ownKeys(data).length})`;
+        default:
+          return itemString;
+      }
+    } }
     data={ value }
     invertTheme={ false }
     className={ classes.Tree }
