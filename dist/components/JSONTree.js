@@ -26,7 +26,8 @@ var theme = {
   base00: 'transparent',
   base01: '#383830',
   base02: '#49483e',
-  base03: '#666',
+  // ITEM_STRING_EXPANDED_COLOR
+  base03: '#66666677',
   base04: '#666',
   base05: '#f8f8f2',
   base06: '#f5f4f1',
@@ -34,6 +35,8 @@ var theme = {
   base08: '#666',
   base09: '#666',
   base0A: '#666',
+  // STRING_COLOR
+  // DATE_COLOR
   base0B: '#666',
   base0C: '#666',
   base0D: '#666',
@@ -106,17 +109,36 @@ var Tree = React.memo(function (_ref) {
           })
         };
       },
+      arrowContainer: function arrowContainer(_ref4) {
+        var style = _ref4.style;
+        return {
+          style: _objectSpread({}, style, {
+            width: 6,
+            height: 14
+          })
+        };
+      },
       arrowSign: {
         color: 'transparent'
       }
     },
     valueRenderer: function valueRenderer(raw) {
       return React.createElement(CopyPasteValue, {
-        value: raw
+        value: raw,
+        stringify: false
       });
     },
-    getItemString: function getItemString(type, data, itemType) {
-      return itemType;
+    getItemString: function getItemString(type, data, itemType, itemString) {
+      switch (type) {
+        case 'Array':
+          return "[\u2026] (".concat(data.length, ")");
+
+        case 'Object':
+          return "{\u2026} (".concat(Reflect.ownKeys(data).length, ")");
+
+        default:
+          return itemString;
+      }
     },
     data: value,
     invertTheme: false,

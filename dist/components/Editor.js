@@ -1,3 +1,5 @@
+import _regeneratorRuntime from "@babel/runtime/regenerator";
+import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import _possibleConstructorReturn from "@babel/runtime/helpers/possibleConstructorReturn";
@@ -66,6 +68,7 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Editor).call(this));
     _this.handleEditorChanged = _this.handleEditorChanged.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleInsertCommandClick = _this.handleInsertCommandClick.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -170,18 +173,67 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "handleInsertCommandClick",
+    value: function () {
+      var _handleInsertCommandClick = _asyncToGenerator(
+      /*#__PURE__*/
+      _regeneratorRuntime.mark(function _callee(command) {
+        var editor, doc, aggregateId, cursorPosition, commandCall, commandExecutionCode, indexOfCommandCall;
+        return _regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                editor = this.editor;
+                doc = editor.getDoc();
+                aggregateId = '';
+                cursorPosition = editor.getCursor();
+                commandCall = "".concat(command.command, "({})"); // In the future we could use the clipboard to fetch a previously copied aggregate id.
+                // try {
+                //   const clipboard = await navigator.clipboard.readText();
+                //
+                //   if (uuid.is(clipboard)) {
+                //     aggregateId = `'${clipboard}'`;
+                //   }
+                // } catch (ex) {
+                //   // Left blank intenionally
+                // }
+
+                commandExecutionCode = "app.".concat(command.context, ".").concat(command.aggregate, "(").concat(aggregateId, ").").concat(commandCall, ".failed(console.log);\n"), indexOfCommandCall = commandExecutionCode.indexOf(commandCall);
+
+                if (cursorPosition.line === 0 && cursorPosition.ch === 0) {
+                  cursorPosition = new CodeMirror.Pos(doc.lastLine());
+                }
+
+                doc.replaceRange(commandExecutionCode, cursorPosition);
+                doc.setCursor(new CodeMirror.Pos(cursorPosition.line, indexOfCommandCall + commandCall.length - 2));
+                editor.focus();
+
+              case 10:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function handleInsertCommandClick(_x) {
+        return _handleInsertCommandClick.apply(this, arguments);
+      }
+
+      return handleInsertCommandClick;
+    }()
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
       var _this$props2 = this.props,
           classes = _this$props2.classes,
-          configuration = _this$props2.configuration,
-          onInsertCommandClick = _this$props2.onInsertCommandClick;
+          configuration = _this$props2.configuration;
       return React.createElement("div", {
         className: classes.Editor
       }, React.createElement(EditorBar, null, React.createElement(CommandBuilder, {
-        onInsertCommandClick: onInsertCommandClick,
+        onInsertCommandClick: this.handleInsertCommandClick,
         configuration: configuration
       })), React.createElement("div", {
         className: classes.EditorContainer,

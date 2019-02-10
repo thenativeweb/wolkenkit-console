@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import copy from 'copy-text-to-clipboard';
 import injectSheet from 'react-jss';
 import React from 'react';
@@ -30,22 +31,35 @@ var handleValueClicked = function handleValueClicked(event) {
   var target = event.target;
 
   if (target) {
-    var stringifiedJSON = target.innerText;
-    copy(JSON.parse(stringifiedJSON));
-    services.notifications.show({
-      type: 'success',
-      text: "Copied to clipboard!"
-    });
+    var textToCopy = target.innerText;
+
+    try {
+      textToCopy = JSON.parse(textToCopy);
+    } catch (ex) {
+      return;
+    }
+
+    var hasBeenCopied = copy(String(textToCopy));
+
+    if (hasBeenCopied) {
+      services.notifications.show({
+        type: 'success',
+        text: "Copied to clipboard!"
+      });
+    }
   }
 };
 
 var CopyPasteValue = React.memo(function (_ref) {
   var classes = _ref.classes,
-      value = _ref.value;
+      className = _ref.className,
+      value = _ref.value,
+      _ref$stringify = _ref.stringify,
+      stringify = _ref$stringify === void 0 ? true : _ref$stringify;
   return React.createElement("span", {
-    className: classes.CopyPasteValue,
+    className: classNames(classes.CopyPasteValue, className),
     onClick: handleValueClicked
-  }, value, React.createElement(Icon, {
+  }, stringify ? JSON.stringify(value) : value, React.createElement(Icon, {
     className: classes.CopyIcon,
     size: "s",
     name: "copy"

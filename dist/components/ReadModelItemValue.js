@@ -1,9 +1,9 @@
 import _typeof from "@babel/runtime/helpers/typeof";
-import copy from 'copy-text-to-clipboard';
+import CopyPasteValue from './CopyPasteValue';
+import { Icon } from 'thenativeweb-ux';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Icon, services } from 'thenativeweb-ux';
 
 var styles = function styles(theme) {
   return {
@@ -14,13 +14,7 @@ var styles = function styles(theme) {
       'text-overflow': 'ellipsis',
       'white-space': 'nowrap',
       cursor: 'pointer',
-      opacity: 0.8,
-      '&:hover': {
-        opacity: 1,
-        '& $CopyIcon': {
-          opacity: 1
-        }
-      }
+      opacity: 0.8
     },
     Value: {
       'flex-basis': 'auto',
@@ -39,15 +33,6 @@ var styles = function styles(theme) {
       marginTop: '-0.1em'
     }
   };
-};
-
-var handleCopyClicked = function handleCopyClicked(event) {
-  var text = event.currentTarget.innerText;
-  services.notifications.show({
-    type: 'success',
-    text: "Copied to clipboard!"
-  });
-  copy(JSON.parse(text));
 };
 
 var ReadModelItemValue = React.memo(function (_ref) {
@@ -79,18 +64,10 @@ var ReadModelItemValue = React.memo(function (_ref) {
       }));
 
     default:
-      return React.createElement("div", {
+      return React.createElement(CopyPasteValue, {
         className: classes.ValueContainer,
-        onClick: handleCopyClicked,
-        title: "Copy to clipboard",
-        "aria-label": "Copy to clipboard"
-      }, React.createElement("div", {
-        className: classes.Value
-      }, JSON.stringify(value)), React.createElement(Icon, {
-        size: "s",
-        name: "copy",
-        className: classes.CopyIcon
-      }));
+        value: value
+      });
   }
 });
 export default injectSheet(styles)(observer(ReadModelItemValue));

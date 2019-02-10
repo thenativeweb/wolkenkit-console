@@ -7,6 +7,7 @@ import JSONTree from './JSONTree';
 import { observer } from 'mobx-react';
 import pick from 'lodash/pick';
 import React from 'react';
+import { toJS } from 'mobx';
 
 var styles = function styles(theme) {
   return {
@@ -19,7 +20,7 @@ var styles = function styles(theme) {
       'white-space': 'pre',
       'line-height': 1.1,
       '&:hover $DetailsData': {
-        overflow: 'auto'
+        overflowY: 'auto'
       }
     },
     IsActive: {
@@ -83,11 +84,7 @@ var styles = function styles(theme) {
       position: 'relative',
       paddingLeft: theme.grid.stepSize,
       overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      '& > div': {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      }
+      textOverflow: 'ellipsis'
     },
     Copy: {
       cursor: 'pointer',
@@ -116,17 +113,16 @@ var Event = React.memo(function (_ref) {
   var classes = _ref.classes,
       event = _ref.event,
       isActive = _ref.isActive,
-      style = _ref.style,
       onExpand = _ref.onExpand;
 
   if (!event) {
     return null;
   }
 
+  var eventAsJSON = toJS(event);
   var componentClasses = classNames(classes.Event, _defineProperty({}, classes.IsActive, isActive));
   return React.createElement("div", {
-    className: componentClasses,
-    style: style
+    className: componentClasses
   }, React.createElement("div", {
     className: classes.Header,
     onClick: function onClick() {
@@ -145,11 +141,11 @@ var Event = React.memo(function (_ref) {
   }, React.createElement("div", {
     className: classes.DetailsGeneric
   }, React.createElement(JSONTree, {
-    value: pick(event, ['aggregate.id', 'user', 'metadata.revision'])
+    value: pick(eventAsJSON, ['aggregate.id', 'user', 'metadata.revision'])
   })), React.createElement("div", {
     className: classes.DetailsData
   }, React.createElement(JSONTree, {
-    value: pick(event, ['data'])
+    value: pick(eventAsJSON, ['data'])
   }))));
 });
 export default injectSheet(styles)(observer(Event));

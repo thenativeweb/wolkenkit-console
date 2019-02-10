@@ -14,6 +14,7 @@ import { observer } from 'mobx-react';
 import PrettyJson from './PrettyJson';
 import React from 'react';
 import state from '../state';
+import throttle from 'lodash/throttle';
 
 var styles = function styles(theme) {
   return {
@@ -48,11 +49,12 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(EventConsole).call(this, props));
     _this.handleEventExpand = _this.handleEventExpand.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.updateScrollPositionThrottled = throttle(_this.updateScrollPosition, 200);
 
     _this.setListRef = function (element) {
       _this.listRef = element;
 
-      _this.updateScrollPosition();
+      _this.updateScrollPositionThrottled();
     };
 
     _this.state = {
@@ -76,7 +78,7 @@ function (_React$Component) {
           previousEventCount: newEventCount,
           scrollToIndex: newEventCount - 1
         }, function () {
-          _this2.updateScrollPosition();
+          _this2.updateScrollPositionThrottled();
         });
       }
     }

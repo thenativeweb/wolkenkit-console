@@ -31,7 +31,6 @@ var Connected = function Connected() {
   }, React.createElement(Editor, {
     configuration: state.backend.configuration,
     value: state.programming.code,
-    onInsertCommandClick: programming.handleInsertCommandClicked,
     onChange: programming.handleCodeEdited,
     onExecute: programming.handleExecuteCodeClicked
   })), React.createElement(View, {
