@@ -32,7 +32,6 @@ const Connected = function () {
             <Editor
               configuration={ state.backend.configuration }
               value={ state.programming.code }
-              onInsertCommandClick={ programming.handleInsertCommandClicked }
               onChange={ programming.handleCodeEdited }
               onExecute={ programming.handleExecuteCodeClicked }
             />

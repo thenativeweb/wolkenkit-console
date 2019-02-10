@@ -8,6 +8,7 @@ import { observer } from 'mobx-react';
 import PrettyJson from './PrettyJson';
 import React from 'react';
 import state from '../state';
+import throttle from 'lodash/throttle';
 
 const styles = theme => ({
   EventConsole: {
@@ -35,11 +36,12 @@ class EventConsole extends React.Component {
     super(props);
 
     this.handleEventExpand = this.handleEventExpand.bind(this);
+    this.updateScrollPositionThrottled = throttle(this.updateScrollPosition, 200);
 
     this.setListRef = element => {
       this.listRef = element;
 
-      this.updateScrollPosition();
+      this.updateScrollPositionThrottled();
     };
 
     this.state = {
@@ -58,7 +60,7 @@ class EventConsole extends React.Component {
         previousEventCount: newEventCount,
         scrollToIndex: newEventCount - 1
       }, () => {
-        this.updateScrollPosition();
+        this.updateScrollPositionThrottled();
       });
     }
   }

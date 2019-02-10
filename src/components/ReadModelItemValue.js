@@ -1,8 +1,8 @@
-import copy from 'copy-text-to-clipboard';
+import CopyPasteValue from './CopyPasteValue';
+import { Icon } from 'thenativeweb-ux';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Icon, services } from 'thenativeweb-ux';
 
 const styles = theme => ({
   ValueContainer: {
@@ -12,15 +12,7 @@ const styles = theme => ({
     'text-overflow': 'ellipsis',
     'white-space': 'nowrap',
     cursor: 'pointer',
-    opacity: 0.8,
-
-    '&:hover': {
-      opacity: 1,
-
-      '& $CopyIcon': {
-        opacity: 1
-      }
-    }
+    opacity: 0.8
   },
 
   Value: {
@@ -41,14 +33,6 @@ const styles = theme => ({
     marginTop: '-0.1em'
   }
 });
-
-const handleCopyClicked = function (event) {
-  const text = event.currentTarget.innerText;
-
-  services.notifications.show({ type: 'success', text: `Copied to clipboard!` });
-
-  copy(JSON.parse(text));
-};
 
 const ReadModelItemValue = React.memo(({ classes, value, onJsonClick }) => {
   if (value === null) {
@@ -78,21 +62,7 @@ const ReadModelItemValue = React.memo(({ classes, value, onJsonClick }) => {
       );
     default:
       return (
-        <div
-          className={ classes.ValueContainer }
-          onClick={ handleCopyClicked }
-          title='Copy to clipboard'
-          aria-label='Copy to clipboard'
-        >
-          <div className={ classes.Value }>
-            { JSON.stringify(value) }
-          </div>
-          <Icon
-            size='s'
-            name='copy'
-            className={ classes.CopyIcon }
-          />
-        </div>
+        <CopyPasteValue className={ classes.ValueContainer } value={ value } />
       );
   }
 });
