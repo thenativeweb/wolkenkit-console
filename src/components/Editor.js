@@ -2,6 +2,7 @@ import { Button } from 'thenativeweb-ux';
 import CodeMirror from 'codemirror';
 import CommandBuilder from './CommandBuilder';
 import EditorBar from './EditorBar';
+import ErrorConsoleStats from './ErrorConsoleStats';
 import injectSheet from 'react-jss';
 import React from 'react';
 import 'codemirror/mode/javascript/javascript';
@@ -205,7 +206,9 @@ class Editor extends React.Component {
             this.container = ref;
           } }
         />
-        <EditorBar type='bottom' style={{ alignItems: 'flex-end' }}>
+        <EditorBar type='bottom' style={{ justifyContent: 'space-between' }}>
+          <ErrorConsoleStats />
+
           <Button size='s' isPrimary={ true } onClick={ this.props.onExecute }>
             Execute <Button.Hint>[Ctrl+Enter]</Button.Hint>
           </Button>

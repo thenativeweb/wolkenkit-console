@@ -26,25 +26,27 @@ const Connected = function () {
           <Sidebar.Item onClick={ backend.handleDisconnectClicked }>Disconnect</Sidebar.Item>
         </Sidebar.Item>
       </Sidebar>
-      <View orientation='horizontal' adjust='flex' style={{ overflow: 'hidden' }}>
-        <View orientation='vertical' adjust='flex'>
-          <View adjust='flex'>
-            <Editor
-              configuration={ state.backend.configuration }
-              value={ state.programming.code }
-              onChange={ programming.handleCodeEdited }
-              onExecute={ programming.handleExecuteCodeClicked }
-            />
+      <View orientation='vertical' adjust='flex' style={{ overflow: 'hidden' }}>
+        <View orientation='horizontal' adjust='flex' style={{ overflow: 'hidden' }}>
+          <View orientation='vertical' adjust='flex' style={{ overflow: 'hidden', maxWidth: 700 }}>
+            <View adjust='flex'>
+              <Editor
+                configuration={ state.backend.configuration }
+                value={ state.programming.code }
+                onChange={ programming.handleCodeEdited }
+                onExecute={ programming.handleExecuteCodeClicked }
+              />
+            </View>
           </View>
-          <View adjust='auto'>
-            <ErrorConsole />
+          <View orientation='vertical' adjust='flex' style={{ overflow: 'hidden' }}>
+            <Tabs>
+              <EventConsole title={ `Events (${state.watching.collectedEvents.length})` } />
+              <ReadModelConsole title='ReadModels' />
+            </Tabs>
           </View>
         </View>
-        <View orientation='vertical' adjust='flex' style={{ overflow: 'hidden' }}>
-          <Tabs>
-            <EventConsole title={ `Events (${state.watching.collectedEvents.length})` } />
-            <ReadModelConsole title='ReadModels' />
-          </Tabs>
+        <View adjust='auto'>
+          <ErrorConsole />
         </View>
       </View>
     </React.Fragment>

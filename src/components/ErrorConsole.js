@@ -1,43 +1,42 @@
+import { Button } from 'thenativeweb-ux';
 import classNames from 'classnames';
 import debugging from '../actions/debugging';
 import injectSheet from 'react-jss';
 import { observer } from 'mobx-react';
 import React from 'react';
 import state from '../state';
-import { Button, View } from 'thenativeweb-ux';
 
 const styles = theme => ({
   ErrorConsole: {
     overflow: 'hidden',
     display: 'flex',
     'flex-direction': 'column',
-    'border-top': '1px solid #eee',
-    height: 48,
+    height: 0,
     transition: 'height 200ms ease-in-out',
-    'will-change': 'height'
+    'will-change': 'height',
+
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      right: 0,
+      height: 1,
+      background: '#eee'
+    }
   },
 
   IsExpanded: {
     height: '300px'
   },
 
-  Link: {
-    background: 'transparent',
-    color: theme.color.brand.highlight,
-    border: 0,
-
-    '&:active, &:focus': {
-      background: 'transparent',
-      color: theme.color.brand.highlight
-    }
-  },
-
   Header: {
     height: 48,
+    'flex-grow': 0,
     display: 'flex',
     'flex-direction': 'row',
     'align-items': 'center',
-    padding: [ theme.grid.stepSize * 2, theme.grid.stepSize ],
+    padding: [ 0, theme.grid.stepSize ],
     'border-bottom': '1px solid #eee'
   },
 
@@ -46,19 +45,20 @@ const styles = theme => ({
   },
 
   Messages: {
-    'font-family': theme.font.family.code,
     overflow: 'auto',
-    'flex-grow': 1
+    'flex-grow': 1,
+    'font-family': theme.font.family.code,
+    'font-size': theme.font.size.small
   },
 
   Message: {
-    'font-size': theme.font.size.small,
     padding: [ theme.grid.stepSize, theme.grid.stepSize * 2 ],
-    'border-bottom': '1px solid #eee',
+    'border-bottom': '1px solid #eee'
+  },
 
-    '& h3': {
-      'font-size': theme.font.size.small
-    }
+  MessageContent: {
+    'font-size': theme.font.size.small,
+    'word-break': 'break-all'
   },
 
   Hint: {
@@ -74,28 +74,16 @@ class ErrorConsole extends React.Component {
     debugging.clear();
   }
 
+  static handleCloseClicked (event) {
+    event.preventDefault();
+
+    debugging.hideErrorConsole();
+  }
+
   constructor () {
     super();
 
     this.renderMessage = this.renderMessage.bind(this);
-    this.handleExpandClicked = this.handleExpandClicked.bind(this);
-    this.handleCloseClicked = this.handleCloseClicked.bind(this);
-
-    this.state = {
-      isExpanded: false
-    };
-  }
-
-  handleExpandClicked () {
-    this.setState({
-      isExpanded: !this.state.isExpanded
-    });
-  }
-
-  handleCloseClicked () {
-    this.setState({
-      isExpanded: false
-    });
   }
 
   renderMessage (error, index) {
@@ -107,12 +95,12 @@ class ErrorConsole extends React.Component {
       content = <React.Fragment><h3>Error: {error.message}</h3><p>{error.stack}</p></React.Fragment>;
 
       if (error.name === 'CommandRejected' || error.name === 'CommandFailed') {
-        content = <h3>Command got rejected: {error.message}</h3>;
+        content = <div className={ classes.MessageContent }>Command got rejected: {error.message}</div>;
       }
     } else if (typeof error === 'object') {
-      content = <h3>{JSON.stringify(error)}</h3>;
+      content = <div className={ classes.MessageContent }>{JSON.stringify(error)}</div>;
     } else {
-      content = <h3>{error}</h3>;
+      content = <div className={ classes.MessageContent }>{error}</div>;
     }
 
     return (
@@ -124,33 +112,27 @@ class ErrorConsole extends React.Component {
 
   render () {
     const { classes } = this.props;
-    const { isExpanded } = this.state;
 
     if (!state.debugging.messages) {
       return null;
     }
 
     const componentClasses = classNames(classes.ErrorConsole, {
-      [classes.IsExpanded]: isExpanded
+      [classes.IsExpanded]: state.debugging.errorConsoleVisible
     });
 
     return (
       <div className={ componentClasses }>
-        <View orientation='horizontal' adjust='auto' className={ classes.Header }>
-
-          <Button className={ classes.Link } onClick={ this.handleExpandClicked }>Logs and Errors: ({state.debugging.messages.length})</Button>
-
-          <Button className={ classes.Link } onClick={ ErrorConsole.handleClearClicked }>Clear</Button>
+        <div className={ classes.Header }>
+          <Button icon='clear' isSubtle={ true } onClick={ ErrorConsole.handleClearClicked }>Clear</Button>
           <div className={ classes.HeaderSpacer } />
-          { this.state.isExpanded ? <Button className={ classes.Link } onClick={ this.handleCloseClicked }>Close</Button> : null }
-        </View>
+          <Button icon='close' isSubtle={ true } onClick={ ErrorConsole.handleCloseClicked } />
+        </div>
         <div className={ classes.Messages }>
           { state.debugging.messages.length === 0 ? <div className={ classes.Hint }>No errors encountered yet. Well done!</div> : '' }
 
           {
-            /* eslint-disable no-extra-parens */
             state.debugging.messages.map(this.renderMessage)
-            /* eslint-enable no-extra-parens */
           }
         </div>
       </div>

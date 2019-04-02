@@ -1,5 +1,6 @@
 const debugging = {
-  messages: []
+  messages: [],
+  errorConsoleVisible: false
 };
 
 export default debugging;

@@ -22,4 +22,8 @@ autoSave({
   key
 });
 
+export const reset = function () {
+  window.sessionStorage.removeItem(key);
+};
+
 export default state;
