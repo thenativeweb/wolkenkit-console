@@ -10,6 +10,7 @@ import { Button } from 'thenativeweb-ux';
 import CodeMirror from 'codemirror';
 import CommandBuilder from './CommandBuilder';
 import EditorBar from './EditorBar';
+import ErrorConsoleStats from './ErrorConsoleStats';
 import injectSheet from 'react-jss';
 import React from 'react';
 import 'codemirror/mode/javascript/javascript';
@@ -243,9 +244,9 @@ function (_React$Component) {
       }), React.createElement(EditorBar, {
         type: "bottom",
         style: {
-          alignItems: 'flex-end'
+          justifyContent: 'space-between'
         }
-      }, React.createElement(Button, {
+      }, React.createElement(ErrorConsoleStats, null), React.createElement(Button, {
         size: "s",
         isPrimary: true,
         onClick: this.props.onExecute

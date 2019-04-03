@@ -20,4 +20,7 @@ autoSave({
   skip: ['backend.app', 'backend.isConnected', 'backend.user', 'connecting.error'],
   key: key
 });
+export var reset = function reset() {
+  window.sessionStorage.removeItem(key);
+};
 export default state;

@@ -1,8 +1,10 @@
 import _regeneratorRuntime from "@babel/runtime/regenerator";
 import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import App from './App';
+import checkUrlForResetOption from './actions/checkUrlForResetOption';
 import React from 'react';
 import { render } from 'react-dom';
+checkUrlForResetOption();
 
 _asyncToGenerator(
 /*#__PURE__*/

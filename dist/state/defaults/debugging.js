@@ -1,4 +1,5 @@
 var debugging = {
-  messages: []
+  messages: [],
+  errorConsoleVisible: false
 };
 export default debugging;
